@@ -1,4 +1,4 @@
-name: "Terrafrom checks"
+name: "Terraform checks"
 on:
   push:
     branches:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   tf_fmt:
-    name: Check Terraform formatting
+    name: tf format
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -18,7 +18,7 @@ jobs:
       - name: Check formatting of all terraform files
         run: terraform fmt -check -diff -recursive
   tf_validate:
-    name: Check Terraform validity
+    name: tf validate
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -30,7 +30,7 @@ jobs:
       - name: Terraform validate
         run: terraform validate
   tflint:
-    name: Run Terraform lint
+    name: tflint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -52,7 +52,7 @@ jobs:
       - name: Run tflint
         run: tflint -f compact --recursive
   tfsec:
-    name: Run Terraform security static analysis
+    name: tfsec
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -64,7 +64,7 @@ jobs:
           # TODO - setup a token?
           github_token: ${{ secrets.GITHUB_TOKEN }}
   checkov:
-    name: Check Terraform configuration
+    name: checkov
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -75,3 +75,4 @@ jobs:
           output_format: cli
           quiet: true # display only failed checks
           framework: terraform
+          # TODO - should we check external modules using downlaod_external_modules: true
