@@ -73,7 +73,5 @@ jobs:
         uses: bridgecrewio/checkov-action@v12.1347.0
         with:
           output_format: cli
-          output_file_format: console
           quiet: true # display only failed checks
           framework: terraform
-          download_external_modules: true
