@@ -1,21 +1,7 @@
 # submit-social-housing-lettings-and-sales-data-infrastructure
 Infrastructure repository for the service for submitting social housing lettings and sales data (CORE)
 
-## Terraform state remote backend setup
-Before starting to create any infrastructure on the meta, development, staging or production accounts, a developer will need to complete a one-time setup of the remote "backend" for Terraform state management by "bootstrapping".
-
-We use the `cloudposse` module in [meta/main.tf](./terraform/meta/main.tf) to help set this up. General instructions for the module can be found [here](https://github.com/cloudposse/terraform-aws-tfstate-backend#usage) if required, however please follow the steps below for our use case:
-
-1. Ensure your machine is set up to use the credentials of the Meta AWS account (e.g. by configuring the AWS CLI, using AWS-Vault or otherwise)
-
-2. `cd` into the `meta` folder and run the `terraform init` command
-
-3. Now run `terraform apply`. This will create two sets of backend configuration in terms of S3 buckets and DynamoDBs, one set for all the non-production accounts, and one set just for the production account. It will also automatically create a `backend_non_production.tf` and `backend_production.tf` config files at the root of the folder which you will need to keep for reference later
-
-4. Now run `terraform init` again. It should ask if you want to copy over the state file (from local to the backend), type in `yes`. Once complete, the state management is now setup for all accounts and you can begin to work on the infrastructure
-
 ## Zero to Hero
-
 Depending on your type of machine, the following package managers are recommended to help install the required packages
 for developers
 
@@ -29,12 +15,13 @@ Mac:
 - `homebrew` - [see installation instructions](https://brew.sh/)
 
 ### Installing Packages
-You will need to install the following on your machine. Ideally install the exact same version, but if not possible the 
-exact same minor version should also be fine. How they are installed will depend on your type of machine, see below.
+You will need to install the following packages on your machine. Ideally, install the exact same version, but if not 
+possible the exact same minor version should also be fine. How they are installed will depend on your type of machine, 
+see below.
 
 - [terraform](https://github.com/hashicorp/terraform) _v1.5.2_  
 - [aws cli](https://github.com/aws/aws-cli) _v2.12.6_  
-- [tflint]((https://github.com/terraform-linters/tflint)) _v0.47.0_  
+- [tflint](https://github.com/terraform-linters/tflint) _v0.47.0_  
 - [tfsec](https://github.com/aquasecurity/tfsec) _v1.28.1_  
 - [checkov](https://github.com/marketplace/actions/checkov-github-action) _v2.3.311_
 
@@ -83,3 +70,16 @@ If it's newer and undesired or you need to do a clean install due to issues, you
 
 - If at any point you don't want to target a specific version / get the latest version, you can omit the `@x.y.z`
 from the command
+
+## Terraform state remote backend setup
+Before starting to create any infrastructure on the meta, development, staging or production accounts, a developer will need to complete a one-time setup of the remote "backend" for Terraform state management by "bootstrapping".
+
+We use the `cloudposse` module in [meta/main.tf](./terraform/meta/main.tf) to help set this up. General instructions for the module can be found [here](https://github.com/cloudposse/terraform-aws-tfstate-backend#usage) if required, however please follow the steps below for our use case:
+
+1. Ensure your machine is set up to use the credentials of the Meta AWS account (e.g. by configuring the AWS CLI, using AWS-Vault or otherwise)
+
+2. `cd` into the `meta` folder and run the `terraform init` command
+
+3. Now run `terraform apply`. This will create two sets of backend configuration in terms of S3 buckets and DynamoDBs, one set for all the non-production accounts, and one set just for the production account. It will also automatically create a `backend_non_production.tf` and `backend_production.tf` config files at the root of the folder which you will need to keep for reference later
+
+4. Now run `terraform init` again. It should ask if you want to copy over the state file (from local to the backend), type in `yes`. Once complete, the state management is now setup for all accounts and you can begin to work on the infrastructure
