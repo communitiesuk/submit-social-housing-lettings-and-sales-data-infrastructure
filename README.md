@@ -14,27 +14,72 @@ We use the `cloudposse` module in [meta/main.tf](./terraform/meta/main.tf) to he
 
 4. Now run `terraform init` again. It should ask if you want to copy over the state file (from local to the backend), type in `yes`. Once complete, the state management is now setup for all accounts and you can begin to work on the infrastructure
 
-## WIP Zero to Hero
-If you use a Mac, it's recommended that you use the package manager [homebrew](https://brew.sh) to install the following. You can use `brew install <packagename>` to install your desired package. Use `brew install <packagename>@x.y.z` to install version x.y.z of the desired package. Use `brew cleanup <packagename>` to uninstall all but the latest version of the package. Use `brew uninstall <packagename>` or `brew remove <packagename>` to uninstall all versions of that package.
+## Zero to Hero
 
-### Terraform
-Mac: `brew install terraform`
+Depending on your type of machine, the following package managers are recommended to help install the required packages
+for developers
 
-### AWS CLI
-Mac: `brew install awscli`
+Windows:
+- `chocolatey` - [see installation instructions](https://chocolatey.org/install#individual)
+- `pip3` - this is typically included by default when you install `Python3.4+`, so ensure you have a suitable python 
+version installed on your machine. You can use [pyenv for windows](https://github.com/pyenv-win/pyenv-win) or a 
+[python installer](https://www.python.org/downloads/) for this
 
-### TFLint
-Link to repo and install instructions, as well as github-actions recommendation, see [here](https://github.com/terraform-linters/tflint)
+Mac:
+- `homebrew` - [see installation instructions](https://brew.sh/)
 
-Mac: `brew install tflint`
+### Installing Packages
+You will need to install the following on your machine. Ideally install the exact same version, but if not possible the 
+exact same minor version should also be fine. How they are installed will depend on your type of machine, see below.
 
-### tfsec
-Link to repo and install instructions, see [here](https://github.com/aquasecurity/tfsec)
-Link to github actions useful info, see [here](https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting)
+- [terraform](https://github.com/hashicorp/terraform) _v1.5.2_  
+- [aws cli](https://github.com/aws/aws-cli) _v2.12.6_  
+- [tflint]((https://github.com/terraform-linters/tflint)) _v0.47.0_  
+- [tfsec](https://github.com/aquasecurity/tfsec) _v1.28.1_  
+- [checkov](https://github.com/marketplace/actions/checkov-github-action) _v2.3.311_
 
-Mac: `brew install tfsec`
+#### Windows
 
-### Checkov
-Link to repo and install instructions, see [here](https://github.com/marketplace/actions/checkov-github-action)
+Check if you have any of the packages already installed and which version by either:
+- finding and opening the `chocolatey GUI` program
+- using the `choco list` or `choco list <packagename>` commands (package names can be found in the `install` commands 
+below)
 
-Mac: `brew install checkov`
+If you don't have the package installed already, you can run the desired install command from the list below:
+- `choco install terraform --version 1.5.2`
+- `choco install awscli --version 2.12.6`
+- `choco install tflint --version 0.47.0`
+- `choco install tfsec --version 1.28.1`
+- `pip3 install checkov`
+
+If it's already installed and is an older version, you can upgrade it using:
+- `choco upgrade <packagename> --version x.y.z`
+
+If it's newer and undesired or you need to do a clean install due to issues, you can `uninstall` first using:
+- `choco uninstall <packagename> --version x.y.z` to remove the version
+- then run the desired `choco install` command from above
+
+If at any point you don't want to target a specific version / get the latest version, you can omit `--version x.y.z` 
+from the commands above
+
+#### Macs 
+
+Check if you have any of the packages already installed and which version by using the command:
+- `brew list --versions`
+
+If you don't have the package installed already, you can run the desired install command from the list below:
+- `brew install terraform@1.5.2`  
+- `brew install awscli@2.12.6`  
+- `brew install tflint@0.47.0`  
+- `brew install tfsec@1.28.1`  
+- `brew install checkov@v2.3.311`
+
+If it's already installed and is an older version, you can the latest version of the package by using:
+- `brew cleanup <packagename>`
+
+If it's newer and undesired or you need to do a clean install due to issues, you can `uninstall` first using:
+- `brew uninstall <packagename>` or `brew remove <packagename>` to uninstall all versions of that package
+- then run the desired `brew install` command from above
+
+- If at any point you don't want to target a specific version / get the latest version, you can omit the `@x.y.z`
+from the command
