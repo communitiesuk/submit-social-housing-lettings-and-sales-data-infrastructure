@@ -15,16 +15,26 @@ We use the `cloudposse` module in [meta/main.tf](./terraform/meta/main.tf) to he
 4. Now run `terraform init` again. It should ask if you want to copy over the state file (from local to the backend), type in `yes`. Once complete, the state management is now setup for all accounts and you can begin to work on the infrastructure
 
 ## WIP Zero to Hero
+If you use a Mac, it's recommended that you use the package manager [homebrew](https://brew.sh) to install the following. You can use `brew install <packagename>` to install your desired package. Use `brew install <packagename>@x.y.z` to install version x.y.z of the desired package. Use `brew cleanup <packagename>` to uninstall all but the latest version of the package. Use `brew uninstall <packagename>` or `brew remove <packagename>` to uninstall all versions of that package.
 
 ### Terraform
+Mac: `brew install terraform`
+
 ### AWS CLI
+Mac: `brew install awscli`
 
 ### TFLint
 Link to repo and install instructions, as well as github-actions recommendation, see [here](https://github.com/terraform-linters/tflint)
+
+Mac: `brew install tflint`
 
 ### tfsec
 Link to repo and install instructions, see [here](https://github.com/aquasecurity/tfsec)
 Link to github actions useful info, see [here](https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting)
 
+Mac: `brew install tfsec`
+
 ### Checkov
 Link to repo and install instructions, see [here](https://github.com/marketplace/actions/checkov-github-action)
+
+Mac: `brew install checkov`
