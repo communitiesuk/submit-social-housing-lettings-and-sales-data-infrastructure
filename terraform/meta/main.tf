@@ -8,13 +8,13 @@ terraform {
 
   # TODO - uncomment once backend has been created by the cloudposse module below.
   # TODO - update bucket and dynamodb_table names with info in the backend_non_production.tf file it produces
-  #  backend "s3" {
-  #    region         = "eu-west-2"
-  #    bucket         = "core-non-production-terraform-states"
-  #    key            = "core-meta.tfstate"
-  #    dynamodb_table = "core-non-production-terraform-states"
-  #    encrypt        = true
-  #  }
+   backend "s3" {
+     region         = "eu-west-2"
+     bucket         = "core-non-production-terraform-states"
+     key            = "core-meta.tfstate"
+     dynamodb_table = "core-non-production-terraform-states-lock"
+     encrypt        = true
+   }
 }
 
 provider "aws" {

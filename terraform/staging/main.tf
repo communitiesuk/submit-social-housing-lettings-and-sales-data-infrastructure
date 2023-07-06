@@ -11,7 +11,7 @@ terraform {
     region          = "eu-west-2"
     bucket          = "core-non-production-terraform-states"
     key             = "core-staging.tfstate"
-    dyanamodb_table = "core-non-production-terraform-states"
+    dynamodb_table  = "core-non-production-terraform-states-lock"
     encrypt         = true
   }
 }

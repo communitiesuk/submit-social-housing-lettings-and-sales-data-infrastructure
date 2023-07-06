@@ -11,7 +11,7 @@ terraform {
     region          = "eu-west-2"
     bucket          = "core-production-terraform-state"
     key             = "core-production.tfstate"
-    dyanamodb_table = "core-production-terraform-state"
+    dyanamodb_table = "core-production-terraform-state-lock"
     encrypt         = true
   }
 }
