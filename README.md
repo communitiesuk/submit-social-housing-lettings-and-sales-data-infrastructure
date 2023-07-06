@@ -61,7 +61,7 @@ If you don't have the package installed already, you can run the desired install
 - `brew install tfsec@1.28.1`  
 - `brew install checkov@v2.3.311`
 
-If it's already installed and is an older version, you can the latest version of the package by using:
+If it's already installed and you want to uninstall any outdated versions, plus clear download caches, you can run the following command:
 - `brew cleanup <packagename>`
 
 If it's newer and undesired or you need to do a clean install due to issues, you can `uninstall` first using:
