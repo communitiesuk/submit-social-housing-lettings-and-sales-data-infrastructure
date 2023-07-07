@@ -20,6 +20,10 @@ terraform {
 
 provider "aws" {
   region = "eu-west-2"
+
+  assume_role {
+    role_arn = "arn:aws:iam::META-ACCOUNT-ID:role/ROLE-NAME"
+  }
 }
 
 # We create two backends. One for the meta, development and staging accounts, and one just for production
