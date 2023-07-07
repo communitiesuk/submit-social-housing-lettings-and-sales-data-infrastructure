@@ -13,6 +13,7 @@ terraform {
     key             = "core-staging.tfstate"
     dynamodb_table  = "core-non-production-terraform-states-lock"
     encrypt         = true
+    role_arn        = "arn:aws:iam::META-ACCOUNT-ID:role/ROLE-NAME"
   }
 }
 
