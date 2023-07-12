@@ -8,12 +8,12 @@ terraform {
 
   # TODO - update with correct NON-production bucket and dynamodb-table once backend made using cloudposse module in meta/main.tf
   backend "s3" {
-    region          = "eu-west-2"
-    bucket          = "core-non-production-terraform-states"
-    key             = "core-staging.tfstate"
-    dynamodb_table  = "core-non-production-terraform-states-lock"
-    encrypt         = true
-    role_arn        = "arn:aws:iam::META-ACCOUNT-ID:role/ROLE-NAME"
+    region         = "eu-west-2"
+    bucket         = "core-non-production-terraform-states"
+    key            = "core-staging.tfstate"
+    dynamodb_table = "core-non-production-terraform-states-lock"
+    encrypt        = true
+    role_arn       = "arn:aws:iam::META-ACCOUNT-ID:role/ROLE-NAME"
   }
 }
 
