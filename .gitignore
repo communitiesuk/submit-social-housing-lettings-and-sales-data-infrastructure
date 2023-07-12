@@ -1,6 +1,11 @@
+### Checkov ###
+**/.external_modules/*
+
+### IntelliJ ###
 # Ignore IntelliJ config
 **/.idea/*
 
+### Terraform ###
 # Local .terraform directories
 **/.terraform/*
 
