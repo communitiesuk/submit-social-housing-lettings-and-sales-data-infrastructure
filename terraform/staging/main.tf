@@ -13,7 +13,7 @@ terraform {
     key            = "core-staging.tfstate"
     dynamodb_table = "core-non-production-terraform-states-lock"
     encrypt        = true
-    role_arn       = "arn:aws:iam::META-ACCOUNT-ID:role/ROLE-NAME"
+    role_arn       = "arn:aws:iam::815624722760:role/developer"
   }
 }
 
@@ -22,6 +22,6 @@ provider "aws" {
 
   # TODO - update with account id and role name to assume once created by DLUHC
   assume_role {
-    role_arn = "arn:aws:iam::STAGING-ACCOUNT-ID:role/ROLE-NAME"
+    role_arn = "arn:aws:iam::107155005276:role/developer"
   }
 }

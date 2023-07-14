@@ -5,7 +5,7 @@ provider "aws" {
   region = "eu-west-1"
 
   assume_role {
-    role_arn = "arn:aws:iam::META-ACCOUNT-ID:role/ROLE-NAME"
+    role_arn = "arn:aws:iam::815624722760:role/developer"
   }
 }
 

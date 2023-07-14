@@ -11,9 +11,9 @@ terraform {
     region          = "eu-west-2"
     bucket          = "core-production-terraform-state"
     key             = "core-production.tfstate"
-    dyanamodb_table = "core-production-terraform-state-lock"
+    dynamodb_table = "core-production-terraform-state-lock"
     encrypt         = true
-    role_arn        = "arn:aws:iam::META-ACCOUNT-ID:role/ROLE-NAME"
+    role_arn        = "arn:aws:iam::815624722760:role/developer"
   }
 }
 
@@ -22,6 +22,6 @@ provider "aws" {
 
   # TODO - update with account id and role name to assume once created by DLUHC
   assume_role {
-    role_arn = "arn:aws:iam::PRODUCTION-ACCOUNT-ID:role/ROLE-NAME"
+    role_arn = "arn:aws:iam::977287343304:role/developer"
   }
 }

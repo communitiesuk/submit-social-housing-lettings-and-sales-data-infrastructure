@@ -14,7 +14,7 @@ terraform {
     encrypt        = true
     key            = "core-meta.tfstate"
     region         = "eu-west-2"
-    role_arn       = "arn:aws:iam::META-ACCOUNT-ID:role/ROLE-NAME"
+    role_arn       = "arn:aws:iam::815624722760:role/developer"
   }
 }
 
@@ -22,12 +22,13 @@ provider "aws" {
   region = "eu-west-2"
 
   assume_role {
-    role_arn = "arn:aws:iam::META-ACCOUNT-ID:role/ROLE-NAME"
+    role_arn = "arn:aws:iam::815624722760:role/developer"
   }
 }
 
-# We create two backends. non_prod manages terraform state for the meta, development and staging accounts, and prod just
-# for production
+# We create two backends for managing the terraform state of different accounts:
+# non_prod manages meta, development and staging
+# prod manages just production
 module "non_prod_backend" {
   source = "../modules/backend"
 
