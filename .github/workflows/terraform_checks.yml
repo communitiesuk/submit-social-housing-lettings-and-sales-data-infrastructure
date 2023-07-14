@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - "main"
+      - "dev"
 
 jobs:
   tf_fmt:
@@ -76,4 +77,3 @@ jobs:
           quiet: true # display only failed checks
           framework: terraform
           download_external_modules: true
-          # TODO - should we check external modules using downlaod_external_modules: true
