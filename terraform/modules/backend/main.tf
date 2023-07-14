@@ -16,7 +16,7 @@ module "tf_state_replica_bucket" {
   #checkov:skip=CKV_AWS_300:lifecycle configuration is set below for aborting failed uploads, looks like a false flag
   #checkov:skip=CKV2_AWS_34:use of ssm to store a parameter for the access key of an iam user isn't required nor created by cloudposse with our configuration, so we don't need to ensure encryption of the parameter
   #checkov:skip=CKV2_AWS_62:we don't require event notifications on this bucket as it's only replicating the tfstate files as a fallback
-  source    = "cloudposse/s3-bucket/aws"
+  source = "cloudposse/s3-bucket/aws"
 
   acl                          = null
   allow_encrypted_uploads_only = true
@@ -31,19 +31,19 @@ module "tf_state_replica_bucket" {
   lifecycle_configuration_rules = [{
     abort_incomplete_multipart_upload_days = 1
     enabled                                = true
-    expiration                    = {}
-    filter_and                    = {}
-    id                            = "remove-incomplete-uploads"
-    noncurrent_version_expiration = {}
-    noncurrent_version_transition = []
-    transition                    = []
+    expiration                             = {}
+    filter_and                             = {}
+    id                                     = "remove-incomplete-uploads"
+    noncurrent_version_expiration          = {}
+    noncurrent_version_transition          = []
+    transition                             = []
   }]
-  restrict_public_buckets      = true
-  s3_object_ownership          = "BucketOwnerEnforced"
-  s3_replication_enabled       = false
-  sse_algorithm                = "AES256"
-  user_enabled                 = false
-  versioning_enabled           = true
+  restrict_public_buckets = true
+  s3_object_ownership     = "BucketOwnerEnforced"
+  s3_replication_enabled  = false
+  sse_algorithm           = "AES256"
+  user_enabled            = false
+  versioning_enabled      = true
 }
 
 data "aws_caller_identity" "current" {}
