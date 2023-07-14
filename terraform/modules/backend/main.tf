@@ -1,3 +1,14 @@
+terraform {
+  required_version = "~>1.5.1"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~>5.0"
+    }
+  }
+}
+
 # The state replication bucket is kept in a separate region (eu-west-1) to the source bucket and where we generally
 # create our infrastructure (eu-west-2), so we define a provider here to be especially for this
 provider "aws" {
@@ -11,12 +22,14 @@ provider "aws" {
 
 module "tf_state_replica_bucket" {
   providers = { aws = aws.ireland }
-  #checkov:skip=CKV_TF_1:providing git source with commit hash causes filename too long errors on Checkov, and latest module updates are preferred
+  #checkov:skip=CKV_TF_1:providing git source with commit hash causes filename too long errors on Checkov, and we provide the version
   #checkov:skip=CKV_AWS_273:iam user for bucket access isn't required nor created by cloudposse with our configuration, so we don't need to ensure this is controlled through SSO instead
   #checkov:skip=CKV_AWS_300:lifecycle configuration is set below for aborting failed uploads, looks like a false flag
   #checkov:skip=CKV2_AWS_34:use of ssm to store a parameter for the access key of an iam user isn't required nor created by cloudposse with our configuration, so we don't need to ensure encryption of the parameter
   #checkov:skip=CKV2_AWS_62:we don't require event notifications on this bucket as it's only replicating the tfstate files as a fallback
   source = "cloudposse/s3-bucket/aws"
+  # Cloud Posse recommends pinning every module to a specific version
+  version = "3.1.2"
 
   acl                          = null
   allow_encrypted_uploads_only = true
@@ -78,12 +91,14 @@ data "aws_iam_policy_document" "allow_log_writes" {
 }
 
 module "tf_state_log_bucket" {
-  #checkov:skip=CKV_TF_1:providing git source with commit hash causes filename too long errors on Checkov, and latest module updates are preferred
+  #checkov:skip=CKV_TF_1:providing git source with commit hash causes filename too long errors on Checkov, and we provide the version
   #checkov:skip=CKV_AWS_273:iam user for bucket access isn't required nor created by cloudposse with our configuration, so we don't need to ensure this is controlled through SSO instead
   #checkov:skip=CKV_AWS_300:lifecycle configuration is set below for aborting failed uploads, looks like a false flag
   #checkov:skip=CKV2_AWS_34:use of ssm to store a parameter for the access key of an iam user isn't required nor created by cloudposse with our configuration, so we don't need to ensure encryption of the parameter
   #checkov:skip=CKV2_AWS_62:we don't require event notifications on this bucket as its storing logs continuously and will become a nuisance
   source = "cloudposse/s3-bucket/aws"
+  # Cloud Posse recommends pinning every module to a specific version
+  version = "3.1.2"
 
   acl                          = null
   allow_encrypted_uploads_only = false
