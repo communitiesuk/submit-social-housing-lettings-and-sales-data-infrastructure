@@ -23,7 +23,7 @@ see below.
 - [aws cli](https://github.com/aws/aws-cli) _v2.12.6_  
 - [tflint](https://github.com/terraform-linters/tflint) _v0.47.0_  
 - [tfsec](https://github.com/aquasecurity/tfsec) _v1.28.1_  
-- [checkov](https://github.com/marketplace/actions/checkov-github-action) _v2.3.311_
+- [checkov](https://github.com/bridgecrewio/checkov) _v2.3.329_
 
 #### Windows
 
@@ -59,7 +59,7 @@ If you don't have the package installed already, you can run the desired install
 - `brew install awscli@2.12.6`  
 - `brew install tflint@0.47.0`  
 - `brew install tfsec@1.28.1`  
-- `brew install checkov@v2.3.311`
+- `brew install checkov@v2.3.329`
 
 If it's already installed and you want to uninstall any outdated versions, plus clear download caches, you can run the 
 following command:

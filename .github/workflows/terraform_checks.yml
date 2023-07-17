@@ -68,6 +68,7 @@ jobs:
         uses: aquasecurity/tfsec-action@v1.0.3
         with:
           working_directory: terraform/
+          version: v1.28.1
           # TODO - consider setting up token on a dedicated github account? see https://github.com/marketplace/actions/tfsec-action for more info
           github_token: ${{ secrets.GITHUB_TOKEN }}
           # TODO - consider including values from a tfvars file once we have these? see https://github.com/aquasecurity/tfsec
@@ -78,7 +79,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Run checkov
-        uses: bridgecrewio/checkov-action@v12.2417.0
+        uses: bridgecrewio/checkov-action@v12.2425.0
         with:
           output_format: cli
           quiet: true # display only failed checks
