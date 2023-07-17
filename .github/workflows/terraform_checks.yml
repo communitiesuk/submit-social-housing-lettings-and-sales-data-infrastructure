@@ -48,7 +48,7 @@ jobs:
       - name: Init tflint
         run: tflint --init
         env:
-          # TODO - setup a token?
+          # TODO - setup a token on a machine user github account? see https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting for more info about avoiding rate limiting
           GITHUB_TOKEN: ${{ github.token }}
       - name: Run tflint
         run: tflint -f compact --recursive
@@ -62,7 +62,7 @@ jobs:
         uses: aquasecurity/tfsec-action@v1.0.3
         with:
           working_directory: terraform/
-          # TODO - setup a token?
+          # TODO - setup a token on a machine user github account? see https://github.com/marketplace/actions/tfsec-action for more info
           github_token: ${{ secrets.GITHUB_TOKEN }}
   checkov:
     name: checkov
