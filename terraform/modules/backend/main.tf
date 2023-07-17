@@ -20,6 +20,15 @@ provider "aws" {
   }
 }
 
+#tfsec:ignore:aws-s3-block-public-acls:block_public_acls is set to true, this is a false flag
+#tfsec:ignore:aws-s3-block-public-policy:block_public_policy is set to true, this is a false flag
+#tfsec:ignore:aws-s3-enable-bucket-encryption:using AES256 encryption with key managed by Amazon S3 instead of KMS
+#tfsec:ignore:aws-s3-ignore-public-acls:ignore_public_acls is set to true, this is a false flag
+#tfsec:ignore:aws-s3-no-public-buckets:restrict_public_buckets is set to true, this is a false flag
+#tfsec:ignore:aws-s3-encryption-customer-key:using key managed by S3 because cloudposse backend module can't be configured with KMS
+#tfsec:ignore:aws-s3-enable-versioning:versioning not required for replica of a bucket with versioning enabled
+#tfsec:ignore:aws-s3-enable-bucket-logging:exp:2023-07-18:ignoring this warning temporarily while deciding if logging is necessary
+#tfsec:ignore:aws-s3-specify-public-access-block:aws_s3_bucket_public_access_block is being used, this is a false flag
 module "tf_state_replica_bucket" {
   providers = { aws = aws.ireland }
   #checkov:skip=CKV_TF_1:providing git source with commit hash causes filename too long errors on Checkov, and we provide the version
@@ -90,6 +99,15 @@ data "aws_iam_policy_document" "allow_log_writes" {
   }
 }
 
+#tfsec:ignore:aws-s3-block-public-acls:block_public_acls is set to true, this is a false flag
+#tfsec:ignore:aws-s3-block-public-policy:block_public_policy is set to true, this is a false flag
+#tfsec:ignore:aws-s3-enable-bucket-encryption:using AES256 encryption with key managed by Amazon S3 instead of KMS
+#tfsec:ignore:aws-s3-ignore-public-acls:ignore_public_acls is set to true, this is a false flag
+#tfsec:ignore:aws-s3-no-public-buckets:restrict_public_buckets is set to true, this is a false flag
+#tfsec:ignore:aws-s3-encryption-customer-key:using key managed by S3 because bucket will only contain access logs for another bucket
+#tfsec:ignore:aws-s3-enable-versioning:versioning not required because log files are unique and only created once
+#tfsec:ignore:aws-s3-enable-bucket-logging:access logs are not required for a log bucket
+#tfsec:ignore:aws-s3-specify-public-access-block:aws_s3_bucket_public_access_block is being used, this is a false flag
 module "tf_state_log_bucket" {
   #checkov:skip=CKV_TF_1:providing git source with commit hash causes filename too long errors on Checkov, and we provide the version
   #checkov:skip=CKV_AWS_273:iam user for bucket access isn't required nor created by cloudposse with our configuration, so we don't need to ensure this is controlled through SSO instead
