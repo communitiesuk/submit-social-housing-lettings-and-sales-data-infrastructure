@@ -70,7 +70,6 @@ jobs:
           working_directory: terraform/
           # TODO - consider setting up token on a dedicated github account? see https://github.com/marketplace/actions/tfsec-action for more info
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          additional_args: --concise-output
           # TODO - consider including values from a tfvars file once we have these? see https://github.com/aquasecurity/tfsec
   checkov:
     name: checkov
