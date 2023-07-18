@@ -197,23 +197,22 @@ The Terraform pipeline also makes use of these same tools.
   verification of reusable modules, including correctness of attribute names and value types.
 
 ### tflint
-- Make sure you are at the root of the codebase to check all files and initialise the plugins
-- `tflint --init` - this will install any plugins defined in the [.tflint.hcl](.tflint.hcl) configuration file
+- Make sure you are at the root of the codebase to check all files and initialise the plugins.
+- `tflint --init` - this will install any plugins defined in the [.tflint.hcl](.tflint.hcl) configuration file.
 - `tflint --recursive --config "$(pwd)/.tflint.hcl" --format=compact --color` - this will check the terraform files 
   against a rule set for AWS, mainly to find possible errors (such as incorrect instance types), warn about 
   deprecated syntax and unused declarations, and to enforce best practices and naming conventions.
 
 ### tfsec
-- Make sure you are at the root of the codebase to check all files
-- `tfsec` - this will complete a static analysis security scan of the terraform code
+- Make sure you are at the root of the codebase to check all files.
+- `tfsec` - this will complete a static analysis security scan of the terraform code.
 - On Windows machines, ensure you use this command in terminal run as an administrator! Otherwise, it will not 
   complete all the checks it should and the result will be unreliable.
-- Note
 
 ### checkov
-- Make sure you are at the root of the codebase to check all files
+- Make sure you are at the root of the codebase to check all files.
 - `checkov --quiet --download-external-modules true --directory .` - this will scan and check for any 
-  misconfigurations in our terraform
+  misconfigurations in our terraform.
 
 ### A note about external modules
 - We use [Cloud Posse](https://github.com/cloudposse) `tfstate-backend` and `s3-bucket` modules in
