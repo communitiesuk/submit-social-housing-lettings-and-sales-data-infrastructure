@@ -88,7 +88,7 @@ from the command.
 We are using [AWS Vault](https://github.com/99designs/aws-vault) to simplify storing and using AWS credentials while 
 doing local development.
 
-Once installed, you will need to configure a root profile as follows:
+Once installed, you will need to configure a mhclg profile as follows:
 
 1. Find your `config` and `credentials` files in your `~/.aws/config` folder. If any of these don't exist, create them.
 
@@ -178,3 +178,45 @@ please follow the steps below for our use case:
 5. Finally run `terraform init` again. It should ask if you want to copy over the state file (from local to the 
    backend), type in `yes` when prompted. Once complete, the state management is now setup for all accounts and you 
    can begin to work on the infrastructure.
+
+## Using tools
+While developing the codebase, you can run the tools below locally to check the Terraform using the commands below. 
+The Terraform pipeline also makes use of these same tools.
+
+### Terraform
+#### terraform fmt
+- Make sure you are at the root of the codebase to check all files.
+- Run `terraform fmt -recursive` - this checks the formatting of all terraform files in the current directory and all 
+  its subdirectories.
+
+#### terraform validate
+- Make sure you are at the root of the `meta`, `development`, `staging` or `production` folders.
+- Make sure that you have run `terraform init` in these folders.
+- `terraform validate` - runs checks that verify whether a configuration is syntactically valid and internally 
+  consistent, regardless of any provided variables or existing state. It is thus primarily useful for general 
+  verification of reusable modules, including correctness of attribute names and value types.
+
+### tflint
+- Make sure you are at the root of the codebase to check all files and initialise the plugins
+- `tflint --init` - this will install any plugins defined in the [.tflint.hcl](.tflint.hcl) configuration file
+- `tflint --recursive --config "$(pwd)/.tflint.hcl" --format=compact --color` - this will check the terraform files 
+  against a rule set for AWS, mainly to find possible errors (such as incorrect instance types), warn about 
+  deprecated syntax and unused declarations, and to enforce best practices and naming conventions.
+
+### tfsec
+- Make sure you are at the root of the codebase to check all files
+- `tfsec` - this will complete a static analysis security scan of the terraform code
+- On Windows machines, ensure you use this command in terminal run as an administrator! Otherwise, it will not 
+  complete all the checks it should and the result will be unreliable.
+- Note
+
+### checkov
+- Make sure you are at the root of the codebase to check all files
+- `checkov --quiet --download-external-modules true --directory .` - this will scan and check for any 
+  misconfigurations in our terraform
+
+### A note about external modules
+- We use [Cloud Posse](https://github.com/cloudposse) `tfstate-backend` and `s3-bucket` modules in
+  [modules/backend/main.tf](terraform/modules/backend/main.tf) to help set up the backend. Be aware, that the source 
+  code of these external modules contain statements to ignore certain `tfesc` and `checkov` rules that would 
+  otherwise be flagged. In general these ignore rules look sensible given how these modules are designed.
