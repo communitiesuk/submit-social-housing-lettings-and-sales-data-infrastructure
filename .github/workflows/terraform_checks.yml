@@ -24,6 +24,8 @@ jobs:
           terraform_version: 1.5.2
       - name: Check formatting of all terraform files
         run: terraform fmt -check -recursive
+  # TODO - technically this isn't checking anything as validate does not work recursively. We need to update the
+  # pipeline to be able to use credentials to run terraform init and then run the command in the env folders
   tf_validate:
     name: tf validate
     runs-on: ubuntu-latest
@@ -36,6 +38,9 @@ jobs:
           terraform_version: 1.5.2
       - name: Terraform validate
         run: terraform validate
+  # TODO - we want tflint to be able to inspect module calls as per https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/module-inspection.md
+  # We need to update the pipeline to be able to use credentials to run terraform init and get, and then update the
+  # config file as instructed on the link
   tflint:
     name: tflint
     runs-on: ubuntu-latest
