@@ -57,7 +57,7 @@ jobs:
           # TODO - consider setting up token on a dedicated github account? see https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting for more info about avoiding rate limiting
           GITHUB_TOKEN: ${{ github.token }}
       - name: Run tflint
-        run: tflint -f compact --recursive --color
+        run: tflint --recursive --config "$(pwd)/.tflint.hcl" --format=compact --color
   tfsec:
     name: tfsec
     runs-on: ubuntu-latest
