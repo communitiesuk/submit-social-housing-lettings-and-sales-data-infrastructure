@@ -27,8 +27,6 @@ jobs:
       - name: Check formatting of all terraform files
         run: terraform fmt -check -recursive
 
-  # TODO - technically this isn't checking anything as validate does not work recursively. We need to update the
-  # pipeline to be able to use AWS credentials to run terraform init and then run the command in the env folders
   tf_validate:
     name: tf validate
     runs-on: ubuntu-latest
@@ -41,7 +39,36 @@ jobs:
         with:
           terraform_version: 1.5.2
 
-      - name: Terraform validate
+      - name: Terraform init meta folder
+        working-directory: terraform/meta
+        run: terraform init -backend=false
+
+      - name: Terraform validate meta folder
+        working-directory: terraform/meta
+        run: terraform validate
+
+      - name: Terraform init development folder
+        working-directory: terraform/development
+        run: terraform init -backend=false
+
+      - name: Terraform validate development folder
+        working-directory: terraform/development
+        run: terraform validate
+
+      - name: Terraform init staging folder
+        working-directory: terraform/staging
+        run: terraform init -backend=false
+
+      - name: Terraform validate staging folder
+        working-directory: terraform/staging
+        run: terraform validate
+
+      - name: Terraform init production folder
+        working-directory: terraform/production
+        run: terraform init -backend=false
+
+      - name: Terraform validate production folder
+        working-directory: terraform/production
         run: terraform validate
 
   tflint:
