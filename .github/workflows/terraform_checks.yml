@@ -116,7 +116,7 @@ jobs:
 
       - name: Init tflint
         run: tflint --init
-        env:
+       # env:
           # TODO CLDC-2580 - consider setting up token on a dedicated github account
           # GITHUB_TOKEN: ${{ github.token }}
 
