@@ -24,6 +24,10 @@ rule "terraform_unused_required_providers" {
   enabled = true
 }
 
+config {
+  module = true
+}
+
 plugin "aws" {
   enabled = true
   version = "0.24.1"

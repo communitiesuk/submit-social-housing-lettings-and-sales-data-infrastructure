@@ -18,57 +18,91 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.5.2
+
       - name: Check formatting of all terraform files
         run: terraform fmt -check -recursive
+
   # TODO - technically this isn't checking anything as validate does not work recursively. We need to update the
-  # pipeline to be able to use credentials to run terraform init and then run the command in the env folders
+  # pipeline to be able to use AWS credentials to run terraform init and then run the command in the env folders
   tf_validate:
     name: tf validate
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.5.2
+
       - name: Terraform validate
         run: terraform validate
-  # TODO - we want tflint to be able to inspect module calls as per https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/module-inspection.md
-  # We need to update the pipeline to be able to use credentials to run terraform init and get, and then update the
-  # config file as instructed on the link
+
   tflint:
     name: tflint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Cache plugin directory
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.2
+
+      - name: Get terraform backend modules
+        working-directory: terraform/modules/backend
+        run: terraform get
+
+      - name: Get terraform meta modules
+        working-directory: terraform/meta
+        run: terraform get
+
+      - name: Get terraform development modules
+        working-directory: terraform/development
+        run: terraform get
+
+      - name: Get terraform staging modules
+        working-directory: terraform/staging
+        run: terraform get
+
+      - name: Get terraform production modules
+        working-directory: terraform/production
+        run: terraform get
+
+      - name: Cache plugin directory for tflint
         uses: actions/cache@v3
         with:
           path: ~/.tflint.d/plugins
           key: ubuntu-latest-tflint-${{ hashFiles('.tflint.hcl') }}
+
       - name: Set up tflint
         uses: terraform-linters/setup-tflint@v3
         with:
           tflint_version: v0.47.0
+
       - name: Init tflint
         run: tflint --init
         env:
           # TODO - consider setting up token on a dedicated github account? see https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting for more info about avoiding rate limiting
           GITHUB_TOKEN: ${{ github.token }}
+
       - name: Run tflint
         run: tflint --recursive --config "$(pwd)/.tflint.hcl" --format=compact --color
+
   tfsec:
     name: tfsec
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Run tfsec
         uses: aquasecurity/tfsec-action@v1.0.3
         with:
@@ -77,12 +111,14 @@ jobs:
           # TODO - consider setting up token on a dedicated github account? see https://github.com/marketplace/actions/tfsec-action for more info
           github_token: ${{ secrets.GITHUB_TOKEN }}
           # TODO - consider including values from a tfvars file once we have these? see https://github.com/aquasecurity/tfsec
+
   checkov:
     name: checkov
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Run checkov
         uses: bridgecrewio/checkov-action@v12.2425.0
         with:
