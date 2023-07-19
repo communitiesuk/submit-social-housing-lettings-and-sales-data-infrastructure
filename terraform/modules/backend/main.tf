@@ -27,7 +27,7 @@ provider "aws" {
 #tfsec:ignore:aws-s3-no-public-buckets:restrict_public_buckets is set to true, this is a false flag
 #tfsec:ignore:aws-s3-encryption-customer-key:using key managed by S3 because cloudposse backend module can't be configured with KMS
 #tfsec:ignore:aws-s3-enable-versioning:versioning not required for replica of a bucket with versioning enabled
-#tfsec:ignore:aws-s3-enable-bucket-logging:exp:2023-07-18:ignoring this warning temporarily while deciding if logging is necessary
+#tfsec:ignore:aws-s3-enable-bucket-logging:exp:2023-07-24:ignoring this warning temporarily while deciding if logging is necessary
 #tfsec:ignore:aws-s3-specify-public-access-block:aws_s3_bucket_public_access_block is being used, this is a false flag
 module "tf_state_replica_bucket" {
   providers = { aws = aws.ireland }
