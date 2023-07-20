@@ -8,7 +8,6 @@ on:
       - reopened
   push:
     branches:
-      - "main"
       - "dev"
 
 jobs:
@@ -116,9 +115,6 @@ jobs:
 
       - name: Init tflint
         run: tflint --init
-       # env:
-          # TODO CLDC-2580 - consider setting up token on a dedicated github account
-          # GITHUB_TOKEN: ${{ github.token }}
 
       - name: Run tflint
         run: tflint --recursive --config "$(pwd)/.tflint.hcl" --format=compact --color
@@ -135,9 +131,6 @@ jobs:
         with:
           working_directory: terraform/
           version: v1.28.1
-          # TODO CLDC-2580 - consider setting up token on a dedicated github account
-          # github_token: ${{ secrets.GITHUB_TOKEN }}
-          # TODO CLDC-2581 -- consider providing a tfvars file
 
   checkov:
     name: checkov
