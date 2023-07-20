@@ -33,6 +33,7 @@ see instructions below.
 <details>
 <summary>instructions</summary>
 
+<br>
 Check if you have any of the packages already installed and which version by either:
 - finding and opening the `chocolatey GUI` program.
 - using the `choco list` or `choco list <packagename>` commands (package names can be found in the `install` commands
@@ -63,6 +64,7 @@ from the commands above.
 <details>
 <summary>instructions</summary>
 
+<br>
 Check if you have any of the packages already installed and which version by using the command:
 - `brew list --versions`
 
@@ -198,8 +200,8 @@ The Terraform pipeline also makes use of these same tools.
   its subdirectories.
 
 #### terraform validate
-- Make sure you are at the root of the `meta`, `development`, `staging` or `production` folders.
-- Make sure that you have run `terraform init` in these folders.
+- Make sure you are at the root of the `meta`, `development`, `staging` or `production` folders to check whole environments. Alternatively you can be at the root of a folder in `modules`, if you just want to validate a specific module.
+- Make sure that you have run `terraform init` in your chosen folder.
 - `terraform validate` - runs checks that verify whether a configuration is syntactically valid and internally 
   consistent, regardless of any provided variables or existing state. It is thus primarily useful for general 
   verification of reusable modules, including correctness of attribute names and value types.
