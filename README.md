@@ -20,7 +20,7 @@ Mac:
 ### Installing Packages
 You will need to install the following packages on your machine. Ideally, install the exact same version, but if not 
 possible the exact same minor version should also be fine. How they are installed will depend on your type of machine,
-see below.
+see instructions below.
 
 - [Terraform](https://github.com/hashicorp/terraform) _v1.5.2_
 - [AWS CLI](https://github.com/aws/aws-cli) _v2.12.6_
@@ -30,6 +30,8 @@ see below.
 - [Checkov](https://github.com/bridgecrewio/checkov) _v2.3.329_
 
 #### Windows
+<details>
+<summary>instructions</summary>
 
 Check if you have any of the packages already installed and which version by either:
 - finding and opening the `chocolatey GUI` program.
@@ -55,7 +57,11 @@ If it's newer and undesired or you need to do a clean install due to issues, you
 If at any point you don't want to target a specific version / get the latest version, you can omit `--version x.y.z`
 from the commands above.
 
+</details>
+
 #### Macs
+<details>
+<summary>instructions</summary>
 
 Check if you have any of the packages already installed and which version by using the command:
 - `brew list --versions`
@@ -83,12 +89,14 @@ If it's newer and undesired or you need to do a clean install due to issues, you
 If at any point you don't want to target a specific version / get the latest version, you can omit the `@x.y.z`
 from the command.
 
+</details>
+
 ## AWS Vault
 
 We are using [AWS Vault](https://github.com/99designs/aws-vault) to simplify storing and using AWS credentials while 
 doing local development.
 
-Once installed, you will need to configure a mhclg profile as follows:
+Once installed, you will need to configure a dluhc profile as follows:
 
 1. Find your `config` and `credentials` files in your `~/.aws/config` folder. If any of these don't exist, create them.
 
@@ -96,7 +104,7 @@ Once installed, you will need to configure a mhclg profile as follows:
 2. Add the following to your `config` file (filling in the AWS account ID of the main MHCLG account, and the 
    username created for you by MHCLG in this account):
 ```
-[profile mhclg]
+[profile dluhc]
 mfa_serial=arn:aws:iam::<MHCLG-ACCOUNT-ID>:mfa/<IAM-USERNAME>
 region=eu-west-2
 output=json
@@ -108,38 +116,38 @@ output=json
 
 4. Add in the details from above to your `credentials` file in the following format:
 ```
-[mhclg]
+[dluhc]
 aws_access_key_id = ...
 aws_secret_access_key = ...
 ``````
 
-5. Run `aws-vault add mhclg` and enter the keys just added to your `credentials` file as requested.
+5. Run `aws-vault add dluhc` and enter the keys just added to your `credentials` file as requested.
 
 
 6. If you are using a Mac you may be prompted to store the credentials in a Keychain - if so it's recommended that 
    you create a custom keychain (in the Keychain Access app) called `aws-vault` to store the keychain item in. When 
-   creating the item (which will get a name like `aws-vault (mhclg)`) you will need to generate a password. It's 
+   creating the item (which will get a name like `aws-vault (dluhc)`) you will need to generate a password. It's 
    recommended that you store this password somewhere secure, e.g. also in Keychain (but not in your new `aws-vault` 
    custom keychain, since then you'd be storing the password inside what the password is for), or in Keeper or an 
    equivalent secrets manager.
 
 
-7. You can then run `aws-vault exec mhclg` to launch an aws-vault subshell using the `mhclg` profile/credentials you 
+7. You can then run `aws-vault exec dluhc` to launch an aws-vault subshell using the `dluhc` profile/credentials you 
    just set up. When running this command, you maybe asked to enter your MFA code (you will have setup MFA as part 
    of instructions sent to you by MHCLG for accessing your account). Then when you run Terraform commands (e.g. 
    `terraform apply`) you will automatically be acting as this user, without needing to enter your AWS credentials. 
-   If you are a Windows user, you may need to run the command `aws-vault exec mhclg -- bash` or `aws-vault exec 
-   mhclg -- powershell` in order to get aws-vault to open a subshell without erroring.
+   If you are a Windows user, you may need to run the command `aws-vault exec dluhc -- bash` or `aws-vault exec 
+   dluhc -- powershell` in order to get aws-vault to open a subshell without erroring.
 
 
-You can set up other profiles in a similar way (just using a name other than `mhclg`, configuring the profile as 
+You can set up other profiles in a similar way (just using a name other than `dluhc`, configuring the profile as 
 necessary in the `config` file, and entering the relevant credentials as necessary in the `credentials` file). You may 
 need to do this if you want to complete actions directly on the `meta`, `development`, `staging` and `production` 
 accounts. When creating your profiles for this in your `config` file, you will also need to put the `role_arn` to be 
 assumed on that account, e.g.
 ```
-[profile mhclg]
-mfa_serial=arn:aws:iam::<MHCLG-ACCOUNT-ID>:mfa/<IAM-USERNAME>
+[profile dluhc]
+mfa_serial=arn:aws:iam::<DLUHC-ACCOUNT-ID>:mfa/<IAM-USERNAME>
 role_arn=arn:aws:iam::<META-ACCOUNT-ID>:role/<ROLE-NAME>
 region=eu-west-2
 output=json
@@ -156,7 +164,7 @@ We use the [Cloud Posse](https://github.com/cloudposse) `tfstate-backend` and `s
 the module can be found [here](https://github.com/cloudposse/terraform-aws-tfstate-backend#usage) if necessary, however
 please follow the steps below for our use case:
 
-1. Ensure your machine is set up to use the credentials of your MHCLG profile / account (using `AWS Vault` is 
+1. Ensure your machine is set up to use the credentials of your DLUHC profile / account (using `AWS Vault` is 
    recommended).
 
 
