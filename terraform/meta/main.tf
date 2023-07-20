@@ -9,8 +9,8 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "core-non-prod-tf-state"
-    dynamodb_table = "core-non-prod-tf-state-lock"
+    bucket         = "core-prod-tf-state"
+    dynamodb_table = "core-prod-tf-state-lock"
     encrypt        = true
     key            = "core-meta.tfstate"
     region         = "eu-west-2"
