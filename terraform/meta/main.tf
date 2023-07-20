@@ -32,17 +32,11 @@ provider "aws" {
 module "non_prod_backend" {
   source = "../modules/backend"
 
-  state_bucket_name             = "core-non-prod-tf-state"
-  state_lock_dynamodb_name      = "core-non-prod-tf-state-lock"
-  state_log_bucket_name         = "core-non-prod-tf-state-logs"
-  state_replication_bucket_name = "core-non-prod-tf-state-replication"
+  prefix  = "core-non-prod"
 }
 
 module "prod_backend" {
   source = "../modules/backend"
 
-  state_bucket_name             = "core-prod-tf-state"
-  state_lock_dynamodb_name      = "core-prod-tf-state-lock"
-  state_log_bucket_name         = "core-prod-tf-state-logs"
-  state_replication_bucket_name = "core-prod-tf-state-replication"
+  prefix  = "core-prod"
 }

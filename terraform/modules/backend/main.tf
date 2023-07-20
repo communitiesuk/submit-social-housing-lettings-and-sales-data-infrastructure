@@ -20,6 +20,10 @@ provider "aws" {
   }
 }
 
+locals {
+  prefix = "${var.prefix}-tf-state"
+}
+
 #tfsec:ignore:aws-s3-block-public-acls:block_public_acls is set to true, this is a false flag
 #tfsec:ignore:aws-s3-block-public-policy:block_public_policy is set to true, this is a false flag
 #tfsec:ignore:aws-s3-enable-bucket-encryption:using AES256 encryption with key managed by Amazon S3 instead of KMS
@@ -45,7 +49,7 @@ module "tf_state_replica_bucket" {
   allow_ssl_requests_only      = true
   block_public_acls            = true
   block_public_policy          = true
-  bucket_name                  = var.state_replication_bucket_name
+  bucket_name                  = "${local.prefix}-replication"
   enabled                      = true
   environment                  = "meta"
   force_destroy                = false
@@ -123,7 +127,7 @@ module "tf_state_log_bucket" {
   allow_ssl_requests_only      = false
   block_public_acls            = true
   block_public_policy          = true
-  bucket_name                  = var.state_log_bucket_name
+  bucket_name                  = "${local.prefix}-logs"
   enabled                      = true
   environment                  = "meta"
   force_destroy                = false
@@ -169,7 +173,7 @@ module "tf_state_backend" {
   bucket_enabled                    = true
   bucket_ownership_enforced_enabled = true
   dynamodb_enabled                  = true
-  dynamodb_table_name               = var.state_lock_dynamodb_name
+  dynamodb_table_name               = "${local.prefix}-lock"
   enable_point_in_time_recovery     = true
   enable_public_access_block        = true
   enabled                           = true
@@ -177,12 +181,12 @@ module "tf_state_backend" {
   force_destroy                     = false
   ignore_public_acls                = true
   logging = [{
-    target_bucket = var.state_log_bucket_name,
+    target_bucket = "${local.prefix}-logs",
     target_prefix = ""
   }]
   prevent_unencrypted_uploads = true
   restrict_public_buckets     = true
-  s3_bucket_name              = var.state_bucket_name
+  s3_bucket_name              = "${local.prefix}"
   s3_replica_bucket_arn       = module.tf_state_replica_bucket.bucket_arn
   s3_replication_enabled      = true
   # This is the minimum required terraform version
