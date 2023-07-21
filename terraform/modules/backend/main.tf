@@ -26,8 +26,10 @@ locals {
 
 data "aws_caller_identity" "current" {}
 
-data "aws_iam_policy_document" "allow_log_writes" {
+data "aws_iam_policy_document" "allow_state_bucket_log_writes" {
   statement {
+    sid = "S3StateAccessLogging"
+
     principals {
       type        = "Service"
       identifiers = ["logging.s3.amazonaws.com"]
@@ -45,6 +47,37 @@ data "aws_iam_policy_document" "allow_log_writes" {
       test     = "ArnLike"
       variable = "aws:SourceArn"
       values   = [module.tf_state_backend.s3_bucket_arn]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [data.aws_caller_identity.current.account_id]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "allow_state_replica_bucket_log_writes" {
+  statement {
+    sid = "S3StateReplicaAccessLogging"
+
+    principals {
+      type        = "Service"
+      identifiers = ["logging.s3.amazonaws.com"]
+    }
+
+    actions = [
+      "s3:PutObject"
+    ]
+
+    resources = [
+      "${module.tf_state_replica_log_bucket.bucket_arn}/*"
+    ]
+
+    condition {
+      test     = "ArnLike"
+      variable = "aws:SourceArn"
+      values   = [module.tf_state_replica_bucket.bucket_arn]
     }
 
     condition {
@@ -100,7 +133,7 @@ module "tf_state_log_bucket" {
   restrict_public_buckets = true
   s3_object_ownership     = "BucketOwnerEnforced"
   s3_replication_enabled  = false
-  source_policy_documents = [data.aws_iam_policy_document.allow_log_writes.json]
+  source_policy_documents = [data.aws_iam_policy_document.allow_state_bucket_log_writes.json]
   sse_algorithm           = "AES256"
   user_enabled            = false
   versioning_enabled      = false
@@ -152,7 +185,7 @@ module "tf_state_replica_log_bucket" {
   restrict_public_buckets = true
   s3_object_ownership     = "BucketOwnerEnforced"
   s3_replication_enabled  = false
-  source_policy_documents = [data.aws_iam_policy_document.allow_log_writes.json]
+  source_policy_documents = [data.aws_iam_policy_document.allow_state_replica_bucket_log_writes.json]
   sse_algorithm           = "AES256"
   user_enabled            = false
   versioning_enabled      = false
@@ -242,7 +275,7 @@ module "tf_state_backend" {
   }]
   prevent_unencrypted_uploads = true
   restrict_public_buckets     = true
-  s3_bucket_name              = "${local.prefix}"
+  s3_bucket_name              = local.prefix
   s3_replica_bucket_arn       = module.tf_state_replica_bucket.bucket_arn
   s3_replication_enabled      = true
   # This is the minimum required terraform version
