@@ -155,7 +155,7 @@ module "tf_state_replica_log_bucket" {
   #checkov:skip=CKV2_AWS_34:use of ssm to store a parameter for the access key of an iam user isn't required nor created by cloudposse with our configuration, so we don't need to ensure encryption of the parameter
   #checkov:skip=CKV2_AWS_62:we don't require event notifications on this bucket as its storing logs continuously and will become a nuisance
   providers = { aws = aws.ireland }
-  source = "cloudposse/s3-bucket/aws"
+  source    = "cloudposse/s3-bucket/aws"
   # Cloud Posse recommends pinning every module to a specific version
   version = "3.1.2"
 
@@ -207,7 +207,7 @@ module "tf_state_replica_bucket" {
   #checkov:skip=CKV2_AWS_34:use of ssm to store a parameter for the access key of an iam user isn't required nor created by cloudposse with our configuration, so we don't need to ensure encryption of the parameter
   #checkov:skip=CKV2_AWS_62:we don't require event notifications on this bucket as it's only replicating the tfstate files as a fallback
   providers = { aws = aws.ireland }
-  source = "cloudposse/s3-bucket/aws"
+  source    = "cloudposse/s3-bucket/aws"
   # Cloud Posse recommends pinning every module to a specific version
   version = "3.1.2"
 
@@ -233,7 +233,7 @@ module "tf_state_replica_bucket" {
   }]
   logging = {
     bucket_name = "${local.prefix}-replica-logs",
-    prefix = ""
+    prefix      = ""
   }
   restrict_public_buckets = true
   s3_object_ownership     = "BucketOwnerEnforced"

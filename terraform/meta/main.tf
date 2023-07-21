@@ -32,11 +32,11 @@ provider "aws" {
 module "non_prod_backend" {
   source = "../modules/backend"
 
-  prefix  = "core-non-prod"
+  prefix = "core-non-prod"
 }
 
 module "prod_backend" {
   source = "../modules/backend"
 
-  prefix  = "core-prod"
+  prefix = "core-prod"
 }
