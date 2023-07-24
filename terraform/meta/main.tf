@@ -40,3 +40,7 @@ module "prod_backend" {
 
   prefix = "core-prod"
 }
+
+module "ecr" {
+  source = "../modules/ecr"
+}
