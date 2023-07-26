@@ -10,31 +10,12 @@ terraform {
 }
 
 #tfsec:ignore:aws-ecr-repository-customer-key:encryption using KMS CMK not required
-resource "aws_ecr_repository" "main" {
+resource "aws_ecr_repository" "_" {
   #checkov:skip=CKV_AWS_136:encryption using KMS not required
   name                 = "core-ecr"
-  image_tag_mutability = "IMMUTABLE"
+  image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
     scan_on_push = true
   }
-}
-
-resource "aws_ecr_lifecycle_policy" "main" {
-  repository = aws_ecr_repository.main.name
-
-  policy = jsonencode({
-    rules = [{
-      rulePriority = 1
-      description  = "keep last 10 images"
-      action = {
-        type = "expire"
-      }
-      selection = {
-        tagStatus   = "any"
-        countType   = "imageCountMoreThan"
-        countNumber = 10
-      }
-    }]
-  })
 }
