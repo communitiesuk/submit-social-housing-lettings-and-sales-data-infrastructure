@@ -28,3 +28,8 @@ resource "aws_subnet" "private" {
   cidr_block = cidrsubnet(local.private_subnet_cidr, 2, count.index)
   vpc_id = aws_vpc.main.id
 }
+
+resource "aws_db_subnet_group" "private_subnet_group" {
+  name = "${var.prefix}-private-subnet-group"
+  subnet_ids = aws_subnet.private[*].id
+}
