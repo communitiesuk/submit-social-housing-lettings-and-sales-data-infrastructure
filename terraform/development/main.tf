@@ -25,3 +25,10 @@ provider "aws" {
     role_arn = "arn:aws:iam::837698168072:role/developer"
   }
 }
+
+module "networking" {
+  source = "../modules/networking"
+
+  prefix = "core-dev"
+  vpc_cidr_block = "10.0.0.0/16"
+}

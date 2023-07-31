@@ -44,10 +44,3 @@ module "prod_backend" {
 module "ecr" {
   source = "../modules/ecr"
 }
-
-module "networking" {
-  source = "../modules/networking"
-
-  # The first 16 bits / 2 octets identify the network while the remaining identify the hosts within the network
-  vpc_cidr_block = "10.0.0.0/16"
-}
