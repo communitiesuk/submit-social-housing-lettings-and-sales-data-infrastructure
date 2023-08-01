@@ -1,18 +1,19 @@
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
-  # tags = {
-  #   Name = "${var.prefix}-internet-gateway"
-  # }
+  tags = {
+    Name = "${var.prefix}-internet-gateway"
+  }
 }
 
 resource "aws_eip" "nat_gateway" {
-  count = length(aws_subnet.private)
+  #checkov:skip=CKV2_AWS_19:it's acceptable to associate an EIP with a NAT gateway, but Checkov is expecting it to be associated with an EC2 instance. We think this is a false flag
+  count  = length(aws_subnet.private)
   domain = "vpc"
 
-  # tags = {
-  #   Name = "${var.prefix}-ngw-eip-${count.index}"
-  # }
+  tags = {
+    Name = "${var.prefix}-nat-gateway-eip-${count.index}"
+  }
 
   depends_on = [aws_internet_gateway.main]
 }
@@ -22,9 +23,9 @@ resource "aws_nat_gateway" "main" {
   allocation_id = element(aws_eip.nat_gateway[*].id, count.index)
   subnet_id     = element(aws_subnet.public[*].id, count.index)
 
-  # tags = {
-  #   Name = "${var.prefix}-ngw-${count.index}"
-  # }
+  tags = {
+    Name = "${var.prefix}-nat-gateway-${count.index}"
+  }
 
-  depends_on = [aws_internet_gateway.this]
+  depends_on = [aws_internet_gateway.main]
 }
