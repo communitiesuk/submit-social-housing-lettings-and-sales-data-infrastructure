@@ -29,6 +29,7 @@ provider "aws" {
 module "networking" {
   source = "../modules/networking"
 
-  prefix = "core-prod"
+  prefix         = "core-prod"
   vpc_cidr_block = "10.0.0.0/16"
+  vpc_flow_cloudwatch_log_expiration_days = 90
 }
