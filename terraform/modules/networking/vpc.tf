@@ -22,6 +22,7 @@ resource "aws_flow_log" "vpc_rejected" {
 # tfsec:ignore:aws-cloudwatch-log-group-customer-key:flow logs are non-sensitive
 resource "aws_cloudwatch_log_group" "vpc_flow_logs_accepted" {
   #checkov:skip=CKV_AWS_158:flow logs are non-sensitive
+  #checkov:skip=CKV_AWS_338:requiring retention of logs for 1year is excessive for this application, 90days preferred
   name              = "${var.prefix}-vpc-flow-logs-accepted"
   retention_in_days = var.vpc_flow_cloudwatch_log_expiration_days
 }
@@ -29,6 +30,7 @@ resource "aws_cloudwatch_log_group" "vpc_flow_logs_accepted" {
 # tfsec:ignore:aws-cloudwatch-log-group-customer-key:flow logs are non-sensitive
 resource "aws_cloudwatch_log_group" "vpc_flow_logs_rejected" {
   #checkov:skip=CKV_AWS_158:flow logs are non-sensitive
+  #checkov:skip=CKV_AWS_338:requiring retention of logs for 1year is excessive for this application, 90days preferred
   name              = "${var.prefix}-vpc-flow-logs-rejected"
   retention_in_days = var.vpc_flow_cloudwatch_log_expiration_days
 }
