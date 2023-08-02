@@ -13,6 +13,10 @@ resource "aws_subnet" "public" {
   # Splits the public CIDR block into three parts (one for each AZ)
   cidr_block = cidrsubnet(local.public_subnet_cidr, 2, count.index)
   vpc_id     = aws_vpc.main.id
+
+  tags = {
+    Name = "${var.prefix}-public-subnet-${data.aws_availability_zones.available.names[count.index]}"
+  }
 }
 
 resource "aws_subnet" "private" {
@@ -21,6 +25,10 @@ resource "aws_subnet" "private" {
   # Splits the private CIDR block into three parts (one for each AZ)
   cidr_block = cidrsubnet(local.private_subnet_cidr, 2, count.index)
   vpc_id     = aws_vpc.main.id
+
+  tags = {
+    Name = "${var.prefix}-private-subnet-${data.aws_availability_zones.available.names[count.index]}"
+  }
 }
 
 resource "aws_db_subnet_group" "private_subnet_group" {
