@@ -31,7 +31,7 @@ resource "aws_subnet" "private" {
   }
 }
 
-resource "aws_db_subnet_group" "private_subnet_group" {
+resource "aws_db_subnet_group" "private" {
   name       = "${var.prefix}-private-subnet-group"
   subnet_ids = aws_subnet.private[*].id
 }
