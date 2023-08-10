@@ -26,7 +26,7 @@ resource "aws_flow_log" "vpc_rejected" {
 # tfsec:ignore:aws-cloudwatch-log-group-customer-key:flow logs are non-sensitive
 resource "aws_cloudwatch_log_group" "vpc_flow_logs_accepted" {
   #checkov:skip=CKV_AWS_158:flow logs are non-sensitive
-  #checkov:skip=CKV_AWS_338:we think that log retention of at least 1 year is excessive for this application and are using 90 days
+  #checkov:skip=CKV_AWS_338:we think that a minimum log retention of at least 1 year is excessive and are ok with less
   name              = "${var.prefix}-vpc-flow-logs-accepted"
   retention_in_days = var.vpc_flow_cloudwatch_log_expiration_days
 }
@@ -34,7 +34,7 @@ resource "aws_cloudwatch_log_group" "vpc_flow_logs_accepted" {
 # tfsec:ignore:aws-cloudwatch-log-group-customer-key:flow logs are non-sensitive
 resource "aws_cloudwatch_log_group" "vpc_flow_logs_rejected" {
   #checkov:skip=CKV_AWS_158:flow logs are non-sensitive
-  #checkov:skip=CKV_AWS_338:we think that log retention of at least 1 year is excessive for this application and are using 90 days
+  #checkov:skip=CKV_AWS_338:we think that a minimum log retention of at least 1 year is excessive and are ok with less
   name              = "${var.prefix}-vpc-flow-logs-rejected"
   retention_in_days = var.vpc_flow_cloudwatch_log_expiration_days
 }
@@ -71,7 +71,6 @@ data "aws_iam_policy_document" "vpc_flow_logs_log_permissions" {
 }
 
 data "aws_iam_policy_document" "vpc_flow_logs_assume_role_permissions" {
-
   statement {
     effect = "Allow"
 
