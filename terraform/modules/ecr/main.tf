@@ -21,3 +21,25 @@ resource "aws_ecr_repository" "this" {
     scan_on_push = true
   }
 }
+
+data "aws_iam_policy_document" "this" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "AWS"
+      identifiers = formatlist("arn:aws:iam::%s:*", var.accessible_from_accounts)
+    }
+
+    actions = [
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:BatchGetImage",
+    ]
+  }
+}
+
+resource "aws_ecr_repository_policy" "this" {
+  repository = aws_ecr_repository.this.name
+  policy     = data.aws_iam_policy_document.this.json
+}
