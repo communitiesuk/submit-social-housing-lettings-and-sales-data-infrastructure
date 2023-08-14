@@ -43,4 +43,6 @@ module "prod_backend" {
 
 module "ecr" {
   source = "../modules/ecr"
+
+  aaccessible_from_accounts = ["837698168072", "107155005276", "977287343304"]
 }

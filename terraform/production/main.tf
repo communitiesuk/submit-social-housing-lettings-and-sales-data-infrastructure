@@ -44,3 +44,9 @@ module "rds" {
   security_group_ids   = []
   vpc_id               = module.networking.vpc_id
 }
+
+module "service" {
+  source = "../modules/service"
+
+  prefix = "core-stag"
+}
