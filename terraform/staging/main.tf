@@ -34,13 +34,13 @@ module "networking" {
   vpc_flow_cloudwatch_log_expiration_days = 90
 }
 
-module "rds" {
+module "database" {
   source = "../modules/rds"
 
-  prefix               = "core-stag"
-  allocated_storage    = 5
-  db_subnet_group_name = module.networking.private_subnet_group_name
-  instance_class       = "db.t3.micro"
-  security_group_ids   = []
-  vpc_id               = module.networking.vpc_id
+  prefix                            = "core-stag"
+  allocated_storage                 = 5
+  db_subnet_group_name              = module.networking.private_subnet_group_name
+  instance_class                    = "db.t3.micro"
+  ingress_source_security_group_ids = []
+  vpc_id                            = module.networking.vpc_id
 }

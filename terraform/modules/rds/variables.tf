@@ -18,7 +18,7 @@ variable "prefix" {
   description = "The prefix to be prepended to resource names."
 }
 
-variable "security_group_ids" {
+variable "ingress_source_security_group_ids" {
   type        = list(string)
   description = "The security group ids (sources) the rds security group will allow ingress from"
 }

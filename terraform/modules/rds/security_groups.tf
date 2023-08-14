@@ -5,7 +5,7 @@ resource "aws_security_group" "rds" {
 
   ingress {
     description     = "Allow ingress on port 5432 only from the specified security groups"
-    security_groups = var.security_group_ids
+    security_groups = var.ingress_source_security_group_ids
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"
