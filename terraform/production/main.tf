@@ -39,7 +39,7 @@ module "database" {
 
   prefix                            = "core-prod"
   allocated_storage                 = 100
-  db_subnet_group_name              = module.networking.private_subnet_group_name
+  db_subnet_group_name              = module.networking.db_private_subnet_group_name
   instance_class                    = "db.t3.small"
   ingress_source_security_group_ids = []
   vpc_id                            = module.networking.vpc_id
