@@ -28,7 +28,7 @@ data "aws_iam_policy_document" "this" {
 
     principals {
       type        = "AWS"
-      identifiers = formatlist("arn:aws:iam::%s:*", var.accessible_from_accounts)
+      identifiers =  var.allow_access_by_roles
     }
 
     actions = [

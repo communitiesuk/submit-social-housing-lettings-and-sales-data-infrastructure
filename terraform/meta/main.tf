@@ -44,5 +44,6 @@ module "prod_backend" {
 module "ecr" {
   source = "../modules/ecr"
 
-  accessible_from_accounts = ["837698168072", "107155005276", "977287343304"]
+  # This will need updating to include dev and production roles
+  allow_access_by_roles = ["arn:aws:iam::107155005276:role/core-stag-task-execution"]
 }

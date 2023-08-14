@@ -1,4 +1,4 @@
-variable "accessible_from_accounts" {
+variable "allow_access_by_roles" {
   type        = list(string)
-  description = "AWS account ids for the accounts requiring access to the repository"
+  description = "arns for the roles requiring access to the repository"
 }
