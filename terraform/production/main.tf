@@ -37,7 +37,7 @@ module "networking" {
 module "rds" {
   source = "../modules/rds"
 
-  prefix               = "core-stag"
+  prefix               = "core-prod"
   allocated_storage    = 100
   db_subnet_group_name = module.networking.private_subnet_group_name
   instance_class       = "db.t3.small"
