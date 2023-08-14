@@ -38,9 +38,9 @@ module "rds" {
   source = "../modules/rds"
 
   prefix               = "core-stag"
-  allocated_storage    = 5
+  allocated_storage    = 100
   db_subnet_group_name = module.networking.private_subnet_group_name
-  instance_class       = "db.m5.large"
+  instance_class       = "db.t3.small"
   security_group_ids   = []
   vpc_id               = module.networking.vpc_id
 }
