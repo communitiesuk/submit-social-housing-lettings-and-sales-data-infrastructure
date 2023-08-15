@@ -48,5 +48,5 @@ module "database" {
 module "service" {
   source = "../modules/service"
 
-  prefix = "core-stag"
+  prefix = "core-prod"
 }
