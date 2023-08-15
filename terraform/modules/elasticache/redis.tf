@@ -1,6 +1,8 @@
-#tfsec:ignore:aws-elasticache-enable-backup-retention:TODO CLDC-XXXX setup a snapshot retention limit
+#tfsec:ignore:aws-elasticache-enable-backup-retention:TODO CLDC-2679 setup a snapshot retention limit
 resource "aws_elasticache_cluster" "main" {
-  #checkov:skip=CKV_AWS_134:TODO CLDC-XXXX setup a snapshot retention limit
+  #checkov:skip=CKV_AWS_134:TODO CLDC-2679 setup a snapshot retention limit
+  #TODO CLDC-2679 setup redis replicas with multi-az and automatic failover
+  #TODO CLDC-2682 setup redis logging
   cluster_id                 = "${var.prefix}-redis"
   auto_minor_version_upgrade = true
   apply_immediately          = true
