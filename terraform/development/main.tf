@@ -44,3 +44,9 @@ module "database" {
   ingress_source_security_group_ids = []
   vpc_id                            = module.networking.vpc_id
 }
+
+module "service" {
+  source = "../modules/service"
+
+  prefix = "core-dev"
+}
