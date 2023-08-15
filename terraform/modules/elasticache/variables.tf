@@ -15,7 +15,7 @@ variable "private_subnet_cidr" {
 
 variable "redis_subnet_group_name" {
   type        = string
-  description = "The name of the subnet group associated with the VPC the DB needs to be in."
+  description = "The name of the subnet group associated with the VPC that Redis needs to be in."
 }
 
 variable "vpc_id" {
