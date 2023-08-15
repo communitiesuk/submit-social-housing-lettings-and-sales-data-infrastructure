@@ -26,14 +26,6 @@ provider "aws" {
   }
 }
 
-module "networking" {
-  source = "../modules/networking"
-
-  prefix                                  = "core-stag"
-  vpc_cidr_block                          = "10.0.0.0/16"
-  vpc_flow_cloudwatch_log_expiration_days = 90
-}
-
 module "database" {
   source = "../modules/rds"
 
@@ -43,6 +35,24 @@ module "database" {
   instance_class                    = "db.t3.micro"
   ingress_source_security_group_ids = []
   vpc_id                            = module.networking.vpc_id
+}
+
+module "networking" {
+  source = "../modules/networking"
+
+  prefix                                  = "core-stag"
+  vpc_cidr_block                          = "10.0.0.0/16"
+  vpc_flow_cloudwatch_log_expiration_days = 90
+}
+
+module "redis" {
+  source = "../modules/elasticache"
+
+  prefix                  = "core-stag"
+  node_type               = "cache.t2.micro"
+  private_subnet_cidr     = module.networking.private_subnet_cidr
+  redis_subnet_group_name = module.networking.redis_private_subnet_group_name
+  vpc_id                  = module.networking.vpc_id
 }
 
 module "service" {
