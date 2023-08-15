@@ -26,10 +26,14 @@ provider "aws" {
   }
 }
 
+locals {
+  prefix = "core-stag"
+}
+
 module "database" {
   source = "../modules/rds"
 
-  prefix                            = "core-stag"
+  prefix                            = local.prefix
   allocated_storage                 = 5
   db_subnet_group_name              = module.networking.db_private_subnet_group_name
   instance_class                    = "db.t3.micro"
@@ -40,7 +44,7 @@ module "database" {
 module "networking" {
   source = "../modules/networking"
 
-  prefix                                  = "core-stag"
+  prefix                                  = local.prefix
   vpc_cidr_block                          = "10.0.0.0/16"
   vpc_flow_cloudwatch_log_expiration_days = 90
 }
@@ -48,7 +52,7 @@ module "networking" {
 module "redis" {
   source = "../modules/elasticache"
 
-  prefix                  = "core-stag"
+  prefix                  = local.prefix
   node_type               = "cache.t2.micro"
   private_subnet_cidr     = module.networking.private_subnet_cidr
   redis_subnet_group_name = module.networking.redis_private_subnet_group_name
@@ -58,5 +62,5 @@ module "redis" {
 module "service" {
   source = "../modules/service"
 
-  prefix = "core-stag"
+  prefix = local.prefix
 }
