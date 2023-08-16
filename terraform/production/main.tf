@@ -36,8 +36,8 @@ module "database" {
   prefix                            = local.prefix
   allocated_storage                 = 100
   db_subnet_group_name              = module.networking.db_private_subnet_group_name
-  instance_class                    = "db.t3.small"
   ingress_source_security_group_ids = []
+  instance_class                    = "db.t3.small"
   vpc_id                            = module.networking.vpc_id
 }
 
@@ -52,11 +52,12 @@ module "networking" {
 module "redis" {
   source = "../modules/elasticache"
 
-  prefix                  = local.prefix
-  node_type               = "cache.t2.micro"
-  private_subnet_cidr     = module.networking.private_subnet_cidr
-  redis_subnet_group_name = module.networking.redis_private_subnet_group_name
-  vpc_id                  = module.networking.vpc_id
+  prefix                            = local.prefix
+  ingress_source_security_group_ids = []
+  node_type                         = "cache.t2.micro"
+  private_subnet_cidr               = module.networking.private_subnet_cidr
+  redis_subnet_group_name           = module.networking.redis_private_subnet_group_name
+  vpc_id                            = module.networking.vpc_id
 }
 
 module "service" {

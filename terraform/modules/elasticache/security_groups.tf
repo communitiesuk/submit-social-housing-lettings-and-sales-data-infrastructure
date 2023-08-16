@@ -4,11 +4,11 @@ resource "aws_security_group" "redis" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "Allow ingress on port 6379 from anything within the private subnet cidr block range"
-    protocol    = "tcp"
-    from_port   = 6379
-    to_port     = 6379
-    cidr_blocks = [var.private_subnet_cidr]
+    description     = "Allow ingress on port 6379 from anything within the private subnet cidr block range"
+    protocol        = "tcp"
+    from_port       = 6379
+    to_port         = 6379
+    security_groups = var.ingress_source_security_group_ids
   }
 
   egress {

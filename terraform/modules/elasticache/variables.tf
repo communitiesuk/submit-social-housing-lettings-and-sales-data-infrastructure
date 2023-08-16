@@ -1,3 +1,8 @@
+variable "ingress_source_security_group_ids" {
+  type        = list(string)
+  description = "The security group ids (sources) the redis security group will allow ingress from"
+}
+
 variable "node_type" {
   type        = string
   description = "The type of node for the redis elasticache."
