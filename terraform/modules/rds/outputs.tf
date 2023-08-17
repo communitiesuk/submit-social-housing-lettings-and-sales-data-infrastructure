@@ -4,7 +4,7 @@ output "rds_security_group_id" {
 }
 
 output "rds_data_access_policy_arn" {
-  value       = aws_iam_policy.rds-data-acess.arn
+  value       = aws_iam_policy.rds_data_access.arn
   description = "The arn of the iam policy enabling access to the rds data"
 }
 

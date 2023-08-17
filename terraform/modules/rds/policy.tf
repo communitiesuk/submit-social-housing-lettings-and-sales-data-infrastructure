@@ -1,4 +1,4 @@
-resource "aws_iam_policy" "rds-data-acess" {
+resource "aws_iam_policy" "rds_data_access" {
   name        = "${var.prefix}-rds-data-access"
   description = "Policy that allows full access to RDS"
 
