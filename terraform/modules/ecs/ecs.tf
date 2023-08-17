@@ -5,6 +5,7 @@ resource "aws_ecs_cluster" "main" {
 }
 
 resource "aws_ecs_task_definition" "main" {
+  #checkov:skip=CKV_AWS_336:using readonlyRootFilesystem to true breaks the app, as it needs to write to app/tmp/pids for example
   family                   = "${var.prefix}-ecs-task"
   cpu                      = var.ecs_task_cpu
   execution_role_arn       = aws_iam_role.task_execution.arn
@@ -21,7 +22,6 @@ resource "aws_ecs_task_definition" "main" {
       essential              = true
       image                  = var.ecr_repository_url
       memoryReservation      = var.ecs_task_memory * 0.75
-      readonlyRootFilesystem = true
       user                   = "nonroot"
 
       logConfiguration = {
@@ -55,6 +55,7 @@ resource "aws_ecs_task_definition" "main" {
 }
 
 resource "aws_ecs_task_definition" "db_migrate" {
+  #checkov:skip=CKV_AWS_336:using readonlyRootFilesystem to true breaks the app, as it needs to write to app/tmp/pids for example
   family                   = "${var.prefix}-ecs-db-migrate-task"
   cpu                      = var.ecs_task_cpu
   execution_role_arn       = aws_iam_role.task_execution.arn
@@ -72,7 +73,6 @@ resource "aws_ecs_task_definition" "db_migrate" {
       essential              = true
       image                  = var.ecr_repository_url
       memoryReservation      = var.ecs_task_memory * 0.75
-      readonlyRootFilesystem = true
       user                   = "nonroot"
 
       logConfiguration = {
@@ -106,6 +106,7 @@ resource "aws_ecs_task_definition" "db_migrate" {
 }
 
 resource "aws_ecs_task_definition" "db_seed" {
+  #checkov:skip=CKV_AWS_336:using readonlyRootFilesystem to true breaks the app, as it needs to write to app/tmp/pids for example
   family                   = "${var.prefix}-ecs-db-seed-task"
   cpu                      = var.ecs_task_cpu
   execution_role_arn       = aws_iam_role.task_execution.arn
@@ -123,7 +124,6 @@ resource "aws_ecs_task_definition" "db_seed" {
       essential              = true
       image                  = var.ecr_repository_url
       memoryReservation      = var.ecs_task_memory * 0.75
-      readonlyRootFilesystem = true
       user                   = "nonroot"
 
       logConfiguration = {
@@ -157,6 +157,7 @@ resource "aws_ecs_task_definition" "db_seed" {
 }
 
 resource "aws_ecs_task_definition" "db_setup" {
+  #checkov:skip=CKV_AWS_336:using readonlyRootFilesystem to true breaks the app, as it needs to write to app/tmp/pids for example
   family                   = "${var.prefix}-ecs-db-setup-task"
   cpu                      = var.ecs_task_cpu
   execution_role_arn       = aws_iam_role.task_execution.arn
@@ -174,7 +175,6 @@ resource "aws_ecs_task_definition" "db_setup" {
       essential              = true
       image                  = var.ecr_repository_url
       memoryReservation      = var.ecs_task_memory * 0.75
-      readonlyRootFilesystem = true
       user                   = "nonroot"
 
       logConfiguration = {
