@@ -130,7 +130,6 @@ module "redis" {
   ingress_from_ecs_security_group_id = module.ecs.ecs_security_group_id
   egress_to_ecs_security_group_id    = module.ecs.ecs_security_group_id
   node_type                          = "cache.t2.micro"
-  private_subnet_cidr                = module.networking.private_subnet_cidr
   redis_subnet_group_name            = module.networking.redis_private_subnet_group_name
   vpc_id                             = module.networking.vpc_id
 }
