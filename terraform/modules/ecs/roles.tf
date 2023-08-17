@@ -9,7 +9,10 @@ resource "aws_iam_role_policy_attachment" "ecs_task_additional_policies" {
   policy_arn = each.value
 }
 
+#tfsec:ignore:aws-iam-no-policy-wildcards:TODO CLDC-2542 remove resource wildcard if retaining cloudwatch logging
 resource "aws_iam_role_policy" "cloudwatch_logs_access" {
+  #checkov:skip=CKV_AWS_290:TODO CLDC-2542 remove resource wildcard if retaining cloudwatch logging
+  #checkov:skip=CKV_AWS_355:TODO CLDC-2542 remove resource wildcard if retaining cloudwatch logging
   name = "${var.prefix}-cloudwatch-logs-access"
   role = aws_iam_role.task.id
 
