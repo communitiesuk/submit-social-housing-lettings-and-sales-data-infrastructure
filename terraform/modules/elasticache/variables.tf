@@ -18,11 +18,6 @@ variable "prefix" {
   description = "The prefix to be prepended to resource names."
 }
 
-variable "private_subnet_cidr" {
-  type        = string
-  description = "The cidr block of the private subnet."
-}
-
 variable "redis_subnet_group_name" {
   type        = string
   description = "The name of the subnet group associated with the VPC that Redis needs to be in."
