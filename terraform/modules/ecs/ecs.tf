@@ -16,13 +16,13 @@ resource "aws_ecs_task_definition" "main" {
 
   container_definitions = jsonencode([
     {
-      name                   = "${var.prefix}-ecs-container"
-      cpu                    = var.ecs_task_cpu
-      environment            = var.ecs_environment_variables
-      essential              = true
-      image                  = var.ecr_repository_url
-      memoryReservation      = var.ecs_task_memory * 0.75
-      user                   = "nonroot"
+      name              = "${var.prefix}-ecs-container"
+      cpu               = var.ecs_task_cpu
+      environment       = var.ecs_environment_variables
+      essential         = true
+      image             = var.ecr_repository_url
+      memoryReservation = var.ecs_task_memory * 0.75
+      user              = "nonroot"
 
       logConfiguration = {
         logDriver = "awslogs"
@@ -66,14 +66,14 @@ resource "aws_ecs_task_definition" "db_migrate" {
 
   container_definitions = jsonencode([
     {
-      name                   = "${var.prefix}-ecs-db-migrate-container"
-      command                = ["bundle", "exec", "rake", "db:migrate"]
-      cpu                    = var.ecs_task_cpu
-      environment            = var.ecs_environment_variables
-      essential              = true
-      image                  = var.ecr_repository_url
-      memoryReservation      = var.ecs_task_memory * 0.75
-      user                   = "nonroot"
+      name              = "${var.prefix}-ecs-db-migrate-container"
+      command           = ["bundle", "exec", "rake", "db:migrate"]
+      cpu               = var.ecs_task_cpu
+      environment       = var.ecs_environment_variables
+      essential         = true
+      image             = var.ecr_repository_url
+      memoryReservation = var.ecs_task_memory * 0.75
+      user              = "nonroot"
 
       logConfiguration = {
         logDriver = "awslogs"
@@ -117,14 +117,14 @@ resource "aws_ecs_task_definition" "db_seed" {
 
   container_definitions = jsonencode([
     {
-      name                   = "${var.prefix}-ecs-db-setup-container"
-      command                = ["bundle", "exec", "rake", "db:seed"]
-      cpu                    = var.ecs_task_cpu
-      environment            = var.ecs_environment_variables
-      essential              = true
-      image                  = var.ecr_repository_url
-      memoryReservation      = var.ecs_task_memory * 0.75
-      user                   = "nonroot"
+      name              = "${var.prefix}-ecs-db-setup-container"
+      command           = ["bundle", "exec", "rake", "db:seed"]
+      cpu               = var.ecs_task_cpu
+      environment       = var.ecs_environment_variables
+      essential         = true
+      image             = var.ecr_repository_url
+      memoryReservation = var.ecs_task_memory * 0.75
+      user              = "nonroot"
 
       logConfiguration = {
         logDriver = "awslogs"
@@ -168,14 +168,14 @@ resource "aws_ecs_task_definition" "db_setup" {
 
   container_definitions = jsonencode([
     {
-      name                   = "${var.prefix}-ecs-db-setup-container"
-      command                = ["bundle", "exec", "rake", "db:setup"]
-      cpu                    = var.ecs_task_cpu
-      environment            = var.ecs_environment_variables
-      essential              = true
-      image                  = var.ecr_repository_url
-      memoryReservation      = var.ecs_task_memory * 0.75
-      user                   = "nonroot"
+      name              = "${var.prefix}-ecs-db-setup-container"
+      command           = ["bundle", "exec", "rake", "db:setup"]
+      cpu               = var.ecs_task_cpu
+      environment       = var.ecs_environment_variables
+      essential         = true
+      image             = var.ecr_repository_url
+      memoryReservation = var.ecs_task_memory * 0.75
+      user              = "nonroot"
 
       logConfiguration = {
         logDriver = "awslogs"
