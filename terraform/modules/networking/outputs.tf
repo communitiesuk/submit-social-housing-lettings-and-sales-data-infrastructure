@@ -8,6 +8,11 @@ output "private_subnet_cidr" {
   description = "The cidr block range for all the private subnets"
 }
 
+output "private_subnet_ids" {
+  value       = aws_subnet.private[*].id
+  description = "The ids of all the private subnets"
+}
+
 output "redis_private_subnet_group_name" {
   value       = aws_elasticache_subnet_group.private.name
   description = "The name of the private subnet group for redis"
