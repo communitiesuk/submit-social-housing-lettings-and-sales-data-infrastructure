@@ -3,14 +3,20 @@ variable "additional_task_role_policy_arns" {
   description = "The arns of further policies that need to be attached to the ecs task execution role"
 }
 
+variable "app_host" {
+  type        = string
+  description = "The value of the app host environment variable"
+}
+
+variable "database_connection_string_arn" {
+  type        = string
+  description = "The arn of the datbase connection string in parameter store"
+}
+
+
 variable "ecr_repository_url" {
   type        = string
   description = "The URL of the ECR repository in the meta account"
-}
-
-variable "ecs_environment_variables" {
-  type        = list(map(string))
-  description = "The collection of environment variables required by the ecs container"
 }
 
 variable "ecs_task_cpu" {
@@ -26,11 +32,6 @@ variable "ecs_task_desired_count" {
 variable "ecs_task_memory" {
   type        = number
   description = "The amount of memory used by the ecs task"
-}
-
-variable "ecs_parameters" {
-  type        = map(string)
-  description = "The collection of parameters required by the ecs container"
 }
 
 variable "egress_to_db_security_group_id" {
@@ -51,6 +52,16 @@ variable "prefix" {
 variable "private_subnet_ids" {
   type        = list(string)
   description = "The ids of all the private subnets"
+}
+
+variable "rails_env" {
+  type        = string
+  description = "The value of the rails environment variable"
+}
+
+variable "redis_connection_string" {
+  type        = string
+  description = "The value of the redis connection string"
 }
 
 variable "vpc_id" {

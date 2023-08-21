@@ -32,3 +32,10 @@ resource "aws_db_instance" "main" {
     prevent_destroy = true
   }
 }
+
+resource "aws_ssm_parameter" "database_connection_string" {
+  #checkov:skip=CKV_AWS_337:default encryption not using a kms cmk sufficient
+  name  = "DATA_COLLECTOR_DATABASE_URL"
+  type  = "SecureString"
+  value = "postgresql://${aws_db_instance.main.username}:${aws_db_instance.main.password}@${aws_db_instance.main.endpoint}/${aws_db_instance.main.db_name}"
+}

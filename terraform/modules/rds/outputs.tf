@@ -8,8 +8,8 @@ output "rds_data_access_policy_arn" {
   description = "The arn of the iam policy enabling access to the rds data"
 }
 
-output "rds_db_connection_string" {
-  value       = "postgresql://${aws_db_instance.main.username}:${aws_db_instance.main.password}@${aws_db_instance.main.endpoint}/${aws_db_instance.main.db_name}"
-  description = "A libpq (Postgresql) connection string for consuming this database, intended to be set as the environment variable DATABASE_URL"
+output "rds_connection_string_arn" {
+  value       = aws_ssm_parameter.database_connection_string.arn
+  description = "The arn of the database connection string in the parameter store"
   sensitive   = true
 }

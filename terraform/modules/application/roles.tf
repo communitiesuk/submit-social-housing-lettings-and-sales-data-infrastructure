@@ -59,9 +59,7 @@ resource "aws_iam_role_policy_attachment" "task_execution_managed_policy" {
 }
 
 resource "aws_iam_role_policy" "parameter_access" {
-  for_each = var.ecs_parameters
-
-  name = "${var.prefix}-parameter-access-${each.key}"
+  name = "${var.prefix}-parameter-access"
   role = aws_iam_role.task_execution.id
 
   policy = jsonencode({
@@ -72,7 +70,31 @@ resource "aws_iam_role_policy" "parameter_access" {
           "ssm:GetParameters"
         ]
         Effect   = "Allow"
-        Resource = each.value
+        Resource = [var.database_connection_string_arn]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy" "secret_access" {
+  name = "${var.prefix}-secret-access"
+  role = aws_iam_role.task_execution.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "secretsmanager:GetSecretValue"
+        ]
+        Effect = "Allow"
+        Resource = [
+          aws_secretsmanager_secret.api_key.arn,
+          aws_secretsmanager_secret.govuk_notify_api_key.arn,
+          aws_secretsmanager_secret.os_data_key.arn,
+          aws_secretsmanager_secret.rails_master_key.arn,
+          aws_secretsmanager_secret.sentry_dsn.arn
+        ]
       }
     ]
   })
