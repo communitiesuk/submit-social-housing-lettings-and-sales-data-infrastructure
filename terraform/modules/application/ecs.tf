@@ -28,7 +28,7 @@ resource "aws_ecs_task_definition" "main" {
         { Name = "RAILS_LOG_TO_STDOUT", Value = "true" },
         { Name = "RAILS_SERVE_STATIC_FILES", Value = "true" },
         { Name = "REDIS_INSTANCE_NAME", Value = "" },
-        { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]"},
+        { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
         { Name = "S3_CONFIG", Value = "" }
       ]
       essential         = true
@@ -53,12 +53,12 @@ resource "aws_ecs_task_definition" "main" {
         }
       ]
 
-      secrets = [    
-        { Name = "API_KEY", valueFrom = aws_secretsmanager_secret.api_key.arn },    
+      secrets = [
+        { Name = "API_KEY", valueFrom = aws_secretsmanager_secret.api_key.arn },
         { Name = "DATABASE_URL", valueFrom = var.database_connection_string_arn },
         { Name = "GOVUK_NOTIFY_API_KEY", valueFrom = aws_secretsmanager_secret.govuk_notify_api_key.arn },
         { Name = "OS_DATA_KEY", valueFrom = aws_secretsmanager_secret.os_data_key.arn },
-        { Name = "RAILS_MASTER_KEY", valueFrom =  aws_secretsmanager_secret.rails_master_key.arn },
+        { Name = "RAILS_MASTER_KEY", valueFrom = aws_secretsmanager_secret.rails_master_key.arn },
         { Name = "SENTRY_DSN", valueFrom = aws_secretsmanager_secret.sentry_dsn.arn }
       ]
     }
@@ -82,9 +82,9 @@ resource "aws_ecs_task_definition" "db_migrate" {
 
   container_definitions = jsonencode([
     {
-      name              = "${var.prefix}-ecs-db-migrate-container"
-      command           = ["bundle", "exec", "rake", "db:migrate"]
-      cpu               = var.ecs_task_cpu
+      name    = "${var.prefix}-ecs-db-migrate-container"
+      command = ["bundle", "exec", "rake", "db:migrate"]
+      cpu     = var.ecs_task_cpu
       environment = [
         { Name = "API_USER", Value = "dluhc-user" },
         { Name = "APP_HOST", Value = var.app_host },
@@ -95,9 +95,9 @@ resource "aws_ecs_task_definition" "db_migrate" {
         { Name = "RAILS_LOG_TO_STDOUT", Value = "true" },
         { Name = "RAILS_SERVE_STATIC_FILES", Value = "true" },
         { Name = "REDIS_INSTANCE_NAME", Value = "" },
-        { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]"},
+        { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
         { Name = "S3_CONFIG", Value = "" }
-      ]      
+      ]
       essential         = true
       image             = var.ecr_repository_url
       memoryReservation = var.ecs_task_memory * 0.75
@@ -120,12 +120,12 @@ resource "aws_ecs_task_definition" "db_migrate" {
         }
       ]
 
-      secrets = [    
-        { Name = "API_KEY", valueFrom = aws_secretsmanager_secret.api_key.arn },    
+      secrets = [
+        { Name = "API_KEY", valueFrom = aws_secretsmanager_secret.api_key.arn },
         { Name = "DATABASE_URL", valueFrom = var.database_connection_string_arn },
         { Name = "GOVUK_NOTIFY_API_KEY", valueFrom = aws_secretsmanager_secret.govuk_notify_api_key.arn },
         { Name = "OS_DATA_KEY", valueFrom = aws_secretsmanager_secret.os_data_key.arn },
-        { Name = "RAILS_MASTER_KEY", valueFrom =  aws_secretsmanager_secret.rails_master_key.arn },
+        { Name = "RAILS_MASTER_KEY", valueFrom = aws_secretsmanager_secret.rails_master_key.arn },
         { Name = "SENTRY_DSN", valueFrom = aws_secretsmanager_secret.sentry_dsn.arn }
       ]
     }
@@ -149,9 +149,9 @@ resource "aws_ecs_task_definition" "db_seed" {
 
   container_definitions = jsonencode([
     {
-      name              = "${var.prefix}-ecs-db-setup-container"
-      command           = ["bundle", "exec", "rake", "db:seed"]
-      cpu               = var.ecs_task_cpu
+      name    = "${var.prefix}-ecs-db-setup-container"
+      command = ["bundle", "exec", "rake", "db:seed"]
+      cpu     = var.ecs_task_cpu
       environment = [
         { Name = "API_USER", Value = "dluhc-user" },
         { Name = "APP_HOST", Value = var.app_host },
@@ -162,7 +162,7 @@ resource "aws_ecs_task_definition" "db_seed" {
         { Name = "RAILS_LOG_TO_STDOUT", Value = "true" },
         { Name = "RAILS_SERVE_STATIC_FILES", Value = "true" },
         { Name = "REDIS_INSTANCE_NAME", Value = "" },
-        { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]"},
+        { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
         { Name = "S3_CONFIG", Value = "" }
       ]
       essential         = true
@@ -187,12 +187,12 @@ resource "aws_ecs_task_definition" "db_seed" {
         }
       ]
 
-      secrets = [    
-        { Name = "API_KEY", valueFrom = aws_secretsmanager_secret.api_key.arn },    
+      secrets = [
+        { Name = "API_KEY", valueFrom = aws_secretsmanager_secret.api_key.arn },
         { Name = "DATABASE_URL", valueFrom = var.database_connection_string_arn },
         { Name = "GOVUK_NOTIFY_API_KEY", valueFrom = aws_secretsmanager_secret.govuk_notify_api_key.arn },
         { Name = "OS_DATA_KEY", valueFrom = aws_secretsmanager_secret.os_data_key.arn },
-        { Name = "RAILS_MASTER_KEY", valueFrom =  aws_secretsmanager_secret.rails_master_key.arn },
+        { Name = "RAILS_MASTER_KEY", valueFrom = aws_secretsmanager_secret.rails_master_key.arn },
         { Name = "SENTRY_DSN", valueFrom = aws_secretsmanager_secret.sentry_dsn.arn }
       ]
     }
@@ -216,9 +216,9 @@ resource "aws_ecs_task_definition" "db_setup" {
 
   container_definitions = jsonencode([
     {
-      name              = "${var.prefix}-ecs-db-setup-container"
-      command           = ["bundle", "exec", "rake", "db:setup"]
-      cpu               = var.ecs_task_cpu
+      name    = "${var.prefix}-ecs-db-setup-container"
+      command = ["bundle", "exec", "rake", "db:setup"]
+      cpu     = var.ecs_task_cpu
       environment = [
         { Name = "API_USER", Value = "dluhc-user" },
         { Name = "APP_HOST", Value = var.app_host },
@@ -229,7 +229,7 @@ resource "aws_ecs_task_definition" "db_setup" {
         { Name = "RAILS_LOG_TO_STDOUT", Value = "true" },
         { Name = "RAILS_SERVE_STATIC_FILES", Value = "true" },
         { Name = "REDIS_INSTANCE_NAME", Value = "" },
-        { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]"},
+        { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
         { Name = "S3_CONFIG", Value = "" }
       ]
       essential         = true
@@ -254,12 +254,12 @@ resource "aws_ecs_task_definition" "db_setup" {
         }
       ]
 
-      secrets = [    
-        { Name = "API_KEY", valueFrom = aws_secretsmanager_secret.api_key.arn },    
+      secrets = [
+        { Name = "API_KEY", valueFrom = aws_secretsmanager_secret.api_key.arn },
         { Name = "DATABASE_URL", valueFrom = var.database_connection_string_arn },
         { Name = "GOVUK_NOTIFY_API_KEY", valueFrom = aws_secretsmanager_secret.govuk_notify_api_key.arn },
         { Name = "OS_DATA_KEY", valueFrom = aws_secretsmanager_secret.os_data_key.arn },
-        { Name = "RAILS_MASTER_KEY", valueFrom =  aws_secretsmanager_secret.rails_master_key.arn },
+        { Name = "RAILS_MASTER_KEY", valueFrom = aws_secretsmanager_secret.rails_master_key.arn },
         { Name = "SENTRY_DSN", valueFrom = aws_secretsmanager_secret.sentry_dsn.arn }
       ]
     }
