@@ -2,6 +2,10 @@ resource "aws_security_group" "ecs" {
   name        = "${var.prefix}-ecs-security_group"
   description = "ECS security group"
   vpc_id      = var.vpc_id
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_vpc_security_group_ingress_rule" "ecs_ingress" {
