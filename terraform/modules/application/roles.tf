@@ -1,12 +1,28 @@
+data "aws_iam_policy_document" "task_assume_role" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com"]
+    }
+  }
+}
+
 resource "aws_iam_role" "task" {
   name               = "${var.prefix}-task"
   assume_role_policy = data.aws_iam_policy_document.task_assume_role.json
 }
 
-resource "aws_iam_role_policy_attachment" "ecs_task_additional_policies" {
-  for_each   = var.additional_task_role_policy_arns
+resource "aws_iam_role_policy_attachment" "ecs_task_database_data_access" {
   role       = aws_iam_role.task.name
-  policy_arn = each.value
+  policy_arn = var.database_data_access_policy_arn
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_task_redis_access" {
+  role       = aws_iam_role.task.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonElastiCacheFullAccess"
 }
 
 #tfsec:ignore:aws-iam-no-policy-wildcards:TODO CLDC-2542 remove resource wildcard if retaining cloudwatch logging
@@ -38,18 +54,6 @@ resource "aws_iam_role_policy" "cloudwatch_logs_access" {
 resource "aws_iam_role" "task_execution" {
   name               = "${var.prefix}-task-execution"
   assume_role_policy = data.aws_iam_policy_document.task_assume_role.json
-}
-
-data "aws_iam_policy_document" "task_assume_role" {
-  statement {
-    effect  = "Allow"
-    actions = ["sts:AssumeRole"]
-
-    principals {
-      type        = "Service"
-      identifiers = ["ecs-tasks.amazonaws.com"]
-    }
-  }
 }
 
 resource "aws_iam_role_policy_attachment" "task_execution_managed_policy" {

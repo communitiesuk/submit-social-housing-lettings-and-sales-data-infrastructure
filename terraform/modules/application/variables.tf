@@ -1,8 +1,3 @@
-variable "additional_task_role_policy_arns" {
-  type        = map(string)
-  description = "The arns of further policies that need to be attached to the ecs task execution role"
-}
-
 variable "app_host" {
   type        = string
   description = "The value of the app host environment variable"
@@ -13,6 +8,10 @@ variable "database_connection_string_arn" {
   description = "The arn of the datbase connection string in parameter store"
 }
 
+variable "database_data_access_policy_arn" {
+  type        = string
+  description = "The arn of the policy allowing database data access"
+}
 
 variable "ecr_repository_url" {
   type        = string

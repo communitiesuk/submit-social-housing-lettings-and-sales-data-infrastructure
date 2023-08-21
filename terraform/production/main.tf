@@ -44,12 +44,10 @@ module "database" {
 module "application" {
   source = "../modules/application"
 
-  prefix = local.prefix
-  additional_task_role_policy_arns = {
-    "RDS_access" : module.database.rds_data_access_policy_arn
-    "Redis_access" : "arn:aws:iam::aws:policy/AmazonElastiCacheFullAccess"
-  }
+  prefix                            = local.prefix
   app_host                          = ""
+  database_data_access_policy_arn   = module.database.rds_data_access_policy_arn
+  database_connection_string_arn    = module.database.rds_connection_string_arn
   ecr_repository_url                = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core-ecr"
   egress_to_db_security_group_id    = module.database.rds_security_group_id
   egress_to_redis_security_group_id = module.redis.redis_security_group_id
@@ -59,7 +57,6 @@ module "application" {
   private_subnet_ids                = module.networking.private_subnet_ids
   rails_env                         = "production"
   redis_connection_string           = module.redis.redis_connection_string
-  database_connection_string_arn    = module.database.rds_connection_string_arn
   vpc_id                            = module.networking.vpc_id
 }
 
