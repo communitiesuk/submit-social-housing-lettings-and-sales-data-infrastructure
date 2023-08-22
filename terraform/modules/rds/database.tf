@@ -21,7 +21,7 @@ resource "aws_db_instance" "main" {
   instance_class             = var.instance_class
   multi_az                   = true
   password                   = random_password.password.result
-  port                       = 5432
+  port                       = var.database_port
   publicly_accessible        = false
   storage_encrypted          = true
   storage_type               = "gp2"

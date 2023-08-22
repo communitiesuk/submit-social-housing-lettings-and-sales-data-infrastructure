@@ -3,6 +3,11 @@ variable "app_host" {
   description = "The value of the app host environment variable"
 }
 
+variable "application_port" {
+  type        = number
+  description = "The network port the application runs on"
+}
+
 variable "database_connection_string_arn" {
   type        = string
   description = "The arn of the datbase connection string in parameter store"
@@ -11,6 +16,11 @@ variable "database_connection_string_arn" {
 variable "database_data_access_policy_arn" {
   type        = string
   description = "The arn of the policy allowing database data access"
+}
+
+variable "database_port" {
+  type        = number
+  description = "The network port the database runs on"
 }
 
 variable "ecr_repository_url" {
@@ -61,6 +71,11 @@ variable "rails_env" {
 variable "redis_connection_string" {
   type        = string
   description = "The value of the redis connection string"
+}
+
+variable "redis_port" {
+  type        = number
+  description = "The network port redis runs on"
 }
 
 variable "vpc_id" {

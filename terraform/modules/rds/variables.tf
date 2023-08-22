@@ -3,6 +3,11 @@ variable "allocated_storage" {
   description = "The allocated DB storage in gibibytes."
 }
 
+variable "database_port" {
+  type        = number
+  description = "The network port the database runs on"
+}
+
 variable "db_subnet_group_name" {
   type        = string
   description = "The name of the subnet group associated with the VPC the DB needs to be in."

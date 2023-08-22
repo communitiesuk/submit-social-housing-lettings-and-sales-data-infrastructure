@@ -9,19 +9,19 @@ resource "aws_security_group" "redis" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "redis_ingress" {
-  description                  = "Allow ingress on port 6379 from from the ecs security group"
+  description                  = "Allow ingress on port ${var.redis_port} from from the ecs security group"
   ip_protocol                  = "tcp"
-  from_port                    = 6379
-  to_port                      = 6379
+  from_port                    = var.redis_port
+  to_port                      = var.redis_port
   referenced_security_group_id = var.ingress_from_ecs_security_group_id
   security_group_id            = aws_security_group.redis.id
 }
 
 resource "aws_vpc_security_group_egress_rule" "redis_egress" {
-  description                  = "Allow egress from port 6379 to to ecs security group"
+  description                  = "Allow egress from port ${var.redis_port} to to ecs security group"
   ip_protocol                  = "tcp"
-  from_port                    = 6379
-  to_port                      = 6379
+  from_port                    = var.redis_port
+  to_port                      = var.redis_port
   referenced_security_group_id = var.egress_to_ecs_security_group_id
   security_group_id            = aws_security_group.redis.id
 }

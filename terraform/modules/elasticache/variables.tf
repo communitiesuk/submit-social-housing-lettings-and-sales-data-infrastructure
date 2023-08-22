@@ -18,6 +18,11 @@ variable "prefix" {
   description = "The prefix to be prepended to resource names."
 }
 
+variable "redis_port" {
+  type        = number
+  description = "The network port redis runs on"
+}
+
 variable "redis_subnet_group_name" {
   type        = string
   description = "The name of the subnet group associated with the VPC that Redis needs to be in."

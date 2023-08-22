@@ -27,7 +27,10 @@ provider "aws" {
 }
 
 locals {
-  prefix = "core-stag"
+  prefix           = "core-stag"
+  application_port = 8080
+  database_port    = 5432
+  redis_port       = 6379
 }
 
 module "database" {
@@ -35,6 +38,7 @@ module "database" {
 
   prefix                             = local.prefix
   allocated_storage                  = 5
+  database_port                      = local.database_port
   db_subnet_group_name               = module.networking.db_private_subnet_group_name
   ingress_from_ecs_security_group_id = module.application.ecs_security_group_id
   instance_class                     = "db.t3.micro"
@@ -46,8 +50,10 @@ module "application" {
 
   prefix                            = local.prefix
   app_host                          = ""
+  application_port                  = local.application_port
   database_data_access_policy_arn   = module.database.rds_data_access_policy_arn
   database_connection_string_arn    = module.database.rds_connection_string_arn
+  database_port                     = local.database_port
   ecr_repository_url                = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core-ecr"
   egress_to_db_security_group_id    = module.database.rds_security_group_id
   egress_to_redis_security_group_id = module.redis.redis_security_group_id
@@ -57,6 +63,7 @@ module "application" {
   private_subnet_ids                = module.networking.private_subnet_ids
   rails_env                         = "staging"
   redis_connection_string           = module.redis.redis_connection_string
+  redis_port                        = local.redis_port
   vpc_id                            = module.networking.vpc_id
 }
 
@@ -75,6 +82,7 @@ module "redis" {
   ingress_from_ecs_security_group_id = module.application.ecs_security_group_id
   egress_to_ecs_security_group_id    = module.application.ecs_security_group_id
   node_type                          = "cache.t2.micro"
+  redis_port                         = local.redis_port
   redis_subnet_group_name            = module.networking.redis_private_subnet_group_name
   vpc_id                             = module.networking.vpc_id
 }

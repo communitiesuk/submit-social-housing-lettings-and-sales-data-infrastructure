@@ -48,8 +48,8 @@ resource "aws_ecs_task_definition" "main" {
       portMappings = [
         {
           protocol      = "tcp"
-          containerPort = 8080
-          hostPort      = 8080
+          containerPort = var.application_port
+          hostPort      = var.application_port
         }
       ]
 
@@ -115,8 +115,8 @@ resource "aws_ecs_task_definition" "db_migrate" {
       portMappings = [
         {
           protocol      = "tcp"
-          containerPort = 8080
-          hostPort      = 8080
+          containerPort = var.application_port
+          hostPort      = var.application_port
         }
       ]
 
@@ -182,8 +182,8 @@ resource "aws_ecs_task_definition" "db_seed" {
       portMappings = [
         {
           protocol      = "tcp"
-          containerPort = 8080
-          hostPort      = 8080
+          containerPort = var.application_port
+          hostPort      = var.application_port
         }
       ]
 
@@ -249,8 +249,8 @@ resource "aws_ecs_task_definition" "db_setup" {
       portMappings = [
         {
           protocol      = "tcp"
-          containerPort = 8080
-          hostPort      = 8080
+          containerPort = var.application_port
+          hostPort      = var.application_port
         }
       ]
 

@@ -8,11 +8,11 @@ resource "aws_security_group" "rds" {
   }
 }
 
-resource "aws_vpc_security_group_ingress_rule" "rds_ingress" {
-  description                  = "Allow ingress on port 6379 from ecs security group"
+resource "aws_vpc_security_group_ingress_rule" "db_ingress" {
+  description                  = "Allow ingress on port ${var.database_port} from ecs security group"
   ip_protocol                  = "tcp"
-  from_port                    = 5432
-  to_port                      = 5432
+  from_port                    = var.database_port
+  to_port                      = var.database_port
   referenced_security_group_id = var.ingress_from_ecs_security_group_id
   security_group_id            = aws_security_group.rds.id
 }
