@@ -53,6 +53,11 @@ variable "egress_to_redis_security_group_id" {
   description = "The id of the redis security group id for ecs egress"
 }
 
+variable "load_balancer_target_group_arn" {
+  type        = string
+  description = "The arn of the load balancer target group to be associated with the ecs"
+}
+
 variable "prefix" {
   type        = string
   description = "The prefix to be prepended to resource names."

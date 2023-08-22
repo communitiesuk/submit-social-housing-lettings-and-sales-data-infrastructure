@@ -13,6 +13,11 @@ output "private_subnet_ids" {
   description = "The ids of all the private subnets"
 }
 
+output "public_subnet_ids" {
+  value       = aws_subnet.public[*].id
+  description = "The ids of all the public subnets"
+}
+
 output "redis_private_subnet_group_name" {
   value       = aws_elasticache_subnet_group.private.name
   description = "The name of the private subnet group for redis"

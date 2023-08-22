@@ -60,11 +60,21 @@ module "application" {
   ecs_task_cpu                      = 512
   ecs_task_desired_count            = 2
   ecs_task_memory                   = 1024
+  load_balancer_target_group_arn    = module.front_door.load_balancer_target_group_arn
   private_subnet_ids                = module.networking.private_subnet_ids
   rails_env                         = "staging"
   redis_connection_string           = module.redis.redis_connection_string
   redis_port                        = local.redis_port
   vpc_id                            = module.networking.vpc_id
+}
+
+module "front_door" {
+  source            = "../modules/front_door"
+
+  prefix            = local.prefix
+  application_port  = local.application_port
+  public_subnet_ids = module.networking.public_subnet_ids
+  vpc_id            = module.networking.vpc_id
 }
 
 module "networking" {
