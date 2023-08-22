@@ -69,7 +69,7 @@ module "application" {
 }
 
 module "front_door" {
-  source            = "../modules/front_door"
+  source = "../modules/front_door"
 
   prefix            = local.prefix
   application_port  = local.application_port
