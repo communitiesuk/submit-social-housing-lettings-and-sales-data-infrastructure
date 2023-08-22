@@ -10,7 +10,7 @@ resource "aws_security_group" "load_balancer" {
 
 resource "aws_vpc_security_group_ingress_rule" "load_balancer_http_ingress" {
   #checkov:skip=CKV_AWS_260:ingress from all IPs to port 80 required as load balancer is public
-  description       = "Allow ingress on port 80 from from all IP addresses"
+  description       = "Allow ingress on port 80 from all IP addresses"
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "tcp"
   from_port         = 80
@@ -19,7 +19,7 @@ resource "aws_vpc_security_group_ingress_rule" "load_balancer_http_ingress" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "load_balancer_https_ingress" {
-  description       = "Allow ingress on port 443 from from all IP addresses"
+  description       = "Allow ingress on port 443 from all IP addresses"
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "tcp"
   from_port         = 443
@@ -28,7 +28,7 @@ resource "aws_vpc_security_group_ingress_rule" "load_balancer_https_ingress" {
 }
 
 resource "aws_vpc_security_group_egress_rule" "load_balancer_http_egress" {
-  description       = "Allow egress to port 80 from from all IP addresses"
+  description       = "Allow egress to port 80 from all IP addresses"
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "tcp"
   from_port         = 80
@@ -37,7 +37,7 @@ resource "aws_vpc_security_group_egress_rule" "load_balancer_http_egress" {
 }
 
 resource "aws_vpc_security_group_egress_rule" "load_balancer_https_egress" {
-  description       = "Allow egress to port 443 from from all IP addresses"
+  description       = "Allow egress to port 443 from all IP addresses"
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "tcp"
   from_port         = 443
@@ -46,7 +46,7 @@ resource "aws_vpc_security_group_egress_rule" "load_balancer_https_egress" {
 }
 
 resource "aws_vpc_security_group_egress_rule" "load_balancer_container_egress" {
-  description       = "Allow egress to port ${var.application_port} from from all IP addresses"
+  description       = "Allow egress to port ${var.application_port} from all IP addresses"
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "tcp"
   from_port         = var.application_port
