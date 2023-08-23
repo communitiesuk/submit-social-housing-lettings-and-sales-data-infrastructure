@@ -59,9 +59,9 @@ data "aws_iam_policy_document" "allow_ecs_exec" {
       "ssmmessages:OpenControlChannel",
       "ssmmessages:OpenDataChannel"
     ]
+    resources = ["*"]
+    effect    = "Allow"
   }
-  resources = ["*"]
-  effect    = "Allow"
 }
 
 resource "aws_iam_policy" "allow_ecs_exec" {
@@ -70,7 +70,7 @@ resource "aws_iam_policy" "allow_ecs_exec" {
 }
 
 resource "aws_iam_role_policy_attachment" "task_allow_ecs_exec" {
-  role       = aws_iam_role.task
+  role       = aws_iam_role.task.name
   policy_arn = aws_iam_policy.allow_ecs_exec.arn
 }
 
