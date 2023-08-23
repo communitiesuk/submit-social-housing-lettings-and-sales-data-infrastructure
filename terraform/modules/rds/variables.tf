@@ -13,7 +13,7 @@ variable "db_subnet_group_name" {
   description = "The name of the subnet group associated with the VPC the DB needs to be in."
 }
 
-variable "ingress_from_ecs_security_group_id" {
+variable "ecs_security_group_id" {
   type        = string
   description = "The id of the ecs security group for database ingress"
 }

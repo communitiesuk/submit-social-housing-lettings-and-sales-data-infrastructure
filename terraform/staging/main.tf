@@ -40,7 +40,7 @@ module "database" {
   allocated_storage                  = 5
   database_port                      = local.database_port
   db_subnet_group_name               = module.networking.db_private_subnet_group_name
-  ingress_from_ecs_security_group_id = module.application.ecs_security_group_id
+  ecs_security_group_id              = module.application.ecs_security_group_id
   instance_class                     = "db.t3.micro"
   vpc_id                             = module.networking.vpc_id
 }
@@ -79,8 +79,7 @@ module "redis" {
   source = "../modules/elasticache"
 
   prefix                             = local.prefix
-  ingress_from_ecs_security_group_id = module.application.ecs_security_group_id
-  egress_to_ecs_security_group_id    = module.application.ecs_security_group_id
+  ecs_security_group_id              = module.application.ecs_security_group_id
   node_type                          = "cache.t2.micro"
   redis_port                         = local.redis_port
   redis_subnet_group_name            = module.networking.redis_private_subnet_group_name

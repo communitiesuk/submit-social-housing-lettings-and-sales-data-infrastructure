@@ -1,11 +1,6 @@
-variable "ingress_from_ecs_security_group_id" {
+variable "ecs_security_group_id" {
   type        = string
-  description = "The id of the ecs security group for redis ingress"
-}
-
-variable "egress_to_ecs_security_group_id" {
-  type        = string
-  description = "The id of the ecs security group for redis egress"
+  description = "The id of the ecs security group"
 }
 
 variable "node_type" {
