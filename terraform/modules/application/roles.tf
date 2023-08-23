@@ -51,6 +51,29 @@ resource "aws_iam_role_policy" "cloudwatch_logs_access" {
   })
 }
 
+data "aws_iam_policy_document" "allow_ecs_exec" {
+  statement {
+    actions = [
+      "ssmmessages:CreateControlChannel",
+      "ssmmessages:CreateDataChannel",
+      "ssmmessages:OpenControlChannel",
+      "ssmmessages:OpenDataChannel"
+    ]
+  }
+  resources = ["*"]
+  effect    = "Allow"
+}
+
+resource "aws_iam_policy" "allow_ecs_exec" {
+  name   = "${var.prefix}-allow-ecs-exec"
+  policy = data.aws_iam_policy_document.allow_ecs_exec.json
+}
+
+resource "aws_iam_role_policy_attachment" "task_allow_ecs_exec" {
+  role       = aws_iam_role.task
+  policy_arn = aws_iam_policy.allow_ecs_exec.arn
+}
+
 resource "aws_iam_role" "task_execution" {
   name               = "${var.prefix}-task-execution"
   assume_role_policy = data.aws_iam_policy_document.task_assume_role.json
