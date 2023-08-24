@@ -27,17 +27,43 @@ provider "aws" {
 }
 
 locals {
-  prefix = "core-prod"
+  prefix           = "core-prod"
+  application_port = 8080
+  database_port    = 5432
+  redis_port       = 6379
 }
 
 module "database" {
   source = "../modules/rds"
 
+  prefix                = local.prefix
+  allocated_storage     = 100
+  database_port         = local.database_port
+  db_subnet_group_name  = module.networking.db_private_subnet_group_name
+  ecs_security_group_id = module.application.ecs_security_group_id
+  instance_class        = "db.t3.small"
+  vpc_id                = module.networking.vpc_id
+}
+
+module "application" {
+  source = "../modules/application"
+
   prefix                            = local.prefix
-  allocated_storage                 = 100
-  db_subnet_group_name              = module.networking.db_private_subnet_group_name
-  ingress_source_security_group_ids = []
-  instance_class                    = "db.t3.small"
+  app_host                          = ""
+  application_port                  = local.application_port
+  database_data_access_policy_arn   = module.database.rds_data_access_policy_arn
+  database_connection_string_arn    = module.database.rds_connection_string_arn
+  database_port                     = local.database_port
+  ecr_repository_url                = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core-ecr"
+  egress_to_db_security_group_id    = module.database.rds_security_group_id
+  egress_to_redis_security_group_id = module.redis.redis_security_group_id
+  ecs_task_cpu                      = 512
+  ecs_task_desired_count            = 2
+  ecs_task_memory                   = 1024
+  private_subnet_ids                = module.networking.private_subnet_ids
+  rails_env                         = "production"
+  redis_connection_string           = module.redis.redis_connection_string
+  redis_port                        = local.redis_port
   vpc_id                            = module.networking.vpc_id
 }
 
@@ -52,16 +78,10 @@ module "networking" {
 module "redis" {
   source = "../modules/elasticache"
 
-  prefix                            = local.prefix
-  ingress_source_security_group_ids = []
-  node_type                         = "cache.t2.micro"
-  private_subnet_cidr               = module.networking.private_subnet_cidr
-  redis_subnet_group_name           = module.networking.redis_private_subnet_group_name
-  vpc_id                            = module.networking.vpc_id
-}
-
-module "service" {
-  source = "../modules/service"
-
-  prefix = local.prefix
+  prefix                  = local.prefix
+  ecs_security_group_id   = module.application.ecs_security_group_id
+  node_type               = "cache.t2.micro"
+  redis_port              = local.redis_port
+  redis_subnet_group_name = module.networking.redis_private_subnet_group_name
+  vpc_id                  = module.networking.vpc_id
 }

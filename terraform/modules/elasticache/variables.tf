@@ -1,6 +1,6 @@
-variable "ingress_source_security_group_ids" {
-  type        = list(string)
-  description = "The security group ids (sources) the redis security group will allow ingress from"
+variable "ecs_security_group_id" {
+  type        = string
+  description = "The id of the ecs security group"
 }
 
 variable "node_type" {
@@ -13,9 +13,9 @@ variable "prefix" {
   description = "The prefix to be prepended to resource names."
 }
 
-variable "private_subnet_cidr" {
-  type        = string
-  description = "The cidr block of the private subnet."
+variable "redis_port" {
+  type        = number
+  description = "The network port redis runs on"
 }
 
 variable "redis_subnet_group_name" {
