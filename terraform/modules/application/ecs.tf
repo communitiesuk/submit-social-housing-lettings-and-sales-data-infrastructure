@@ -283,10 +283,6 @@ resource "aws_ecs_service" "main" {
   scheduling_strategy                = "REPLICA"
   task_definition                    = aws_ecs_task_definition.main.arn
 
-  lifecycle {
-    ignore_changes = [desired_count]
-  }
-
   network_configuration {
     security_groups  = [aws_security_group.ecs.id]
     subnets          = var.private_subnet_ids
