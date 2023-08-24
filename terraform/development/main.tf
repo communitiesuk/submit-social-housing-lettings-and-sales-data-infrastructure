@@ -36,13 +36,13 @@ locals {
 module "database" {
   source = "../modules/rds"
 
-  prefix                             = local.prefix
-  allocated_storage                  = 5
-  db_subnet_group_name               = module.networking.db_private_subnet_group_name
-  database_port                      = local.database_port
-  ecs_security_group_id              = module.application.ecs_security_group_id
-  instance_class                     = "db.t3.micro"
-  vpc_id                             = module.networking.vpc_id
+  prefix                = local.prefix
+  allocated_storage     = 5
+  db_subnet_group_name  = module.networking.db_private_subnet_group_name
+  database_port         = local.database_port
+  ecs_security_group_id = module.application.ecs_security_group_id
+  instance_class        = "db.t3.micro"
+  vpc_id                = module.networking.vpc_id
 }
 
 module "application" {
@@ -78,10 +78,10 @@ module "networking" {
 module "redis" {
   source = "../modules/elasticache"
 
-  prefix                             = local.prefix
-  ecs_security_group_id              = module.application.ecs_security_group_id
-  node_type                          = "cache.t2.micro"
-  redis_port                         = local.redis_port
-  redis_subnet_group_name            = module.networking.redis_private_subnet_group_name
-  vpc_id                             = module.networking.vpc_id
+  prefix                  = local.prefix
+  ecs_security_group_id   = module.application.ecs_security_group_id
+  node_type               = "cache.t2.micro"
+  redis_port              = local.redis_port
+  redis_subnet_group_name = module.networking.redis_private_subnet_group_name
+  vpc_id                  = module.networking.vpc_id
 }
