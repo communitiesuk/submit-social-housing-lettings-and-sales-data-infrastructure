@@ -45,6 +45,12 @@ module "database" {
   vpc_id                = module.networking.vpc_id
 }
 
+module "cds_export" {
+  source = "../modules/cds_export"
+
+  prefix = local.prefix
+}
+
 module "application" {
   source = "../modules/application"
 
@@ -60,6 +66,8 @@ module "application" {
   ecs_task_cpu                      = 512
   ecs_task_desired_count            = 2
   ecs_task_memory                   = 1024
+  export_bucket_access_policy_arn   = module.cds_export.read_write_policy_arn
+  export_bucket_details             = module.cds_export.details
   load_balancer_target_group_arn    = module.front_door.load_balancer_target_group_arn
   private_subnet_ids                = module.networking.private_subnet_ids
   rails_env                         = "staging"

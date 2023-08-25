@@ -4,6 +4,16 @@ resource "aws_ecs_cluster" "main" {
   name = "${var.prefix}-ecs-cluster"
 }
 
+locals {
+  export_bucket = "export-bucket"
+  s3_config = [
+    {
+      instance_name : local.export_bucket,
+      credentials : var.export_bucket_details
+    }
+  ]
+}
+
 resource "aws_ecs_task_definition" "main" {
   #checkov:skip=CKV_AWS_336:using readonlyRootFilesystem to true breaks the app, as it needs to write to app/tmp/pids for example
   family                   = "${var.prefix}-ecs-task"
@@ -22,14 +32,14 @@ resource "aws_ecs_task_definition" "main" {
         { Name = "API_USER", Value = "dluhc-user" },
         { Name = "APP_HOST", Value = var.app_host },
         { Name = "CSV_DOWNLOAD_PAAS_INSTANCE", Value = "" },
-        { Name = "EXPORT_PAAS_INSTANCE", Value = "" },
+        { Name = "EXPORT_PAAS_INSTANCE", Value = local.export_bucket },
         { Name = "IMPORT_PAAS_INSTANCE", Value = "" },
         { Name = "RAILS_ENV", Value = var.rails_env },
         { Name = "RAILS_LOG_TO_STDOUT", Value = "true" },
         { Name = "RAILS_SERVE_STATIC_FILES", Value = "true" },
         { Name = "REDIS_INSTANCE_NAME", Value = "" },
         { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
-        { Name = "S3_CONFIG", Value = "" }
+        { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) }
       ]
       essential         = true
       image             = var.ecr_repository_url
