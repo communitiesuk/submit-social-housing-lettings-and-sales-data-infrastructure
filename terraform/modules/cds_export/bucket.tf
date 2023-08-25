@@ -3,6 +3,12 @@
 #tfsec:ignore:aws-s3-enable-bucket-logging: TODO
 #tfsec:ignore:aws-s3-enable-versioning: Not important, source of data is application db
 resource "aws_s3_bucket" "this" {
+  #checkov:skip=CKV2_AWS_62: no need for event notifications
+  #checkov:skip=CKV_AWS_18: access logging - TODO
+  #checkov:skip=CKV_AWS_145: default encryption is fine for now
+  #checkov:skip=CKV_AWS_144: cross region replication is overkill when this is only for data transfer
+  #checkov:skip=CKV2_AWS_61: lifecycle configuration - TODO
+  #checkov:skip=CKV_AWS_21: versioning not important for this
   bucket = "${var.prefix}-export-bucket"
 }
 
