@@ -23,6 +23,11 @@ variable "database_port" {
   description = "The network port the database runs on"
 }
 
+variable "db_security_group_id" {
+  type        = string
+  description = "The id of the db security group id for ecs egress"
+}
+
 variable "ecr_repository_url" {
   type        = string
   description = "The URL of the ECR repository in the meta account"
@@ -41,16 +46,6 @@ variable "ecs_task_desired_count" {
 variable "ecs_task_memory" {
   type        = number
   description = "The amount of memory used by the ecs task"
-}
-
-variable "egress_to_db_security_group_id" {
-  type        = string
-  description = "The id of the db security group id for ecs egress"
-}
-
-variable "egress_to_redis_security_group_id" {
-  type        = string
-  description = "The id of the redis security group id for ecs egress"
 }
 
 variable "export_bucket_access_policy_arn" {
@@ -94,6 +89,11 @@ variable "redis_connection_string" {
 variable "redis_port" {
   type        = number
   description = "The network port redis runs on"
+}
+
+variable "redis_security_group_id" {
+  type        = string
+  description = "The id of the redis security group id for ecs egress"
 }
 
 variable "vpc_id" {
