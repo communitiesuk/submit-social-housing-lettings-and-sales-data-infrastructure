@@ -8,7 +8,7 @@ locals {
   export_bucket_key = "export-bucket"
   s3_config = [
     {
-      instance_name : local.export_bucket,
+      instance_name : local.export_bucket_key,
       credentials : var.export_bucket_details
     }
   ]
