@@ -60,7 +60,7 @@ variable "export_bucket_access_policy_arn" {
 
 variable "export_bucket_details" {
   type = object({
-    aws_region      = string
+    aws_region  = string
     bucket_name = string
   })
   description = "Details block for export bucket"
