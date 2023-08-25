@@ -283,6 +283,12 @@ resource "aws_ecs_service" "main" {
   scheduling_strategy                = "REPLICA"
   task_definition                    = aws_ecs_task_definition.main.arn
 
+  load_balancer {
+    container_name   = "${var.prefix}-ecs-container"
+    container_port   = var.application_port
+    target_group_arn = var.load_balancer_target_group_arn
+  }
+
   network_configuration {
     security_groups  = [aws_security_group.ecs.id]
     subnets          = var.private_subnet_ids
