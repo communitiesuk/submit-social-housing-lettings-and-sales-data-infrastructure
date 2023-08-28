@@ -57,8 +57,8 @@ module "application" {
   prefix                          = local.prefix
   app_host                        = ""
   application_port                = local.application_port
-  database_data_access_policy_arn = module.database.rds_data_access_policy_arn
   database_connection_string_arn  = module.database.rds_connection_string_arn
+  database_data_access_policy_arn = module.database.rds_data_access_policy_arn
   database_port                   = local.database_port
   db_security_group_id            = module.database.rds_security_group_id
   ecr_repository_url              = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core-ecr"
@@ -69,8 +69,8 @@ module "application" {
   export_bucket_details           = module.cds_export.details
   load_balancer_target_group_arn  = module.front_door.load_balancer_target_group_arn
   private_subnet_ids              = module.networking.private_subnet_ids
-  rails_env                       = "development"
   redis_connection_string         = module.redis.redis_connection_string
+  rails_env                       = "development"
   redis_port                      = local.redis_port
   redis_security_group_id         = module.redis.redis_security_group_id
   vpc_id                          = module.networking.vpc_id
