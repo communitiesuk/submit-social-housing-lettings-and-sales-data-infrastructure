@@ -53,6 +53,19 @@ variable "egress_to_redis_security_group_id" {
   description = "The id of the redis security group id for ecs egress"
 }
 
+variable "export_bucket_access_policy_arn" {
+  type        = string
+  description = "The arn of the policy allowing access to the export bucket"
+}
+
+variable "export_bucket_details" {
+  type = object({
+    aws_region  = string
+    bucket_name = string
+  })
+  description = "Details block for export bucket"
+}
+
 variable "load_balancer_target_group_arn" {
   type        = string
   description = "The arn of the load balancer target group to be associated with the ecs"

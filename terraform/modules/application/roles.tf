@@ -74,6 +74,11 @@ resource "aws_iam_role_policy_attachment" "task_allow_ecs_exec" {
   policy_arn = aws_iam_policy.allow_ecs_exec.arn
 }
 
+resource "aws_iam_role_policy_attachment" "task_export_bucket_access" {
+  role       = aws_iam_role.task.name
+  policy_arn = var.export_bucket_access_policy_arn
+}
+
 resource "aws_iam_role" "task_execution" {
   name               = "${var.prefix}-task-execution"
   assume_role_policy = data.aws_iam_policy_document.task_assume_role.json
