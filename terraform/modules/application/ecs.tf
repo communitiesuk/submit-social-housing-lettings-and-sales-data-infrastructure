@@ -5,7 +5,7 @@ resource "aws_ecs_cluster" "main" {
 }
 
 locals {
-  export_bucket_key = "export-bucket"
+  export_bucket_key      = "export-bucket"
   bulk_upload_bucket_key = "bulk-upload-bucket"
   s3_config = [
     {
