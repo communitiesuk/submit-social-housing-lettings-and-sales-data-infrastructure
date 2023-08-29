@@ -3,6 +3,11 @@ variable "application_port" {
   description = "The network port the application runs on"
 }
 
+variable "ecs_security_group_id" {
+  type        = string
+  description = "The id of the ecs security group"
+}
+
 variable "prefix" {
   type        = string
   description = "The prefix to be prepended to resource names."

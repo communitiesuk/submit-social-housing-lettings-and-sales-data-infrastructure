@@ -90,6 +90,7 @@ module "front_door" {
 
   prefix            = local.prefix
   application_port  = local.application_port
+  ecs_security_group_id   = module.application.ecs_security_group_id
   public_subnet_ids = module.networking.public_subnet_ids
   vpc_id            = module.networking.vpc_id
 }
