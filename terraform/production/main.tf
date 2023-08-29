@@ -45,6 +45,12 @@ module "database" {
   vpc_id                = module.networking.vpc_id
 }
 
+module "bulk_upload" {
+  source = "../modules/bulk_upload"
+
+  prefix = local.prefix
+}
+
 module "cds_export" {
   source = "../modules/cds_export"
 
@@ -57,6 +63,8 @@ module "application" {
   prefix                          = local.prefix
   app_host                        = ""
   application_port                = local.application_port
+  bulk_upload_bucket_access_policy_arn = module.bulk_upload.read_write_policy_arn
+  bulk_upload_bucket_details           = module.bulk_upload.details
   database_connection_string_arn  = module.database.rds_connection_string_arn
   database_data_access_policy_arn = module.database.rds_data_access_policy_arn
   database_port                   = local.database_port
