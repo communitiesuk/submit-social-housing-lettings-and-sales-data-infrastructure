@@ -9,11 +9,11 @@ resource "aws_security_group" "ecs" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "ecs_ingress" {
-  description       = "Allow ingress on port ${var.application_port} from any IP address"
-  cidr_ipv4         = "0.0.0.0/0"
+  description       = "Allow ingress on port ${var.application_port} from the load balancer only"
   ip_protocol       = "tcp"
   from_port         = var.application_port
   to_port           = var.application_port
+  referenced_security_group_id = var.load_balancer_security_group_id
   security_group_id = aws_security_group.ecs.id
 }
 

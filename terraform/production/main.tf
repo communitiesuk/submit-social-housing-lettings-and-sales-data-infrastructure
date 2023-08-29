@@ -75,6 +75,7 @@ module "application" {
   ecs_task_memory                      = 1024
   export_bucket_access_policy_arn      = module.cds_export.read_write_policy_arn
   export_bucket_details                = module.cds_export.details
+  load_balancer_security_group_id      = module.front_door.load_balancer_security_group_id
   load_balancer_target_group_arn       = module.front_door.load_balancer_target_group_arn
   private_subnet_ids                   = module.networking.private_subnet_ids
   redis_connection_string              = module.redis.redis_connection_string
