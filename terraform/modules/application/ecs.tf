@@ -5,12 +5,17 @@ resource "aws_ecs_cluster" "main" {
 }
 
 locals {
-  export_bucket_key = "export-bucket"
+  export_bucket_key      = "export-bucket"
+  bulk_upload_bucket_key = "bulk-upload-bucket"
   s3_config = [
+    {
+      instance_name : local.bulk_upload_bucket_key,
+      credentials : var.bulk_upload_bucket_details
+    },
     {
       instance_name : local.export_bucket_key,
       credentials : var.export_bucket_details
-    }
+    },
   ]
 }
 
@@ -31,7 +36,7 @@ resource "aws_ecs_task_definition" "main" {
       environment = [
         { Name = "API_USER", Value = "dluhc-user" },
         { Name = "APP_HOST", Value = var.app_host },
-        { Name = "CSV_DOWNLOAD_PAAS_INSTANCE", Value = "" },
+        { Name = "CSV_DOWNLOAD_PAAS_INSTANCE", Value = local.bulk_upload_bucket_key },
         { Name = "EXPORT_PAAS_INSTANCE", Value = local.export_bucket_key },
         { Name = "IMPORT_PAAS_INSTANCE", Value = "" },
         { Name = "RAILS_ENV", Value = var.rails_env },

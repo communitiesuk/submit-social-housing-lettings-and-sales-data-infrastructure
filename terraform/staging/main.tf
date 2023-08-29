@@ -45,6 +45,12 @@ module "database" {
   vpc_id                = module.networking.vpc_id
 }
 
+module "bulk_upload" {
+  source = "../modules/bulk_upload"
+
+  prefix = local.prefix
+}
+
 module "cds_export" {
   source = "../modules/cds_export"
 
@@ -54,26 +60,28 @@ module "cds_export" {
 module "application" {
   source = "../modules/application"
 
-  prefix                          = local.prefix
-  app_host                        = ""
-  application_port                = local.application_port
-  database_connection_string_arn  = module.database.rds_connection_string_arn
-  database_data_access_policy_arn = module.database.rds_data_access_policy_arn
-  database_port                   = local.database_port
-  db_security_group_id            = module.database.rds_security_group_id
-  ecr_repository_url              = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core-ecr"
-  ecs_task_cpu                    = 512
-  ecs_task_desired_count          = 2
-  ecs_task_memory                 = 1024
-  export_bucket_access_policy_arn = module.cds_export.read_write_policy_arn
-  export_bucket_details           = module.cds_export.details
-  load_balancer_target_group_arn  = module.front_door.load_balancer_target_group_arn
-  private_subnet_ids              = module.networking.private_subnet_ids
-  redis_connection_string         = module.redis.redis_connection_string
-  rails_env                       = "staging"
-  redis_port                      = local.redis_port
-  redis_security_group_id         = module.redis.redis_security_group_id
-  vpc_id                          = module.networking.vpc_id
+  prefix                               = local.prefix
+  app_host                             = ""
+  application_port                     = local.application_port
+  bulk_upload_bucket_access_policy_arn = module.bulk_upload.read_write_policy_arn
+  bulk_upload_bucket_details           = module.bulk_upload.details
+  database_connection_string_arn       = module.database.rds_connection_string_arn
+  database_data_access_policy_arn      = module.database.rds_data_access_policy_arn
+  database_port                        = local.database_port
+  db_security_group_id                 = module.database.rds_security_group_id
+  ecr_repository_url                   = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core-ecr"
+  ecs_task_cpu                         = 512
+  ecs_task_desired_count               = 2
+  ecs_task_memory                      = 1024
+  export_bucket_access_policy_arn      = module.cds_export.read_write_policy_arn
+  export_bucket_details                = module.cds_export.details
+  load_balancer_target_group_arn       = module.front_door.load_balancer_target_group_arn
+  private_subnet_ids                   = module.networking.private_subnet_ids
+  redis_connection_string              = module.redis.redis_connection_string
+  rails_env                            = "staging"
+  redis_port                           = local.redis_port
+  redis_security_group_id              = module.redis.redis_security_group_id
+  vpc_id                               = module.networking.vpc_id
 }
 
 module "front_door" {

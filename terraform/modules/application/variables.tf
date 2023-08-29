@@ -8,6 +8,19 @@ variable "application_port" {
   description = "The network port the application runs on"
 }
 
+variable "bulk_upload_bucket_access_policy_arn" {
+  type        = string
+  description = "The arn of the policy allowing access to the bulk upload bucket"
+}
+
+variable "bulk_upload_bucket_details" {
+  type = object({
+    aws_region  = string
+    bucket_name = string
+  })
+  description = "Details block for bulk upload bucket"
+}
+
 variable "database_connection_string_arn" {
   type        = string
   description = "The arn of the datbase connection string in parameter store"
