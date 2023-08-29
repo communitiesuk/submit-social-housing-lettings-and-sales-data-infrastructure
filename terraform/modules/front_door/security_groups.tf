@@ -28,10 +28,10 @@ resource "aws_vpc_security_group_ingress_rule" "load_balancer_https_ingress" {
 }
 
 resource "aws_vpc_security_group_egress_rule" "load_balancer_container_egress" {
-  description       = "Allow egress to port ${var.application_port} on the ecs security group "
-  ip_protocol       = "tcp"
-  from_port         = var.application_port
-  to_port           = var.application_port
+  description                  = "Allow egress to port ${var.application_port} on the ecs security group "
+  ip_protocol                  = "tcp"
+  from_port                    = var.application_port
+  to_port                      = var.application_port
   referenced_security_group_id = var.ecs_security_group_id
-  security_group_id = aws_security_group.load_balancer.id
+  security_group_id            = aws_security_group.load_balancer.id
 }
