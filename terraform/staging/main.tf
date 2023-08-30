@@ -61,7 +61,7 @@ module "application" {
   source = "../modules/application"
 
   prefix                               = local.prefix
-  app_host                             = "http://core-stag-load-balancer-1832593432.eu-west-2.elb.amazonaws.com"
+  app_host                             = ""
   application_port                     = local.application_port
   bulk_upload_bucket_access_policy_arn = module.bulk_upload.read_write_policy_arn
   bulk_upload_bucket_details           = module.bulk_upload.details
