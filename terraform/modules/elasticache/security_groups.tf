@@ -9,7 +9,7 @@ resource "aws_security_group" "redis" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "redis_ingress" {
-  description                  = "Allow ingress on port ${var.redis_port} from the ecs security group"
+  description                  = "Allow ingress on port ${var.redis_port} from ecs"
   ip_protocol                  = "tcp"
   from_port                    = var.redis_port
   to_port                      = var.redis_port

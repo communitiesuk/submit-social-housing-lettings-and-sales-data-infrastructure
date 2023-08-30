@@ -15,7 +15,7 @@ variable "db_subnet_group_name" {
 
 variable "ecs_security_group_id" {
   type        = string
-  description = "The id of the ecs security group for database ingress"
+  description = "The id of the ecs security group for ecs ingress"
 }
 
 variable "instance_class" {

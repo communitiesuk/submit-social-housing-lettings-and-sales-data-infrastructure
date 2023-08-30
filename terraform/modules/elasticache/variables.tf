@@ -1,6 +1,6 @@
 variable "ecs_security_group_id" {
   type        = string
-  description = "The id of the ecs security group"
+  description = "The id of the ecs security group for ecs ingress"
 }
 
 variable "node_type" {
