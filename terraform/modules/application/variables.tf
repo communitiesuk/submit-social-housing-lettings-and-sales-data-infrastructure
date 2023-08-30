@@ -74,6 +74,11 @@ variable "export_bucket_details" {
   description = "Details block for export bucket"
 }
 
+variable "load_balancer_security_group_id" {
+  type        = string
+  description = "The id of the load balancer security group"
+}
+
 variable "load_balancer_target_group_arn" {
   type        = string
   description = "The arn of the load balancer target group to be associated with the ecs"
