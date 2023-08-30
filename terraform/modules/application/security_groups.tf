@@ -9,7 +9,7 @@ resource "aws_security_group" "ecs" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "ecs_ingress" {
-  description                  = "Allow ingress on port ${var.application_port} from the load balancer only"
+  description                  = "Allow ingress on port ${var.application_port} from the load balancer"
   ip_protocol                  = "tcp"
   from_port                    = var.application_port
   to_port                      = var.application_port
@@ -18,7 +18,7 @@ resource "aws_vpc_security_group_ingress_rule" "ecs_ingress" {
 }
 
 resource "aws_vpc_security_group_egress_rule" "ecs_db_egress" {
-  description                  = "Allow egress from port ${var.database_port} to the database security group"
+  description                  = "Allow egress to the database"
   ip_protocol                  = "tcp"
   from_port                    = var.database_port
   to_port                      = var.database_port
@@ -27,7 +27,7 @@ resource "aws_vpc_security_group_egress_rule" "ecs_db_egress" {
 }
 
 resource "aws_vpc_security_group_egress_rule" "ecs_redis_egress" {
-  description                  = "Allow egress from port ${var.redis_port} to the redis security group"
+  description                  = "Allow egress to redis"
   ip_protocol                  = "tcp"
   from_port                    = var.redis_port
   to_port                      = var.redis_port
@@ -36,7 +36,7 @@ resource "aws_vpc_security_group_egress_rule" "ecs_redis_egress" {
 }
 
 resource "aws_vpc_security_group_egress_rule" "ecs_http_egress" {
-  description       = "Allow egress from port 80 to any IP address"
+  description       = "Allow http egress to any IP address"
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "tcp"
   from_port         = 80
@@ -45,7 +45,7 @@ resource "aws_vpc_security_group_egress_rule" "ecs_http_egress" {
 }
 
 resource "aws_vpc_security_group_egress_rule" "ecs_https_egress" {
-  description       = "Allow egress from port 443 to any IP address"
+  description       = "Allow https egress to any IP address"
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "tcp"
   from_port         = 443

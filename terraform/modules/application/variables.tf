@@ -38,7 +38,7 @@ variable "database_port" {
 
 variable "db_security_group_id" {
   type        = string
-  description = "The id of the db security group id for ecs egress"
+  description = "The id of the db security group for ecs egress"
 }
 
 variable "ecr_repository_url" {
@@ -76,7 +76,7 @@ variable "export_bucket_details" {
 
 variable "load_balancer_security_group_id" {
   type        = string
-  description = "The id of the load balancer security group"
+  description = "The id of the load balancer security group for ecs egress"
 }
 
 variable "load_balancer_target_group_arn" {
@@ -111,7 +111,7 @@ variable "redis_port" {
 
 variable "redis_security_group_id" {
   type        = string
-  description = "The id of the redis security group id for ecs egress"
+  description = "The id of the redis security group for ecs egress"
 }
 
 variable "vpc_id" {

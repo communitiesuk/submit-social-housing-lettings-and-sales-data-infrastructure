@@ -5,7 +5,7 @@ variable "application_port" {
 
 variable "ecs_security_group_id" {
   type        = string
-  description = "The id of the ecs security group"
+  description = "The id of the ecs security group for ecs egress"
 }
 
 variable "prefix" {

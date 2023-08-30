@@ -9,7 +9,7 @@ resource "aws_security_group" "rds" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "db_ingress" {
-  description                  = "Allow ingress on port ${var.database_port} from ecs security group"
+  description                  = "Allow ingress on port ${var.database_port} from ecs"
   ip_protocol                  = "tcp"
   from_port                    = var.database_port
   to_port                      = var.database_port
