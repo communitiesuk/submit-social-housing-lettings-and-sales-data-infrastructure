@@ -22,7 +22,7 @@ resource "aws_cloudfront_cache_policy" "ttl_based" {
 }
 
 resource "aws_cloudfront_origin_request_policy" "this" {
-  name    = "${var.prefix}-cloudfront-origin-request-policy"
+  name = "${var.prefix}-cloudfront-origin-request-policy"
 
   cookies_config {
     cookie_behavior = "all"

@@ -1,5 +1,5 @@
 locals {
-  origin_id       = "${var.prefix}-origin"
+  origin_id = "${var.prefix}-origin"
 }
 
 #tfsec:ignore:aws-cloudfront-enable-logging:TODO we will be implementing logging later
@@ -14,7 +14,7 @@ resource "aws_cloudfront_distribution" "this" {
   #checkov:skip=CKV_AWS_86:TODO we will be implementing logging later
   #checkov:skip=CKV_AWS_174:TODO CLDC-2680
   #checkov:skip=CKV_AWS_305:no need to define a default root object because the root of our distribution is just the app's homepage
-  enabled = true
+  enabled         = true
   is_ipv6_enabled = true
   price_class     = "PriceClass_100" # Affects which edge locations are used by cloudfront, which affects the latency users will experience in different geographic areas
 
