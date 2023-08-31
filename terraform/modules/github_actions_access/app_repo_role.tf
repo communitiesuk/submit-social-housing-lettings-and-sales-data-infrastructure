@@ -52,6 +52,6 @@ resource "aws_iam_policy" "push_images" {
 }
 
 resource "aws_iam_role_policy_attachment" "app_repo_push_images" {
-  role       = aws_iam_role.app_repo
-  policy_arn = aws_iam_policy.push_images
+  role       = aws_iam_role.app_repo.name
+  policy_arn = aws_iam_policy.push_images.arn
 }
