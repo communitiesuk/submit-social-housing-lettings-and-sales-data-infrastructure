@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "app_repo_assume_role" {
     }
 
     condition {
-      test     = "StringEquals"
+      test     = "StringLike"
       values   = ["repo:${var.application_repo}:*"]
       variable = "token.actions.githubusercontent.com:sub"
     }
