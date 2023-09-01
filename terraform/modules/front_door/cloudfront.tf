@@ -27,9 +27,7 @@ resource "aws_cloudfront_distribution" "this" {
     custom_origin_config {
       http_port                = 80
       https_port               = 443
-      origin_keepalive_timeout = 60
       origin_protocol_policy   = "match-viewer"
-      origin_read_timeout      = 60
       origin_ssl_protocols     = ["TLSv1.2"]
     }
   }
