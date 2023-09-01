@@ -21,6 +21,10 @@ resource "aws_cloudfront_cache_policy" "ttl_based" {
   }
 }
 
+data "aws_cloudfront_managed_response_headers_policy" "this" {
+  name = "SecurityHeadersPolicy"
+}
+
 resource "aws_cloudfront_origin_request_policy" "this" {
   name = "${var.prefix}-cloudfront-origin-request-policy"
 
