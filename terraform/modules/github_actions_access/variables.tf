@@ -4,7 +4,7 @@ variable "application_repo" {
 }
 
 variable "ecr_arn" {
-  type    = string
+  type        = string
   description = "ARN of the ECR repository"
 }
 
