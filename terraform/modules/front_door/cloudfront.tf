@@ -38,7 +38,7 @@ resource "aws_cloudfront_distribution" "this" {
     cache_policy_id          = aws_cloudfront_cache_policy.ttl_based.id
     compress                 = true
     origin_request_policy_id = aws_cloudfront_origin_request_policy.this.id
-    response_headers_policy_id = data.aws_cloudfront_managed_response_headers_policy.this.id
+    response_headers_policy_id = data.aws_cloudfront_response_headers_policy.this.id
     target_origin_id         = local.origin_id
     viewer_protocol_policy   = "allow-all"
   }
