@@ -1,5 +1,6 @@
 locals {
-  origin_id = "${var.prefix}-origin"
+  origin_id              = "${var.prefix}-origin"
+  cloudfront_header_name = "X-CLOUDFRONT-HEADER"
 }
 
 #tfsec:ignore:aws-cloudfront-enable-logging:TODO we will be implementing logging later
@@ -30,6 +31,11 @@ resource "aws_cloudfront_distribution" "this" {
       origin_protocol_policy = "http-only"
       origin_ssl_protocols   = ["TLSv1.2"]
     }
+
+    custom_header {
+      name  = local.cloudfront_header_name
+      value = random_password.cloudfront_header.result
+    }
   }
 
   default_cache_behavior {
@@ -56,4 +62,9 @@ resource "aws_cloudfront_distribution" "this" {
   tags = {
     Name = "${var.prefix}-cloudfront"
   }
+}
+
+resource "random_password" "cloudfront_header" {
+  length  = 16
+  special = false
 }

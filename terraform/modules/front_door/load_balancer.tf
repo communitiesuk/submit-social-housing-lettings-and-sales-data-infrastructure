@@ -39,11 +39,33 @@ resource "aws_lb_listener" "http" {
   protocol          = "HTTP"
 
   default_action {
-    target_group_arn = aws_lb_target_group.main.id
-    type             = "forward"
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "403: Forbidden"
+      status_code  = "403"
+    }
   }
 
   lifecycle {
     replace_triggered_by = [aws_lb_target_group.main.id]
+  }
+}
+
+resource "aws_lb_listener_rule" "forward_cloudfront" {
+  listener_arn = aws_lb_listener.http.arn
+  priority     = 1
+
+  action {
+    target_group_arn = aws_lb_target_group.main.id
+    type             = "forward"
+  }
+
+  condition {
+    http_header {
+      http_header_name = local.cloudfront_header_name
+      values           = [random_password.cloudfront_header.result]
+    }
   }
 }
