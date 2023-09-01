@@ -25,22 +25,22 @@ resource "aws_cloudfront_distribution" "this" {
     origin_id   = local.origin_id
 
     custom_origin_config {
-      http_port                = 80
-      https_port               = 443
-      origin_protocol_policy   = "http-only"
-      origin_ssl_protocols     = ["TLSv1.2"]
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "http-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
     }
   }
 
   default_cache_behavior {
-    allowed_methods          = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
-    cached_methods           = ["GET", "HEAD", "OPTIONS"]
-    cache_policy_id          = aws_cloudfront_cache_policy.ttl_based.id
-    compress                 = true
-    origin_request_policy_id = aws_cloudfront_origin_request_policy.this.id
+    allowed_methods            = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods             = ["GET", "HEAD", "OPTIONS"]
+    cache_policy_id            = aws_cloudfront_cache_policy.ttl_based.id
+    compress                   = true
+    origin_request_policy_id   = aws_cloudfront_origin_request_policy.this.id
     response_headers_policy_id = data.aws_cloudfront_response_headers_policy.this.id
-    target_origin_id         = local.origin_id
-    viewer_protocol_policy   = "allow-all"
+    target_origin_id           = local.origin_id
+    viewer_protocol_policy     = "allow-all"
   }
 
   viewer_certificate {
