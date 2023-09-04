@@ -1,5 +1,5 @@
 resource "aws_security_group" "ecs" {
-  name        = "${var.prefix}-ecs-security_group"
+  name        = "${var.prefix}-ecs"
   description = "ECS security group"
   vpc_id      = var.vpc_id
 

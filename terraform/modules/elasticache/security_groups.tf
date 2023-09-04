@@ -1,5 +1,5 @@
 resource "aws_security_group" "redis" {
-  name        = "${var.prefix}-redis-security-group"
+  name        = "${var.prefix}-redis"
   description = "Redis security group"
   vpc_id      = var.vpc_id
 

@@ -41,13 +41,13 @@ resource "aws_cloudwatch_log_group" "vpc_flow_logs_rejected" {
 
 # https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-cwl.html#flow-logs-iam-role
 resource "aws_iam_role" "vpc_flow_logs" {
-  name = "${var.prefix}-vpc-flow-logs-role"
+  name = "${var.prefix}-vpc-flow-logs"
 
   assume_role_policy = data.aws_iam_policy_document.vpc_flow_logs_assume_role_permissions.json
 }
 
 resource "aws_iam_role_policy" "vpc_flow_logs" {
-  name = "${var.prefix}-vpc-flow-logs-cloudwatch-policy"
+  name = "${var.prefix}-vpc-flow-logs"
   role = aws_iam_role.vpc_flow_logs.id
 
   policy = data.aws_iam_policy_document.vpc_flow_logs_log_permissions.json

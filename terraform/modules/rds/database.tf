@@ -9,7 +9,7 @@ resource "aws_db_instance" "main" {
   #checkov:skip=CKV_AWS_354:performance insights TODO CLDC-2660 if insights are necessary
   #checkov:skip=CKV2_AWS_30:query logging TODO CLDC-2660
   #checkov:skip=CKV2_AWS_60:copy tags to snapshots TODO CLDC-2661
-  identifier                 = "${var.prefix}-postgres-db"
+  identifier                 = "${var.prefix}"
   apply_immediately          = true
   auto_minor_version_upgrade = true
   allocated_storage          = var.allocated_storage #units are GiB

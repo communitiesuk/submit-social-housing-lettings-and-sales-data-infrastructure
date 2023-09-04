@@ -8,7 +8,7 @@ resource "aws_s3_bucket" "this" {
   #checkov:skip=CKV_AWS_145: default encryption is fine
   #checkov:skip=CKV_AWS_144: cross region replication is overkill when this is only for data transfer
   #checkov:skip=CKV_AWS_21: versioning not important, each upload creates a new file with a different name (a random UUID)
-  bucket = "${var.prefix}-bulk-upload-bucket"
+  bucket = "${var.prefix}-bulk-upload"
 }
 
 resource "aws_s3_bucket_public_access_block" "this" {

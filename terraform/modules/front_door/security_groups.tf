@@ -1,5 +1,5 @@
 resource "aws_security_group" "load_balancer" {
-  name        = "${var.prefix}-load-balancer-security-group"
+  name        = "${var.prefix}-load-balancer"
   description = "Load Balancer security group"
   vpc_id      = var.vpc_id
 
