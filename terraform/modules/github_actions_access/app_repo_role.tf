@@ -57,9 +57,13 @@ resource "aws_iam_role_policy_attachment" "app_repo_push_images" {
   policy_arn = aws_iam_policy.push_images.arn
 }
 
+#tfsec:ignore:aws-iam-no-policy-wildcards: This is used permissively in what this role can do, not who is allowed to assume this role
 data "aws_iam_policy_document" "allow_assuming_roles" {
   statement {
-    actions   = ["sts:AssumeRole", "sts:TagSession"]
+    actions   = [
+      "sts:AssumeRole", 
+      "sts:TagSession"
+    ]
     resources = ["*"]
     effect    = "Allow"
   }
