@@ -30,11 +30,11 @@ resource "aws_subnet" "private" {
 }
 
 resource "aws_db_subnet_group" "this" {
-  name       = "${var.prefix}"
+  name       = var.prefix
   subnet_ids = aws_subnet.private[*].id
 }
 
 resource "aws_elasticache_subnet_group" "this" {
-  name       = "${var.prefix}"
+  name       = var.prefix
   subnet_ids = aws_subnet.private[*].id
 }

@@ -1,7 +1,7 @@
 #tfsec:ignore:aws-ecs-enable-container-insight:TODO CLDC-2542 enable container insights if necessary for logging/monitoring
 resource "aws_ecs_cluster" "this" {
   #checkov:skip=CKV_AWS_65:TODO CLDC-2542 enable container insights if necessary for logging/monitoring
-  name = "${var.prefix}"
+  name = var.prefix
 }
 
 locals {
@@ -168,7 +168,7 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
 }
 
 resource "aws_ecs_service" "this" {
-  name                               = "${var.prefix}"
+  name                               = var.prefix
   cluster                            = aws_ecs_cluster.this.arn
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 100 / var.ecs_task_desired_count # always 1 task from the desired count should be running
