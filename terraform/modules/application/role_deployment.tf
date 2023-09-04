@@ -1,6 +1,9 @@
 data "aws_iam_policy_document" "deployment_assume_role" {
   statement {
-    actions = ["sts:AssumeRole"]
+    actions = [
+        "sts:AssumeRole",
+        "sts:TagSession"
+    ]
 
     principals {
       type        = "AWS"
