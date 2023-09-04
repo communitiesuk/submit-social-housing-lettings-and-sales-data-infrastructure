@@ -23,11 +23,11 @@ data "aws_iam_policy_document" "allow_deployment" {
       "ecs:DescribeTaskDefinition"
     ]
     resources = [
-        aws_ecs_task_definition.template.arn_without_revision
+      aws_ecs_task_definition.template.arn_without_revision
     ]
     effect = "Allow"
   }
-  
+
   statement {
     actions = [
       "ecs:DescribeTaskDefinition",
@@ -35,10 +35,10 @@ data "aws_iam_policy_document" "allow_deployment" {
       "ecs:RunTask"
     ]
     resources = [
-        aws_ecs_task_definition.ad_hoc_tasks.arn_without_revision,
-        aws_ecs_task_definition.main.arn_without_revision
+      aws_ecs_task_definition.ad_hoc_tasks.arn_without_revision,
+      aws_ecs_task_definition.main.arn_without_revision
     ]
-    effect    = "Allow"
+    effect = "Allow"
   }
 
   statement {
