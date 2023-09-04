@@ -47,3 +47,13 @@ module "ecr" {
   # This will need updating to include dev and production roles
   allow_access_by_roles = ["arn:aws:iam::107155005276:role/core-stag-task-execution"]
 }
+
+data "aws_caller_identity" "current" {}
+
+module "github_actions_access" {
+  source = "../modules/github_actions_access"
+
+  application_repo = "communitiesuk/submit-social-housing-lettings-and-sales-data"
+  ecr_arn          = module.ecr.repository_arn
+  meta_account_id  = data.aws_caller_identity.current.account_id
+}
