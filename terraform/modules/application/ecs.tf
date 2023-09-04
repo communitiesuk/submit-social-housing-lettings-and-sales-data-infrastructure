@@ -98,7 +98,7 @@ resource "aws_ecs_task_definition" "main" {
 
   container_definitions = jsonencode([
     {
-      name = "${var.prefix}-ecs-container"
+      name = local.container_name
       cpu  = var.ecs_task_cpu
       environment = [
         { Name = "API_USER", Value = "dluhc-user" },
@@ -153,8 +153,13 @@ resource "aws_ecs_task_definition" "main" {
 }
 
 resource "aws_ecs_task_definition" "ad_hoc_tasks" {
-  family                = "${var.prefix}-ad-hoc"
-  container_definitions = jsonencode([])
+  family = "${var.prefix}-ad-hoc"
+  container_definitions = jsonencode([{
+    name              = local.container_name
+    image             = var.ecr_repository_url
+    user              = "nonroot"
+    memoryReservation = var.ecs_task_memory * 0.75
+  }])
 
   lifecycle {
     # This definition will be updated on deployments based on the template definition

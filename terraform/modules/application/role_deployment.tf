@@ -36,7 +36,7 @@ data "aws_iam_policy_document" "allow_deployment" {
 }
 
 resource "aws_iam_policy" "allow_deployment" {
-  name = "${var.prefix}-allow-deployment"
+  name   = "${var.prefix}-allow-deployment"
   policy = data.aws_iam_policy_document.allow_deployment.json
 }
 
