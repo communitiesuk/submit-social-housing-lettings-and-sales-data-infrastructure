@@ -59,6 +59,9 @@ resource "aws_iam_role_policy_attachment" "app_repo_push_images" {
 
 #tfsec:ignore:aws-iam-no-policy-wildcards: This is used permissively in what this role can do, not who is allowed to assume this role
 data "aws_iam_policy_document" "allow_assuming_roles" {
+  #checkov:skip=CKV_AWS_107: This is a necessary part of this action
+  #checkov:skip=CKV_AWS_356: We allow our role to assume any other that allows it
+  #checkov:skip=CKV_AWS_111: Allowing our role to tag any sessions is fine
   statement {
     actions   = [
       "sts:AssumeRole", 

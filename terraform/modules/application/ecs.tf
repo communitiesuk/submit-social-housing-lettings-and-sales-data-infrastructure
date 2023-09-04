@@ -153,6 +153,7 @@ resource "aws_ecs_task_definition" "main" {
 }
 
 resource "aws_ecs_task_definition" "ad_hoc_tasks" {
+  #checkov:skip=CKV_AWS_336:using readonlyRootFilesystem to true breaks the app, as it needs to write to app/tmp/pids for example
   family = "${var.prefix}-ad-hoc"
   container_definitions = jsonencode([{
     name              = local.container_name
