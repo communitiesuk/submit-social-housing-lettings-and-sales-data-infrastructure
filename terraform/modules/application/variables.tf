@@ -74,6 +74,11 @@ variable "export_bucket_details" {
   description = "Details block for export bucket"
 }
 
+variable "github_actions_role_arn" {
+  type        = string
+  description = "The arn of the role that github actions assumes in the meta account"
+}
+
 variable "load_balancer_security_group_id" {
   type        = string
   description = "The id of the load balancer security group for ecs egress"
