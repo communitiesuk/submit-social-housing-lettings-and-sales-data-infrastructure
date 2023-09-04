@@ -1,5 +1,5 @@
 #tfsec:ignore:aws-ecs-enable-container-insight:TODO CLDC-2542 enable container insights if necessary for logging/monitoring
-resource "aws_ecs_cluster" "main" {
+resource "aws_ecs_cluster" "this" {
   #checkov:skip=CKV_AWS_65:TODO CLDC-2542 enable container insights if necessary for logging/monitoring
   name = "${var.prefix}"
 }
@@ -167,7 +167,7 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
   }
 }
 
-resource "aws_ecs_service" "main" {
+resource "aws_ecs_service" "this" {
   name                               = "${var.prefix}"
   cluster                            = aws_ecs_cluster.main.arn
   deployment_maximum_percent         = 200

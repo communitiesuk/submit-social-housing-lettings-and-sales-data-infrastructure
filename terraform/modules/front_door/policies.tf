@@ -1,4 +1,4 @@
-resource "aws_cloudfront_cache_policy" "ttl_based" {
+resource "aws_cloudfront_cache_policy" "this" {
   name        = "${var.prefix}"
   min_ttl     = 1
   default_ttl = 60

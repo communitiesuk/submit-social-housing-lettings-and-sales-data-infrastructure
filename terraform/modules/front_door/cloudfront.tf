@@ -64,7 +64,7 @@ resource "aws_cloudfront_distribution" "this" {
   }
 }
 
-resource "random_password" "cloudfront_header" {
+resource "random_password" "this" {
   length  = 16
   special = false
 }

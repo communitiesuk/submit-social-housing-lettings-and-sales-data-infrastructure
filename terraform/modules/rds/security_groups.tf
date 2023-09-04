@@ -1,4 +1,4 @@
-resource "aws_security_group" "rds" {
+resource "aws_security_group" "this" {
   name        = "${var.prefix}-rds"
   description = "RDS security group"
   vpc_id      = var.vpc_id

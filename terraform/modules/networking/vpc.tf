@@ -1,4 +1,4 @@
-resource "aws_vpc" "main" {
+resource "aws_vpc" "this" {
   #checkov:skip=CKV2_AWS_12:we don't think that we should restrict all traffic on the default VPC security group, otherwise our application will be completely isolated
   cidr_block           = var.vpc_cidr_block
   enable_dns_support   = true

@@ -1,7 +1,7 @@
 #tfsec:ignore:aws-rds-specify-backup-retention:TODO CLDC-2661
 #tfsec:ignore:aws-rds-enable-performance-insights:TODO CLDC-2660 if necessary
 #tfsec:ignore:AVD-AWS-0176:iam authentication not suitable as tokens only last 15minutes, password authentication preferred
-resource "aws_db_instance" "main" {
+resource "aws_db_instance" "this" {
   #checkov:skip=CKV_AWS_129:cloudwatch logs TODO CLDC-2660
   #checkov:skip=CKV_AWS_118:monitoring TODO CLDC-2660
   #checkov:skip=CKV_AWS_161:iam authentication not suitable as tokens only last 15minutes, password authentication preferred
