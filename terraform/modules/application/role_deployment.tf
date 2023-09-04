@@ -20,11 +20,24 @@ resource "aws_iam_role" "deployment" {
 data "aws_iam_policy_document" "allow_deployment" {
   statement {
     actions = [
+      "ecs:DescribeTaskDefinition"
+    ]
+    resources = [
+        aws_ecs_task_definition.template.arn_without_revision
+    ]
+    effect = "Allow"
+  }
+  
+  statement {
+    actions = [
       "ecs:DescribeTaskDefinition",
       "ecs:RegisterTaskDefinition",
       "ecs:RunTask"
     ]
-    resources = ["*"]
+    resources = [
+        aws_ecs_task_definition.ad_hoc_tasks.arn_without_revision,
+        aws_ecs_task_definition.main.arn_without_revision
+    ]
     effect    = "Allow"
   }
 
