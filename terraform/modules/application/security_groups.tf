@@ -14,7 +14,7 @@ resource "aws_vpc_security_group_ingress_rule" "load_balancer_ingress" {
   from_port                    = var.application_port
   to_port                      = var.application_port
   referenced_security_group_id = var.load_balancer_security_group_id
-  security_group_id            = aws_security_group.ecs.id
+  security_group_id            = aws_security_group.this.id
 }
 
 resource "aws_vpc_security_group_egress_rule" "db_egress" {
@@ -23,7 +23,7 @@ resource "aws_vpc_security_group_egress_rule" "db_egress" {
   from_port                    = var.database_port
   to_port                      = var.database_port
   referenced_security_group_id = var.db_security_group_id
-  security_group_id            = aws_security_group.ecs.id
+  security_group_id            = aws_security_group.this.id
 }
 
 resource "aws_vpc_security_group_egress_rule" "redis_egress" {
@@ -32,7 +32,7 @@ resource "aws_vpc_security_group_egress_rule" "redis_egress" {
   from_port                    = var.redis_port
   to_port                      = var.redis_port
   referenced_security_group_id = var.redis_security_group_id
-  security_group_id            = aws_security_group.ecs.id
+  security_group_id            = aws_security_group.this.id
 }
 
 resource "aws_vpc_security_group_egress_rule" "http_egress" {
@@ -41,7 +41,7 @@ resource "aws_vpc_security_group_egress_rule" "http_egress" {
   ip_protocol       = "tcp"
   from_port         = 80
   to_port           = 80
-  security_group_id = aws_security_group.ecs.id
+  security_group_id = aws_security_group.this.id
 }
 
 resource "aws_vpc_security_group_egress_rule" "https_egress" {
@@ -50,5 +50,5 @@ resource "aws_vpc_security_group_egress_rule" "https_egress" {
   ip_protocol       = "tcp"
   from_port         = 443
   to_port           = 443
-  security_group_id = aws_security_group.ecs.id
+  security_group_id = aws_security_group.this.id
 }

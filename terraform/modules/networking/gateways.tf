@@ -1,5 +1,5 @@
 resource "aws_internet_gateway" "this" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.this.id
 
   tags = {
     Name = "${var.prefix}-internet-gateway"
@@ -15,7 +15,7 @@ resource "aws_eip" "nat_gateway" {
     Name = "${var.prefix}-nat-gateway-eip-${count.index}"
   }
 
-  depends_on = [aws_internet_gateway.main]
+  depends_on = [aws_internet_gateway.this]
 }
 
 resource "aws_nat_gateway" "this" {
@@ -27,5 +27,5 @@ resource "aws_nat_gateway" "this" {
     Name = "${var.prefix}-nat-gateway-${count.index}"
   }
 
-  depends_on = [aws_internet_gateway.main]
+  depends_on = [aws_internet_gateway.this]
 }

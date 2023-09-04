@@ -14,5 +14,5 @@ resource "aws_vpc_security_group_ingress_rule" "redis_ingress" {
   from_port                    = var.redis_port
   to_port                      = var.redis_port
   referenced_security_group_id = var.ecs_security_group_id
-  security_group_id            = aws_security_group.redis.id
+  security_group_id            = aws_security_group.this.id
 }

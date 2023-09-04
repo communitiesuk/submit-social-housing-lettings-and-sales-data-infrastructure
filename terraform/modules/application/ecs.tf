@@ -55,7 +55,7 @@ resource "aws_ecs_task_definition" "template" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = aws_cloudwatch_log_group.main.id
+          awslogs-group         = aws_cloudwatch_log_group.this.id
           awslogs-region        = "eu-west-2"
           awslogs-stream-prefix = var.prefix
         }
@@ -121,7 +121,7 @@ resource "aws_ecs_task_definition" "main" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = aws_cloudwatch_log_group.main.id
+          awslogs-group         = aws_cloudwatch_log_group.this.id
           awslogs-region        = "eu-west-2"
           awslogs-stream-prefix = var.prefix
         }
@@ -169,7 +169,7 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
 
 resource "aws_ecs_service" "this" {
   name                               = "${var.prefix}"
-  cluster                            = aws_ecs_cluster.main.arn
+  cluster                            = aws_ecs_cluster.this.arn
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 100 / var.ecs_task_desired_count # always 1 task from the desired count should be running
   desired_count                      = var.ecs_task_desired_count
@@ -186,7 +186,7 @@ resource "aws_ecs_service" "this" {
   }
 
   network_configuration {
-    security_groups  = [aws_security_group.ecs.id]
+    security_groups  = [aws_security_group.this.id]
     subnets          = var.private_subnet_ids
     assign_public_ip = false
   }

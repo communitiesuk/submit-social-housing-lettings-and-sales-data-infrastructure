@@ -11,8 +11,8 @@ resource "aws_elasticache_cluster" "this" {
   maintenance_window         = "sun:23:00-mon:01:30"
   node_type                  = var.node_type
   num_cache_nodes            = 1
-  parameter_group_name       = aws_elasticache_parameter_group.main.id
+  parameter_group_name       = aws_elasticache_parameter_group.this.id
   port                       = var.redis_port
-  security_group_ids         = [aws_security_group.redis.id]
+  security_group_ids         = [aws_security_group.this.id]
   subnet_group_name          = var.redis_subnet_group_name
 }

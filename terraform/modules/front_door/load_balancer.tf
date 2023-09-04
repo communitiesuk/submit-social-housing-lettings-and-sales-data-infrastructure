@@ -34,7 +34,7 @@ resource "aws_lb_target_group" "this" {
 resource "aws_lb_listener" "http" {
   #checkov:skip=CKV_AWS_103:ssl policy for https listener will be implemented here TODO CLDC-2654
   #checkov:skip=CKV_AWS_2:https between cloudfront and load balancer will be implemented here TODO CLDC-2654
-  load_balancer_arn = aws_lb.main.id
+  load_balancer_arn = aws_lb.this.id
   port              = 80
   protocol          = "HTTP"
 
@@ -49,7 +49,7 @@ resource "aws_lb_listener" "http" {
   }
 
   lifecycle {
-    replace_triggered_by = [aws_lb_target_group.main.id]
+    replace_triggered_by = [aws_lb_target_group.this.id]
   }
 }
 
@@ -58,14 +58,14 @@ resource "aws_lb_listener_rule" "forward_cloudfront" {
   priority     = 1
 
   action {
-    target_group_arn = aws_lb_target_group.main.id
+    target_group_arn = aws_lb_target_group.this.id
     type             = "forward"
   }
 
   condition {
     http_header {
       http_header_name = local.cloudfront_header_name
-      values           = [random_password.cloudfront_header.result]
+      values           = [random_password.this.result]
     }
   }
 }

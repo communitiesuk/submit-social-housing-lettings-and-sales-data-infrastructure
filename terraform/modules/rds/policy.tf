@@ -15,7 +15,7 @@ resource "aws_iam_policy" "rds_data_access" {
           "rds-data:CommitTransaction",
           "rds-data:RollbackTransaction"
         ]
-        Resource = aws_db_instance.main.arn
+        Resource = aws_db_instance.this.arn
       }
     ]
   })

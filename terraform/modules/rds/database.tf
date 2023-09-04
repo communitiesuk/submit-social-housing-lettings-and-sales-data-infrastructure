@@ -20,13 +20,13 @@ resource "aws_db_instance" "this" {
   engine_version             = "13.11"
   instance_class             = var.instance_class
   multi_az                   = true
-  password                   = random_password.password.result
+  password                   = random_password.this.result
   port                       = var.database_port
   publicly_accessible        = false
   storage_encrypted          = true
   storage_type               = "gp2"
   username                   = "postgres"
-  vpc_security_group_ids     = [aws_security_group.rds.id]
+  vpc_security_group_ids     = [aws_security_group.this.id]
 
   lifecycle {
     prevent_destroy = true
@@ -37,5 +37,5 @@ resource "aws_ssm_parameter" "database_connection_string" {
   #checkov:skip=CKV_AWS_337:default encryption not using a kms cmk sufficient
   name  = "DATA_COLLECTOR_DATABASE_URL"
   type  = "SecureString"
-  value = "postgresql://${aws_db_instance.main.username}:${aws_db_instance.main.password}@${aws_db_instance.main.endpoint}/${aws_db_instance.main.db_name}"
+  value = "postgresql://${aws_db_instance.this.username}:${aws_db_instance.this.password}@${aws_db_instance.this.endpoint}/${aws_db_instance.this.db_name}"
 }
