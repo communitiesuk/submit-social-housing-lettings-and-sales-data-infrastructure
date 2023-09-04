@@ -59,18 +59,18 @@ resource "aws_iam_role_policy_attachment" "app_repo_push_images" {
 
 data "aws_iam_policy_document" "allow_assuming_roles" {
   statement {
-    actions = ["sts:AssumeRole", "sts:TagSession"]
+    actions   = ["sts:AssumeRole", "sts:TagSession"]
     resources = ["*"]
-    effect = "Allow"
+    effect    = "Allow"
   }
 }
 
 resource "aws_iam_policy" "allow_assuming_roles" {
-  name = "allow-assuming-roles"
+  name   = "allow-assuming-roles"
   policy = data.aws_iam_policy_document.allow_assuming_roles.json
 }
 
 resource "aws_iam_role_policy_attachment" "allow_assuming_roles" {
-  role = aws_iam_role.app_repo.name
+  role       = aws_iam_role.app_repo.name
   policy_arn = aws_iam_policy.allow_assuming_roles.arn
 }
