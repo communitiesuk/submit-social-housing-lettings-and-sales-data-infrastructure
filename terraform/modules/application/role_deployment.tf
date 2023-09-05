@@ -20,7 +20,8 @@ resource "aws_iam_role" "deployment" {
 data "aws_iam_policy_document" "allow_deployment" {
   statement {
     actions = [
-      "ecs:DescribeTaskDefinition"
+      "ecs:DescribeTaskDefinition",
+      "ecs:RegisterTaskDefinition"
     ]
     resources = ["*"]
     effect    = "Allow"
@@ -28,7 +29,6 @@ data "aws_iam_policy_document" "allow_deployment" {
 
   statement {
     actions = [
-      "ecs:RegisterTaskDefinition",
       "ecs:RunTask"
     ]
     resources = [
