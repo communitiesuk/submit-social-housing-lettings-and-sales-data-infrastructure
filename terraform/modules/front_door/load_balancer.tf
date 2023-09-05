@@ -1,9 +1,9 @@
 #tfsec:ignore:aws-elb-alb-not-public:load balancer is exposed to internet as it receives traffic from public
-resource "aws_lb" "main" {
+resource "aws_lb" "this" {
   #checkov:skip=CKV_AWS_91:setup access logs on load balancer TODO CLDC-2705
   #checkov:skip=CKV2_AWS_20:redirect http requests to https TODO CLDC-2654
   #checkov:skip=CKV2_AWS_28:WAF protection to be setup TODO CLDC-2546
-  name                       = "${var.prefix}-load-balancer"
+  name                       = var.prefix
   drop_invalid_header_fields = true
   enable_deletion_protection = true
   internal                   = false
@@ -12,8 +12,8 @@ resource "aws_lb" "main" {
   subnets                    = var.public_subnet_ids
 }
 
-resource "aws_lb_target_group" "main" {
-  name        = "${var.prefix}-target-group"
+resource "aws_lb_target_group" "this" {
+  name        = var.prefix
   port        = var.application_port
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
@@ -34,7 +34,7 @@ resource "aws_lb_target_group" "main" {
 resource "aws_lb_listener" "http" {
   #checkov:skip=CKV_AWS_103:ssl policy for https listener will be implemented here TODO CLDC-2654
   #checkov:skip=CKV_AWS_2:https between cloudfront and load balancer will be implemented here TODO CLDC-2654
-  load_balancer_arn = aws_lb.main.id
+  load_balancer_arn = aws_lb.this.id
   port              = 80
   protocol          = "HTTP"
 
@@ -49,7 +49,7 @@ resource "aws_lb_listener" "http" {
   }
 
   lifecycle {
-    replace_triggered_by = [aws_lb_target_group.main.id]
+    replace_triggered_by = [aws_lb_target_group.this.id]
   }
 }
 
@@ -58,7 +58,7 @@ resource "aws_lb_listener_rule" "forward_cloudfront" {
   priority     = 1
 
   action {
-    target_group_arn = aws_lb_target_group.main.id
+    target_group_arn = aws_lb_target_group.this.id
     type             = "forward"
   }
 

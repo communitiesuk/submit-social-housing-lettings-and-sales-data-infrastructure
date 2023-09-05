@@ -1,5 +1,5 @@
-resource "aws_internet_gateway" "main" {
-  vpc_id = aws_vpc.main.id
+resource "aws_internet_gateway" "this" {
+  vpc_id = aws_vpc.this.id
 
   tags = {
     Name = "${var.prefix}-internet-gateway"
@@ -15,10 +15,10 @@ resource "aws_eip" "nat_gateway" {
     Name = "${var.prefix}-nat-gateway-eip-${count.index}"
   }
 
-  depends_on = [aws_internet_gateway.main]
+  depends_on = [aws_internet_gateway.this]
 }
 
-resource "aws_nat_gateway" "main" {
+resource "aws_nat_gateway" "this" {
   count         = length(aws_subnet.private)
   allocation_id = element(aws_eip.nat_gateway[*].id, count.index)
   subnet_id     = element(aws_subnet.public[*].id, count.index)
@@ -27,5 +27,5 @@ resource "aws_nat_gateway" "main" {
     Name = "${var.prefix}-nat-gateway-${count.index}"
   }
 
-  depends_on = [aws_internet_gateway.main]
+  depends_on = [aws_internet_gateway.this]
 }

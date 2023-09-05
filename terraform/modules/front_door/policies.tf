@@ -1,5 +1,5 @@
-resource "aws_cloudfront_cache_policy" "ttl_based" {
-  name        = "${var.prefix}-ttl-60"
+resource "aws_cloudfront_cache_policy" "this" {
+  name        = var.prefix
   min_ttl     = 1
   default_ttl = 60
 
@@ -26,7 +26,7 @@ data "aws_cloudfront_response_headers_policy" "this" {
 }
 
 resource "aws_cloudfront_origin_request_policy" "this" {
-  name = "${var.prefix}-cloudfront-origin-request-policy"
+  name = var.prefix
 
   cookies_config {
     cookie_behavior = "all"
