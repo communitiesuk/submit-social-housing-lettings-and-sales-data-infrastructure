@@ -153,13 +153,26 @@ resource "aws_ecs_task_definition" "main" {
 }
 
 resource "aws_ecs_task_definition" "ad_hoc_tasks" {
+  #checkov:skip=CKV_AWS_336:using readonlyRootFilesystem to true breaks the app, as it needs to write to app/tmp/pids for example
   family = "${var.prefix}-ad-hoc"
+  cpu                      = var.ecs_task_cpu
+  execution_role_arn       = aws_iam_role.task_execution.arn
+  memory                   = var.ecs_task_memory #MiB
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  task_role_arn            = aws_iam_role.task.arn
+
   container_definitions = jsonencode([{
     name              = local.container_name
     image             = var.ecr_repository_url
     user              = "nonroot"
     memoryReservation = var.ecs_task_memory * 0.75
   }])
+
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture        = "X86_64"
+  }
 
   lifecycle {
     # This definition will be updated on deployments based on the template definition

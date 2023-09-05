@@ -1,6 +1,9 @@
 data "aws_iam_policy_document" "deployment_assume_role" {
   statement {
-    actions = ["sts:AssumeRole"]
+    actions = [
+      "sts:AssumeRole",
+      "sts:TagSession"
+    ]
 
     principals {
       type        = "AWS"
@@ -18,11 +21,28 @@ data "aws_iam_policy_document" "allow_deployment" {
   statement {
     actions = [
       "ecs:DescribeTaskDefinition",
-      "ecs:RegisterTaskDefinition",
-      "ecs:RunTask"
+      "ecs:RegisterTaskDefinition"
     ]
     resources = ["*"]
     effect    = "Allow"
+  }
+
+  statement {
+    actions = ["iam:PassRole"]
+    resources = [
+        aws_iam_role.task.arn,
+        aws_iam_role.task_execution.arn
+    ]
+    effect = "Allow"
+  }
+
+  statement {
+    actions = ["ecs:RunTask"]
+    resources = [
+      aws_ecs_task_definition.ad_hoc_tasks.arn_without_revision,
+      aws_ecs_task_definition.main.arn_without_revision
+    ]
+    effect = "Allow"
   }
 
   statement {
