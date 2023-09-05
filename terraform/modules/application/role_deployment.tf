@@ -28,9 +28,16 @@ data "aws_iam_policy_document" "allow_deployment" {
   }
 
   statement {
-    actions = [
-      "ecs:RunTask"
+    actions = ["iam:PassRole"]
+    resources = [
+        aws_iam_role.task.name,
+        aws_iam_role.task_execution.name
     ]
+    effect = "Allow"
+  }
+
+  statement {
+    actions = ["ecs:RunTask"]
     resources = [
       aws_ecs_task_definition.ad_hoc_tasks.arn_without_revision,
       aws_ecs_task_definition.main.arn_without_revision
