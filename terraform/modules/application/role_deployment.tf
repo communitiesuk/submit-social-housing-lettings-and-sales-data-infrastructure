@@ -19,7 +19,7 @@ resource "aws_iam_role" "deployment" {
 
 #tfsec:ignore:aws-iam-no-policy-wildcards: deployment action requires these permissions on all resources to function
 data "aws_iam_policy_document" "allow_deployment" {
-  #chekov:skip=CKV_AWS_356: deployment action requires these permissions on all resources to function
+  #checkov:skip=CKV_AWS_356: deployment action requires these permissions on all resources to function
   statement {
     actions = [
       "ecs:DescribeTaskDefinition",
