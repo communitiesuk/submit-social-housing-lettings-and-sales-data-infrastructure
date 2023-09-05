@@ -27,7 +27,7 @@ provider "aws" {
 }
 
 locals {
-  prefix           = "core-stag"
+  prefix           = "core-staging"
   application_port = 8080
   database_port    = 5432
   redis_port       = 6379
