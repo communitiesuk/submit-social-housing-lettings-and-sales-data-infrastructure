@@ -23,7 +23,7 @@ data "aws_iam_policy_document" "allow_deployment" {
       "ecs:DescribeTaskDefinition"
     ]
     resources = ["*"]
-    effect = "Allow"
+    effect    = "Allow"
   }
 
   statement {
