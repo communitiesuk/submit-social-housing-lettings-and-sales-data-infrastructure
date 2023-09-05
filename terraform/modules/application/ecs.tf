@@ -155,7 +155,7 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
     # The image will be updated by deployments - irritatingly we can't ignore changes just to the image
     # If changing other aspects of the container definition we'll need to temporarily not ignore changes
     # to force the update
-    #ignore_changes = [container_definitions]
+    ignore_changes = [container_definitions]
   }
 }
 
