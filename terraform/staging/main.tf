@@ -27,7 +27,7 @@ provider "aws" {
 }
 
 locals {
-  prefix           = "core-stag"
+  prefix           = "core-staging"
   application_port = 8080
   database_port    = 5432
   redis_port       = 6379
@@ -69,7 +69,7 @@ module "application" {
   database_data_access_policy_arn      = module.database.rds_data_access_policy_arn
   database_port                        = local.database_port
   db_security_group_id                 = module.database.rds_security_group_id
-  ecr_repository_url                   = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core-ecr"
+  ecr_repository_url                   = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core"
   ecs_task_cpu                         = 512
   ecs_task_desired_count               = 2
   ecs_task_memory                      = 1024

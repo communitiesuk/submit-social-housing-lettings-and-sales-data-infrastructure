@@ -12,7 +12,7 @@ terraform {
 #tfsec:ignore:aws-ecr-repository-customer-key:encryption using KMS CMK not required
 resource "aws_ecr_repository" "this" {
   #checkov:skip=CKV_AWS_136:encryption using KMS not required
-  name                 = "core-ecr"
+  name                 = "core"
   image_tag_mutability = "IMMUTABLE"
 
   image_scanning_configuration {

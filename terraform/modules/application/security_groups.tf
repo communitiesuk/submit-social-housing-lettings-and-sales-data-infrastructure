@@ -1,5 +1,5 @@
 resource "aws_security_group" "ecs" {
-  name        = "${var.prefix}-ecs-security_group"
+  name        = "${var.prefix}-ecs"
   description = "ECS security group"
   vpc_id      = var.vpc_id
 
@@ -8,7 +8,7 @@ resource "aws_security_group" "ecs" {
   }
 }
 
-resource "aws_vpc_security_group_ingress_rule" "ecs_ingress" {
+resource "aws_vpc_security_group_ingress_rule" "ingress_from_load_balancer" {
   description                  = "Allow ingress on port ${var.application_port} from the load balancer"
   ip_protocol                  = "tcp"
   from_port                    = var.application_port
@@ -17,7 +17,7 @@ resource "aws_vpc_security_group_ingress_rule" "ecs_ingress" {
   security_group_id            = aws_security_group.ecs.id
 }
 
-resource "aws_vpc_security_group_egress_rule" "ecs_db_egress" {
+resource "aws_vpc_security_group_egress_rule" "egress_to_db" {
   description                  = "Allow egress to the database"
   ip_protocol                  = "tcp"
   from_port                    = var.database_port
@@ -26,7 +26,7 @@ resource "aws_vpc_security_group_egress_rule" "ecs_db_egress" {
   security_group_id            = aws_security_group.ecs.id
 }
 
-resource "aws_vpc_security_group_egress_rule" "ecs_redis_egress" {
+resource "aws_vpc_security_group_egress_rule" "egress_to_redis" {
   description                  = "Allow egress to redis"
   ip_protocol                  = "tcp"
   from_port                    = var.redis_port
@@ -35,7 +35,7 @@ resource "aws_vpc_security_group_egress_rule" "ecs_redis_egress" {
   security_group_id            = aws_security_group.ecs.id
 }
 
-resource "aws_vpc_security_group_egress_rule" "ecs_http_egress" {
+resource "aws_vpc_security_group_egress_rule" "http_egress" {
   description       = "Allow http egress to any IP address"
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "tcp"
@@ -44,7 +44,7 @@ resource "aws_vpc_security_group_egress_rule" "ecs_http_egress" {
   security_group_id = aws_security_group.ecs.id
 }
 
-resource "aws_vpc_security_group_egress_rule" "ecs_https_egress" {
+resource "aws_vpc_security_group_egress_rule" "https_egress" {
   description       = "Allow https egress to any IP address"
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "tcp"

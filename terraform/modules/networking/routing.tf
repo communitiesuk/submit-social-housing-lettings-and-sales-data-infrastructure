@@ -1,5 +1,5 @@
 resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.this.id
 
   tags = {
     Name = "${var.prefix}-public-route-table"
@@ -9,7 +9,7 @@ resource "aws_route_table" "public" {
 resource "aws_route" "to_internet_gateway" {
   route_table_id         = aws_route_table.public.id
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.main.id
+  gateway_id             = aws_internet_gateway.this.id
 }
 
 resource "aws_route_table_association" "public" {
@@ -19,8 +19,8 @@ resource "aws_route_table_association" "public" {
 }
 
 resource "aws_route_table" "private" {
-  count  = length(aws_nat_gateway.main)
-  vpc_id = aws_vpc.main.id
+  count  = length(aws_nat_gateway.this)
+  vpc_id = aws_vpc.this.id
 
   tags = {
     Name = "${var.prefix}-private-route-table-${count.index}"
@@ -28,10 +28,10 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route" "to_nat_gateway" {
-  count                  = length(aws_nat_gateway.main)
+  count                  = length(aws_nat_gateway.this)
   route_table_id         = element(aws_route_table.private[*].id, count.index)
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = element(aws_nat_gateway.main[*].id, count.index)
+  nat_gateway_id         = element(aws_nat_gateway.this[*].id, count.index)
 }
 
 resource "aws_route_table_association" "private" {

@@ -1,5 +1,5 @@
-resource "aws_security_group" "redis" {
-  name        = "${var.prefix}-redis-security-group"
+resource "aws_security_group" "this" {
+  name        = "${var.prefix}-redis"
   description = "Redis security group"
   vpc_id      = var.vpc_id
 
@@ -14,5 +14,5 @@ resource "aws_vpc_security_group_ingress_rule" "redis_ingress" {
   from_port                    = var.redis_port
   to_port                      = var.redis_port
   referenced_security_group_id = var.ecs_security_group_id
-  security_group_id            = aws_security_group.redis.id
+  security_group_id            = aws_security_group.this.id
 }

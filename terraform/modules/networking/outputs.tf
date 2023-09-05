@@ -1,5 +1,5 @@
 output "db_private_subnet_group_name" {
-  value       = aws_db_subnet_group.private.name
+  value       = aws_db_subnet_group.this.name
   description = "The name of the private subnet group for the db"
 }
 
@@ -19,11 +19,11 @@ output "public_subnet_ids" {
 }
 
 output "redis_private_subnet_group_name" {
-  value       = aws_elasticache_subnet_group.private.name
+  value       = aws_elasticache_subnet_group.this.name
   description = "The name of the private subnet group for redis"
 }
 
 output "vpc_id" {
-  value       = aws_vpc.main.id
+  value       = aws_vpc.this.id
   description = "The id of the main vpc"
 }

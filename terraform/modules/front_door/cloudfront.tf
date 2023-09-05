@@ -22,7 +22,7 @@ resource "aws_cloudfront_distribution" "this" {
   price_class     = "PriceClass_100" # Affects which edge locations are used by cloudfront, which affects the latency users will experience in different geographic areas
 
   origin {
-    domain_name = aws_lb.main.dns_name
+    domain_name = aws_lb.this.dns_name
     origin_id   = local.origin_id
 
     custom_origin_config {
@@ -41,7 +41,7 @@ resource "aws_cloudfront_distribution" "this" {
   default_cache_behavior {
     allowed_methods            = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods             = ["GET", "HEAD", "OPTIONS"]
-    cache_policy_id            = aws_cloudfront_cache_policy.ttl_based.id
+    cache_policy_id            = aws_cloudfront_cache_policy.this.id
     compress                   = true
     origin_request_policy_id   = aws_cloudfront_origin_request_policy.this.id
     response_headers_policy_id = data.aws_cloudfront_response_headers_policy.this.id
