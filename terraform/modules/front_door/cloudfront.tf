@@ -34,7 +34,7 @@ resource "aws_cloudfront_distribution" "this" {
 
     custom_header {
       name  = local.cloudfront_header_name
-      value = random_password.this.result
+      value = random_password.cloudfront_header.result
     }
   }
 
@@ -64,7 +64,7 @@ resource "aws_cloudfront_distribution" "this" {
   }
 }
 
-resource "random_password" "this" {
+resource "random_password" "cloudfront_header" {
   length  = 16
   special = false
 }

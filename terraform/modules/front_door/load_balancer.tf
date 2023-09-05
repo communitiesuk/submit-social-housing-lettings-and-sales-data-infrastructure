@@ -65,7 +65,7 @@ resource "aws_lb_listener_rule" "forward_cloudfront" {
   condition {
     http_header {
       http_header_name = local.cloudfront_header_name
-      values           = [random_password.this.result]
+      values           = [random_password.cloudfront_header.result]
     }
   }
 }
