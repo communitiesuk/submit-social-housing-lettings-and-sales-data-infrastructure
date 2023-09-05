@@ -17,7 +17,9 @@ resource "aws_iam_role" "deployment" {
   assume_role_policy = data.aws_iam_policy_document.deployment_assume_role.json
 }
 
+#tfsec:ignore:aws-iam-no-policy-wildcards: deployment action requires these permissions on all resources to function
 data "aws_iam_policy_document" "allow_deployment" {
+  #checkov:skip=CKV_AWS_356: deployment action requires these permissions on all resources to function
   statement {
     actions = [
       "ecs:DescribeTaskDefinition",
