@@ -190,4 +190,9 @@ resource "aws_ecs_service" "this" {
     subnets          = var.private_subnet_ids
     assign_public_ip = false
   }
+
+  lifecycle {
+    # The task definition revision will be updated by the deployment process
+    ignore_changes = [task_definition]
+  }
 }
