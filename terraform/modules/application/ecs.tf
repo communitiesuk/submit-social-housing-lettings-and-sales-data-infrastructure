@@ -20,9 +20,10 @@ locals {
   ]
 }
 
-resource "aws_ecs_task_definition" "main" {
+# N.B. We expect this and the ad_hoc_tasks definition to be very similar - if updating you should change both unless there's a reason for them to be different
+resource "aws_ecs_task_definition" "app" {
   #checkov:skip=CKV_AWS_336:using readonlyRootFilesystem to true breaks the app, as it needs to write to app/tmp/pids for example
-  family                   = "${var.prefix}-ecs-task"
+  family                   = "${var.prefix}-app"
   cpu                      = var.ecs_task_cpu
   execution_role_arn       = aws_iam_role.task_execution.arn
   memory                   = var.ecs_task_memory #MiB
@@ -83,6 +84,13 @@ resource "aws_ecs_task_definition" "main" {
   runtime_platform {
     operating_system_family = "LINUX"
     cpu_architecture        = "X86_64"
+  }
+
+  lifecycle {
+    # The image will be updated by deployments - irritatingly we can't ignore changes just to the image
+    # If changing other aspects of the container definition we'll need to temporarily not ignore changes
+    # to force the update
+    ignore_changes = [container_definitions]
   }
 }
 
@@ -169,7 +177,7 @@ resource "aws_ecs_service" "this" {
   force_new_deployment               = true
   launch_type                        = "FARGATE"
   scheduling_strategy                = "REPLICA"
-  task_definition                    = aws_ecs_task_definition.main.arn
+  task_definition                    = aws_ecs_task_definition.app.arn
 
   load_balancer {
     container_name   = local.container_name
