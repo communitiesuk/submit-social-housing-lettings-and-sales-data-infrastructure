@@ -45,7 +45,7 @@ module "ecr" {
   source = "../modules/ecr"
 
   # This will need updating to include dev and production roles
-  allow_access_by_roles = ["arn:aws:iam::107155005276:role/core-stag-task-execution"]
+  allow_access_by_roles = ["arn:aws:iam::107155005276:role/core-staging-task-execution"]
 }
 
 data "aws_caller_identity" "current" {}
