@@ -89,7 +89,7 @@ resource "aws_ecs_task_definition" "app" {
   lifecycle {
     # The image will be updated by deployments - irritatingly we can't ignore changes just to the image
     # If changing other aspects of the container definition we'll need to temporarily not ignore changes
-    # to force the update
+    # to force the update, ensuring the referenced image is the correct current one
     ignore_changes = [container_definitions]
   }
 }
@@ -162,7 +162,7 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
   lifecycle {
     # The image will be updated by deployments - irritatingly we can't ignore changes just to the image
     # If changing other aspects of the container definition we'll need to temporarily not ignore changes
-    # to force the update
+    # to force the update, ensuring the referenced image is the correct current one
     ignore_changes = [container_definitions]
   }
 }
