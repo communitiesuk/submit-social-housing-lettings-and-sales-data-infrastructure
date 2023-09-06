@@ -47,7 +47,7 @@ data "aws_iam_policy_document" "allow_deployment" {
     ]
     resources = [
       aws_ecs_task_definition.ad_hoc_tasks.arn_without_revision,
-      aws_ecs_task_definition.main.arn_without_revision
+      aws_ecs_task_definition.app.arn_without_revision
     ]
     effect = "Allow"
   }
