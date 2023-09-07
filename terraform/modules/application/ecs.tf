@@ -45,7 +45,6 @@ resource "aws_ecs_task_definition" "app" {
         { Name = "RAILS_ENV", Value = var.rails_env },
         { Name = "RAILS_LOG_TO_STDOUT", Value = "true" },
         { Name = "RAILS_SERVE_STATIC_FILES", Value = "true" },
-        { Name = "REDIS_INSTANCE_NAME", Value = "" },
         { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"${var.prefix}\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
         { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) }
       ]
@@ -260,7 +259,7 @@ resource "aws_ecs_service" "sidekiq" {
   force_new_deployment               = true
   launch_type                        = "FARGATE"
   scheduling_strategy                = "REPLICA"
-  task_definition                    = aws_ecs_task_definition.app.arn # TODO CLDC-2768 - should we carry on using the task definition
+  task_definition                    = aws_ecs_task_definition.sidekiq.arn # TODO CLDC-2768 - should we carry on using the task definition
 
   network_configuration {
     security_groups  = [aws_security_group.ecs.id]
