@@ -1,6 +1,16 @@
+variable "app_host" {
+  type        = string
+  description = "The value of the app host environment variable"
+}
+
 variable "application_port" {
   type        = number
   description = "The network port the application runs on"
+}
+
+variable "cloudfront_certificate_arn" {
+  type        = string
+  description = "The arn of the certifcate to be associated with cloudfront"
 }
 
 variable "ecs_security_group_id" {

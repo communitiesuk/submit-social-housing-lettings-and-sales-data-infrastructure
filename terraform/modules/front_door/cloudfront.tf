@@ -16,6 +16,7 @@ resource "aws_cloudfront_distribution" "this" {
   #checkov:skip=CKV_AWS_174:TODO CLDC-2680
   #checkov:skip=CKV_AWS_305:no need to define a default root object because the root of our distribution is just the app's homepage
   #checkov:skip=CKV_AWS_310:we have decided that we're unlikely to need a secondary load balancer
+  aliases         = [var.app_host]
   enabled         = true
   http_version    = "http2and3"
   is_ipv6_enabled = true
@@ -46,11 +47,13 @@ resource "aws_cloudfront_distribution" "this" {
     origin_request_policy_id   = aws_cloudfront_origin_request_policy.this.id
     response_headers_policy_id = data.aws_cloudfront_response_headers_policy.this.id
     target_origin_id           = local.origin_id
-    viewer_protocol_policy     = "allow-all"
+    viewer_protocol_policy     = "redirect-to-https"
   }
 
   viewer_certificate {
-    cloudfront_default_certificate = true
+    acm_certificate_arn      = var.cloudfront_certificate_arn
+    minimum_protocol_version = "TLSv1.2_2021"
+    ssl_support_method       = "sni-only"
   }
 
   restrictions {
