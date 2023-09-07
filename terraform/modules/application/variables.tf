@@ -46,19 +46,34 @@ variable "ecr_repository_url" {
   description = "The URL of the ECR repository in the meta account"
 }
 
-variable "ecs_task_cpu" {
+variable "ecs_app_task_cpu" {
   type        = number
-  description = "The amount of cpu units used by the ecs task"
+  description = "The amount of cpu units used by the ecs app task"
 }
 
-variable "ecs_task_desired_count" {
+variable "ecs_sidekiq_task_cpu" {
   type        = number
-  description = "The number of instances of the ecs task defintion desired"
+  description = "The amount of cpu units used by the ecs sidekiq task"
 }
 
-variable "ecs_task_memory" {
+variable "ecs_app_task_desired_count" {
   type        = number
-  description = "The amount of memory used by the ecs task"
+  description = "The number of instances of the ecs app task definition desired"
+}
+
+variable "ecs_sidekiq_task_desired_count" {
+  type        = number
+  description = "The number of instances of the ecs sidekiq task definition desired"
+}
+
+variable "ecs_app_task_memory" {
+  type        = number
+  description = "The amount of memory used by the ecs app task"
+}
+
+variable "ecs_sidekiq_task_memory" {
+  type        = number
+  description = "The amount of memory used by the ecs sidekiq task"
 }
 
 variable "export_bucket_access_policy_arn" {
