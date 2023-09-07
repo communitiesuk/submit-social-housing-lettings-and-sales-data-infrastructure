@@ -100,9 +100,9 @@ module "front_door" {
   source = "../modules/front_door"
 
   prefix                = local.prefix
-  cloudfront_domain_name = local.app_host
   application_port      = local.application_port
   cloudfront_certificate_arn = module.certificates.cloudfront_certificate_arn
+  cloudfront_domain_name = local.app_host
   ecs_security_group_id = module.application.ecs_security_group_id
   public_subnet_ids     = module.networking.public_subnet_ids
   vpc_id                = module.networking.vpc_id
