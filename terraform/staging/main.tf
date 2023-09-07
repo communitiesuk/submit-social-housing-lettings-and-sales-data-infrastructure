@@ -26,8 +26,18 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  alias = "us-east-1"
+  region = "us-east-1"
+
+  assume_role {
+    role_arn = "arn:aws:iam::107155005276:role/developer"
+  }
+}
+
 locals {
   prefix           = "core-staging"
+  app_host         = "staging.submit-social-housing-data.levellingup.gov.uk"
   application_port = 8080
   database_port    = 5432
   redis_port       = 6379
@@ -90,10 +100,22 @@ module "front_door" {
   source = "../modules/front_door"
 
   prefix                = local.prefix
+  app_host              = local.app_host
   application_port      = local.application_port
+  cloudfront_certificate_arn = module.cdn_certificate.certificate_arn
   ecs_security_group_id = module.application.ecs_security_group_id
   public_subnet_ids     = module.networking.public_subnet_ids
   vpc_id                = module.networking.vpc_id
+}
+
+module "cdn_certificate" {
+  source = "../modules/certificates"
+
+  providers = {
+    aws = aws.us-east-1
+  }
+
+  domain_name = local.app_host
 }
 
 module "networking" {
