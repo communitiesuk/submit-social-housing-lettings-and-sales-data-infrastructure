@@ -33,7 +33,10 @@ resource "aws_cloudfront_origin_request_policy" "this" {
   }
 
   headers_config {
-    header_behavior = "allViewer"
+    header_behavior = "allExcept"
+    headers {
+      items = ["Origin"]
+    }
   }
 
   query_strings_config {
