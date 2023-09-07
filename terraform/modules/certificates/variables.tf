@@ -1,4 +1,4 @@
-variable "domain_name" {
+variable "cloudfront_domain_name" {
   type        = string
-  description = "Then domain name for which the certificate should be issued"
+  description = "Then domain name of the cloudfront distribution"
 }

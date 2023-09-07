@@ -16,7 +16,7 @@ resource "aws_cloudfront_distribution" "this" {
   #checkov:skip=CKV_AWS_174:TODO CLDC-2680
   #checkov:skip=CKV_AWS_305:no need to define a default root object because the root of our distribution is just the app's homepage
   #checkov:skip=CKV_AWS_310:we have decided that we're unlikely to need a secondary load balancer
-  aliases         = [var.app_host]
+  aliases         = [var.cloudfront_domain_name]
   enabled         = true
   http_version    = "http2and3"
   is_ipv6_enabled = true
