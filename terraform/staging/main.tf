@@ -33,30 +33,6 @@ locals {
   redis_port       = 6379
 }
 
-module "database" {
-  source = "../modules/rds"
-
-  prefix                = local.prefix
-  allocated_storage     = 5
-  database_port         = local.database_port
-  db_subnet_group_name  = module.networking.db_private_subnet_group_name
-  ecs_security_group_id = module.application.ecs_security_group_id
-  instance_class        = "db.t3.micro"
-  vpc_id                = module.networking.vpc_id
-}
-
-module "bulk_upload" {
-  source = "../modules/bulk_upload"
-
-  prefix = local.prefix
-}
-
-module "cds_export" {
-  source = "../modules/cds_export"
-
-  prefix = local.prefix
-}
-
 module "application" {
   source = "../modules/application"
 
@@ -71,10 +47,10 @@ module "application" {
   db_security_group_id                 = module.database.rds_security_group_id
   ecr_repository_url                   = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core"
   ecs_app_task_cpu                     = 512
-  ecs_sidekiq_task_cpu                 = 1024
   ecs_app_task_desired_count           = 2
-  ecs_sidekiq_task_desired_count       = 1
   ecs_app_task_memory                  = 1024
+  ecs_sidekiq_task_cpu                 = 1024
+  ecs_sidekiq_task_desired_count       = 1
   ecs_sidekiq_task_memory              = 8192
   export_bucket_access_policy_arn      = module.cds_export.read_write_policy_arn
   export_bucket_details                = module.cds_export.details
@@ -87,6 +63,30 @@ module "application" {
   redis_port                           = local.redis_port
   redis_security_group_id              = module.redis.redis_security_group_id
   vpc_id                               = module.networking.vpc_id
+}
+
+module "bulk_upload" {
+  source = "../modules/bulk_upload"
+
+  prefix = local.prefix
+}
+
+module "cds_export" {
+  source = "../modules/cds_export"
+
+  prefix = local.prefix
+}
+
+module "database" {
+  source = "../modules/rds"
+
+  prefix                = local.prefix
+  allocated_storage     = 5
+  database_port         = local.database_port
+  db_subnet_group_name  = module.networking.db_private_subnet_group_name
+  ecs_security_group_id = module.application.ecs_security_group_id
+  instance_class        = "db.t3.micro"
+  vpc_id                = module.networking.vpc_id
 }
 
 module "front_door" {
