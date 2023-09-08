@@ -18,6 +18,11 @@ variable "ecs_security_group_id" {
   description = "The id of the ecs security group for ecs egress"
 }
 
+variable "load_balancer_certificate_arn" {
+  type        = string
+  description = "The arn of the certifcate to be associated with the load balancer HTTPS listener"
+}
+
 variable "prefix" {
   type        = string
   description = "The prefix to be prepended to resource names."
