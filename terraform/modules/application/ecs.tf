@@ -90,7 +90,7 @@ resource "aws_ecs_task_definition" "app" {
     # The image will be updated by deployments - irritatingly we can't ignore changes just to the image
     # If changing other aspects of the container definition we'll need to temporarily not ignore changes
     # to force the update, ensuring the referenced image is the correct current one
-#    ignore_changes = [container_definitions]
+    #    ignore_changes = [container_definitions]
   }
 }
 
@@ -113,6 +113,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
         { Name = "EXPORT_PAAS_INSTANCE", Value = local.export_bucket_key },
         { Name = "RAILS_ENV", Value = var.rails_env },
         { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
+        { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) }
       ]
       essential         = true
       image             = var.ecr_repository_url
@@ -130,6 +131,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
 
       secrets = [
         { Name = "DATABASE_URL", valueFrom = var.database_connection_string_arn },
+        { Name = "RAILS_MASTER_KEY", valueFrom = aws_secretsmanager_secret.rails_master_key.arn },
       ]
     }
   ])
@@ -143,7 +145,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
     # The image will be updated by deployments - irritatingly we can't ignore changes just to the image
     # If changing other aspects of the container definition we'll need to temporarily not ignore changes
     # to force the update, ensuring the referenced image is the correct current one
-#    ignore_changes = [container_definitions]
+    #    ignore_changes = [container_definitions]
   }
 }
 
@@ -216,12 +218,12 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
     # The image will be updated by deployments - irritatingly we can't ignore changes just to the image
     # If changing other aspects of the container definition we'll need to temporarily not ignore changes
     # to force the update, ensuring the referenced image is the correct current one
-#    ignore_changes = [container_definitions]
+    #    ignore_changes = [container_definitions]
   }
 }
 
 resource "aws_ecs_service" "app" {
-  name                               = var.prefix
+  name                               = "${var.prefix}-app"
   cluster                            = aws_ecs_cluster.this.arn
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 100 / var.ecs_app_task_desired_count # always 1 task from the desired count should be running
@@ -246,7 +248,7 @@ resource "aws_ecs_service" "app" {
 
   lifecycle {
     # The task definition revision will be updated by the deployment process
-#    ignore_changes = [task_definition]
+    #    ignore_changes = [task_definition]
   }
 }
 
@@ -270,6 +272,6 @@ resource "aws_ecs_service" "sidekiq" {
 
   lifecycle {
     # The task definition revision will be updated by the deployment process
-#    ignore_changes = [task_definition]
+    #    ignore_changes = [task_definition]
   }
 }

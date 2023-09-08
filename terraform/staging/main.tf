@@ -73,7 +73,7 @@ module "application" {
   ecs_app_task_cpu                     = 512
   ecs_sidekiq_task_cpu                 = 1024
   ecs_app_task_desired_count           = 2
-  ecs_sidekiq_task_desired_count       = 2
+  ecs_sidekiq_task_desired_count       = 1
   ecs_app_task_memory                  = 1024
   ecs_sidekiq_task_memory              = 8192
   export_bucket_access_policy_arn      = module.cds_export.read_write_policy_arn
