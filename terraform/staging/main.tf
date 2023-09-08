@@ -40,7 +40,7 @@ locals {
   app_host         = "staging.submit-social-housing-data.levellingup.gov.uk"
   application_port = 8080
   database_port    = 5432
-  load_balancer_domain_name = "staginglb.submit-social-housing-data.levellingup.gov.uk"
+  load_balancer_domain_name = "staging.lb.submit-social-housing-data.levellingup.gov.uk"
   redis_port       = 6379
 }
 
