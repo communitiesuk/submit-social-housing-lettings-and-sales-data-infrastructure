@@ -40,6 +40,7 @@ locals {
   app_host         = "staging.submit-social-housing-data.levellingup.gov.uk"
   application_port = 8080
   database_port    = 5432
+  load_balancer_domain_name = "staginglb.submit-social-housing-data.levellingup.gov.uk"
   redis_port       = 6379
 }
 
@@ -104,6 +105,7 @@ module "front_door" {
   cloudfront_certificate_arn = module.certificates.cloudfront_certificate_arn
   cloudfront_domain_name     = local.app_host
   ecs_security_group_id      = module.application.ecs_security_group_id
+  load_balancer_certificate_arn = module.certificates.load_balancer_certificate_arn
   public_subnet_ids          = module.networking.public_subnet_ids
   vpc_id                     = module.networking.vpc_id
 }
@@ -116,6 +118,7 @@ module "certificates" {
   }
 
   cloudfront_domain_name = local.app_host
+  load_balancer_domain_name = local.load_balancer_domain_name
 }
 
 module "networking" {
