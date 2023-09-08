@@ -45,7 +45,7 @@ resource "aws_ecs_task_definition" "app" {
         { Name = "RAILS_ENV", Value = var.rails_env },
         { Name = "RAILS_LOG_TO_STDOUT", Value = "true" },
         { Name = "RAILS_SERVE_STATIC_FILES", Value = "true" },
-        { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"${var.prefix}\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
+        { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
         { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) }
       ]
       essential         = true
@@ -90,7 +90,7 @@ resource "aws_ecs_task_definition" "app" {
     # The image will be updated by deployments - irritatingly we can't ignore changes just to the image
     # If changing other aspects of the container definition we'll need to temporarily not ignore changes
     # to force the update, ensuring the referenced image is the correct current one
-    ignore_changes = [container_definitions]
+#    ignore_changes = [container_definitions]
   }
 }
 
@@ -111,7 +111,8 @@ resource "aws_ecs_task_definition" "sidekiq" {
       cpu     = var.ecs_sidekiq_task_cpu
       environment = [
         { Name = "EXPORT_PAAS_INSTANCE", Value = local.export_bucket_key },
-        { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"${var.prefix}\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
+        { Name = "RAILS_ENV", Value = var.rails_env },
+        { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
       ]
       essential         = true
       image             = var.ecr_repository_url
@@ -142,7 +143,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
     # The image will be updated by deployments - irritatingly we can't ignore changes just to the image
     # If changing other aspects of the container definition we'll need to temporarily not ignore changes
     # to force the update, ensuring the referenced image is the correct current one
-    ignore_changes = [container_definitions]
+#    ignore_changes = [container_definitions]
   }
 }
 
@@ -170,7 +171,7 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
         { Name = "RAILS_LOG_TO_STDOUT", Value = "true" },
         { Name = "RAILS_SERVE_STATIC_FILES", Value = "true" },
         { Name = "REDIS_INSTANCE_NAME", Value = "" },
-        { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"${var.prefix}\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
+        { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
         { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) }
       ]
       essential         = true
@@ -215,7 +216,7 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
     # The image will be updated by deployments - irritatingly we can't ignore changes just to the image
     # If changing other aspects of the container definition we'll need to temporarily not ignore changes
     # to force the update, ensuring the referenced image is the correct current one
-    ignore_changes = [container_definitions]
+#    ignore_changes = [container_definitions]
   }
 }
 
@@ -245,7 +246,7 @@ resource "aws_ecs_service" "app" {
 
   lifecycle {
     # The task definition revision will be updated by the deployment process
-    ignore_changes = [task_definition]
+#    ignore_changes = [task_definition]
   }
 }
 
@@ -269,6 +270,6 @@ resource "aws_ecs_service" "sidekiq" {
 
   lifecycle {
     # The task definition revision will be updated by the deployment process
-    ignore_changes = [task_definition]
+#    ignore_changes = [task_definition]
   }
 }
