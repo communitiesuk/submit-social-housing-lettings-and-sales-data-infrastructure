@@ -91,12 +91,12 @@ module "database" {
   source = "../modules/rds"
 
   prefix                  = local.prefix
-  allocated_storage       = 5
+  allocated_storage       = 5 # To discuss
   backup_retention_period = 7
   database_port           = local.database_port
   db_subnet_group_name    = module.networking.db_private_subnet_group_name
   ecs_security_group_id   = module.application.ecs_security_group_id
-  instance_class          = "db.t3.micro"
+  instance_class          = "db.t3.micro" # To discuss
   vpc_id                  = module.networking.vpc_id
 }
 
