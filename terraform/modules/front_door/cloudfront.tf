@@ -19,7 +19,7 @@ resource "aws_cloudfront_distribution" "this" {
   enabled         = true
   http_version    = "http2and3"
   is_ipv6_enabled = true
-  price_class     = "PriceClass_100" # Affects which edge locations are used by cloudfront, which affects the latency users will experience in different geographic areas
+  price_class     = "PriceClass_100" # Affects which edge locations are used by cloudfront, which affects the latency users will experience in different geographic areas # To discuss
   web_acl_id      = aws_wafv2_web_acl.this.arn
 
   origin {
