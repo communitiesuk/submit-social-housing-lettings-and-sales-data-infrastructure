@@ -80,14 +80,14 @@ module "cds_export" {
 module "database" {
   source = "../modules/rds"
 
-  prefix                = local.prefix
-  allocated_storage     = 5
+  prefix                  = local.prefix
+  allocated_storage       = 5
   backup_retention_period = 7
-  db_subnet_group_name  = module.networking.db_private_subnet_group_name
-  database_port         = local.database_port
-  ecs_security_group_id = module.application.ecs_security_group_id
-  instance_class        = "db.t3.micro"
-  vpc_id                = module.networking.vpc_id
+  db_subnet_group_name    = module.networking.db_private_subnet_group_name
+  database_port           = local.database_port
+  ecs_security_group_id   = module.application.ecs_security_group_id
+  instance_class          = "db.t3.micro"
+  vpc_id                  = module.networking.vpc_id
 }
 
 module "front_door" {
