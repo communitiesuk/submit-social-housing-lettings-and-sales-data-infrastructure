@@ -22,15 +22,16 @@ provider "aws" {
   region = "eu-west-2"
 
   assume_role {
-    role_arn = "arn:aws:iam::107155005276:role/developer"
+    role_arn = local.provider_role_arn
   }
 }
 
 locals {
-  prefix           = "core-staging"
-  application_port = 8080
-  database_port    = 5432
-  redis_port       = 6379
+  prefix            = "core-staging"
+  application_port  = 8080
+  database_port     = 5432
+  provider_role_arn = "arn:aws:iam::107155005276:role/developer"
+  redis_port        = 6379
 }
 
 module "application" {
@@ -97,6 +98,7 @@ module "front_door" {
   ecs_security_group_id = module.application.ecs_security_group_id
   public_subnet_ids     = module.networking.public_subnet_ids
   vpc_id                = module.networking.vpc_id
+  provider_role_arn     = local.provider_role_arn
 }
 
 module "networking" {

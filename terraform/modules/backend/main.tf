@@ -10,7 +10,7 @@ terraform {
 }
 
 # The state replica bucket is kept in a separate region (eu-west-1) to the source bucket and where we generally
-# create our infrastructure (eu-west-2), so we define a provider here to be especially for this
+# create our infrastructure (eu-west-2), so we define a provider here especially for this
 provider "aws" {
   alias  = "ireland"
   region = "eu-west-1"
