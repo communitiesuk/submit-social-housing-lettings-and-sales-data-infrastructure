@@ -29,7 +29,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
     filter {}
 
     expiration {
-      days = 30
+      days = 30 # To discuss
     }
 
     abort_incomplete_multipart_upload {
