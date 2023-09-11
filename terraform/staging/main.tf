@@ -82,6 +82,7 @@ module "database" {
 
   prefix                = local.prefix
   allocated_storage     = 5
+  backup_retention_period = 7
   database_port         = local.database_port
   db_subnet_group_name  = module.networking.db_private_subnet_group_name
   ecs_security_group_id = module.application.ecs_security_group_id
