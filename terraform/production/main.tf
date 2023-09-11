@@ -60,7 +60,7 @@ module "application" {
   redis_port                           = local.redis_port
   redis_security_group_id              = module.redis.redis_security_group_id
   sidekiq_task_cpu                     = 1024
-  sidekiq_task_desired_count           = 2
+  sidekiq_task_desired_count           = 1
   sidekiq_task_memory                  = 8192
   vpc_id                               = module.networking.vpc_id
 }

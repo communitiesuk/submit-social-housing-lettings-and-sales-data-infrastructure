@@ -262,7 +262,7 @@ resource "aws_ecs_service" "sidekiq" {
   force_new_deployment               = true
   launch_type                        = "FARGATE"
   scheduling_strategy                = "REPLICA"
-  task_definition                    = aws_ecs_task_definition.sidekiq.arn # TODO CLDC-2768 - should we carry on using the task definition
+  task_definition                    = aws_ecs_task_definition.sidekiq.arn
 
   network_configuration {
     security_groups  = [aws_security_group.ecs.id]
