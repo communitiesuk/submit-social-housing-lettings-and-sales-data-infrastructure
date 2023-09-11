@@ -25,9 +25,9 @@ locals {
 resource "aws_ecs_task_definition" "app" {
   #checkov:skip=CKV_AWS_336:using readonlyRootFilesystem to true breaks the app, as it needs to write to app/tmp/pids for example
   family                   = "${var.prefix}-app"
-  cpu                      = var.ecs_app_task_cpu
+  cpu                      = var.app_task_cpu
   execution_role_arn       = aws_iam_role.task_execution.arn
-  memory                   = var.ecs_app_task_memory #MiB
+  memory                   = var.app_task_memory #MiB
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   task_role_arn            = aws_iam_role.task.arn
@@ -35,7 +35,7 @@ resource "aws_ecs_task_definition" "app" {
   container_definitions = jsonencode([
     {
       name = local.app_container_name
-      cpu  = var.ecs_app_task_cpu
+      cpu  = var.app_task_cpu
       environment = [
         { Name = "API_USER", Value = "dluhc-user" },
         { Name = "APP_HOST", Value = var.app_host },
@@ -50,7 +50,7 @@ resource "aws_ecs_task_definition" "app" {
       ]
       essential         = true
       image             = var.ecr_repository_url
-      memoryReservation = var.ecs_app_task_memory * 0.75
+      memoryReservation = var.app_task_memory * 0.75
       user              = "nonroot"
 
       logConfiguration = {
@@ -97,9 +97,9 @@ resource "aws_ecs_task_definition" "app" {
 resource "aws_ecs_task_definition" "sidekiq" {
   #checkov:skip=CKV_AWS_336:using readonlyRootFilesystem to true breaks the app, as it needs to write to app/tmp/pids for example
   family                   = "${var.prefix}-sidekiq"
-  cpu                      = var.ecs_sidekiq_task_cpu
+  cpu                      = var.sidekiq_task_cpu
   execution_role_arn       = aws_iam_role.task_execution.arn
-  memory                   = var.ecs_sidekiq_task_memory #MiB
+  memory                   = var.sidekiq_task_memory #MiB
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   task_role_arn            = aws_iam_role.task.arn
@@ -108,7 +108,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
     {
       name    = local.sidekiq_container_name
       command = ["bundle", "exec", "sidekiq", "-t", "3"]
-      cpu     = var.ecs_sidekiq_task_cpu
+      cpu     = var.sidekiq_task_cpu
       environment = [
         { Name = "EXPORT_PAAS_INSTANCE", Value = local.export_bucket_key },
         { Name = "RAILS_ENV", Value = var.rails_env },
@@ -117,7 +117,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
       ]
       essential         = true
       image             = var.ecr_repository_url
-      memoryReservation = var.ecs_sidekiq_task_memory * 0.75
+      memoryReservation = var.sidekiq_task_memory * 0.75
       user              = "nonroot"
 
       logConfiguration = {
@@ -152,9 +152,9 @@ resource "aws_ecs_task_definition" "sidekiq" {
 resource "aws_ecs_task_definition" "ad_hoc_tasks" {
   #checkov:skip=CKV_AWS_336:using readonlyRootFilesystem to true breaks the app, as it needs to write to app/tmp/pids for example
   family                   = "${var.prefix}-ad-hoc"
-  cpu                      = var.ecs_app_task_cpu
+  cpu                      = var.app_task_cpu
   execution_role_arn       = aws_iam_role.task_execution.arn
-  memory                   = var.ecs_app_task_memory #MiB
+  memory                   = var.app_task_memory #MiB
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   task_role_arn            = aws_iam_role.task.arn
@@ -162,7 +162,7 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
   container_definitions = jsonencode([
     {
       name = local.app_container_name
-      cpu  = var.ecs_app_task_cpu
+      cpu  = var.app_task_cpu
       environment = [
         { Name = "API_USER", Value = "dluhc-user" },
         { Name = "APP_HOST", Value = var.app_host },
@@ -178,7 +178,7 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
       ]
       essential         = true
       image             = var.ecr_repository_url
-      memoryReservation = var.ecs_app_task_memory * 0.75
+      memoryReservation = var.app_task_memory * 0.75
       user              = "nonroot"
 
       logConfiguration = {
@@ -226,8 +226,8 @@ resource "aws_ecs_service" "app" {
   name                               = "${var.prefix}-app"
   cluster                            = aws_ecs_cluster.this.arn
   deployment_maximum_percent         = 200
-  deployment_minimum_healthy_percent = 100 / var.ecs_app_task_desired_count # always 1 task from the desired count should be running
-  desired_count                      = var.ecs_app_task_desired_count
+  deployment_minimum_healthy_percent = 100 / var.app_task_desired_count # always 1 task from the desired count should be running
+  desired_count                      = var.app_task_desired_count
   enable_execute_command             = true
   force_new_deployment               = true
   launch_type                        = "FARGATE"
@@ -256,8 +256,8 @@ resource "aws_ecs_service" "sidekiq" {
   name                               = "${var.prefix}-sidekiq"
   cluster                            = aws_ecs_cluster.this.arn
   deployment_maximum_percent         = 200
-  deployment_minimum_healthy_percent = 100 / var.ecs_sidekiq_task_desired_count # always 1 task from the desired count should be running
-  desired_count                      = var.ecs_sidekiq_task_desired_count
+  deployment_minimum_healthy_percent = 100 / var.sidekiq_task_desired_count # always 1 task from the desired count should be running
+  desired_count                      = var.sidekiq_task_desired_count
   enable_execute_command             = true
   force_new_deployment               = true
   launch_type                        = "FARGATE"
