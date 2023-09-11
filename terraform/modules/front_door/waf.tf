@@ -20,7 +20,7 @@ resource "aws_wafv2_web_acl" "this" {
 
   visibility_config {
     cloudwatch_metrics_enabled = true
-    metric_name                = "waf-metrics"
+    metric_name                = "waf"
     sampled_requests_enabled   = false
   }
 
@@ -41,7 +41,7 @@ resource "aws_wafv2_web_acl" "this" {
 
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "waf-block-disreputable-ip-metrics"
+      metric_name                = "waf-block-disreputable-ip"
       sampled_requests_enabled   = true
     }
   }
@@ -69,7 +69,7 @@ resource "aws_wafv2_web_acl" "this" {
 
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "waf-block-common-exploit-metrics"
+      metric_name                = "waf-block-common-exploit"
       sampled_requests_enabled   = true
     }
   }
@@ -91,7 +91,7 @@ resource "aws_wafv2_web_acl" "this" {
 
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "waf-block-bad-input-exploit-metrics"
+      metric_name                = "waf-block-bad-input-exploit"
       sampled_requests_enabled   = true
     }
   }
@@ -113,7 +113,7 @@ resource "aws_wafv2_web_acl" "this" {
 
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "waf-block-sql-exploit-metrics"
+      metric_name                = "waf-block-sql-exploit"
       sampled_requests_enabled   = true
     }
   }
@@ -135,7 +135,7 @@ resource "aws_wafv2_web_acl" "this" {
 
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "waf-block-linux-exploit-metrics"
+      metric_name                = "waf-block-linux-exploit"
       sampled_requests_enabled   = true
     }
   }
@@ -157,7 +157,7 @@ resource "aws_wafv2_web_acl" "this" {
 
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "waf-block-unix-exploit-metrics"
+      metric_name                = "waf-block-unix-exploit"
       sampled_requests_enabled   = true
     }
   }
