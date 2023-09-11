@@ -35,7 +35,7 @@ resource "aws_ecs_task_definition" "app" {
   container_definitions = jsonencode([
     {
       name = local.app_container_name
-      cpu  = var.app_task_cpu
+      cpu  = var.app_task_cpu # Why have we specified this?
       environment = [
         { Name = "API_USER", Value = "dluhc-user" },
         { Name = "APP_HOST", Value = var.app_host },
@@ -50,7 +50,7 @@ resource "aws_ecs_task_definition" "app" {
       ]
       essential         = true
       image             = var.ecr_repository_url
-      memoryReservation = var.app_task_memory * 0.75
+      memoryReservation = var.app_task_memory * 0.75 # Why have we specified this?
       user              = "nonroot"
 
       logConfiguration = {
@@ -108,7 +108,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
     {
       name    = local.sidekiq_container_name
       command = ["bundle", "exec", "sidekiq", "-t", "3"]
-      cpu     = var.sidekiq_task_cpu
+      cpu     = var.sidekiq_task_cpu # Why have we specified this?
       environment = [
         { Name = "EXPORT_PAAS_INSTANCE", Value = local.export_bucket_key },
         { Name = "RAILS_ENV", Value = var.rails_env },
@@ -117,7 +117,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
       ]
       essential         = true
       image             = var.ecr_repository_url
-      memoryReservation = var.sidekiq_task_memory * 0.75
+      memoryReservation = var.sidekiq_task_memory * 0.75 # Why have we specified this?
       user              = "nonroot"
 
       logConfiguration = {
@@ -162,7 +162,7 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
   container_definitions = jsonencode([
     {
       name = local.app_container_name
-      cpu  = var.app_task_cpu
+      cpu  = var.app_task_cpu # Why have we specified this?
       environment = [
         { Name = "API_USER", Value = "dluhc-user" },
         { Name = "APP_HOST", Value = var.app_host },
@@ -178,7 +178,7 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
       ]
       essential         = true
       image             = var.ecr_repository_url
-      memoryReservation = var.app_task_memory * 0.75
+      memoryReservation = var.app_task_memory * 0.75 # Why have we specified this?
       user              = "nonroot"
 
       logConfiguration = {
@@ -225,8 +225,8 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
 resource "aws_ecs_service" "app" {
   name                               = "${var.prefix}-app"
   cluster                            = aws_ecs_cluster.this.arn
-  deployment_maximum_percent         = 200
-  deployment_minimum_healthy_percent = 100 / var.app_task_desired_count # always 1 task from the desired count should be running
+  deployment_maximum_percent         = 200 # To discuss
+  deployment_minimum_healthy_percent = 100 / var.app_task_desired_count # always 1 task from the desired count should be running # Do we need to worry about rounding?
   desired_count                      = var.app_task_desired_count
   enable_execute_command             = true
   force_new_deployment               = true
@@ -255,8 +255,8 @@ resource "aws_ecs_service" "app" {
 resource "aws_ecs_service" "sidekiq" {
   name                               = "${var.prefix}-sidekiq"
   cluster                            = aws_ecs_cluster.this.arn
-  deployment_maximum_percent         = 200
-  deployment_minimum_healthy_percent = 100 / var.sidekiq_task_desired_count # always 1 task from the desired count should be running
+  deployment_maximum_percent         = 200 # To discuss
+  deployment_minimum_healthy_percent = 100 / var.sidekiq_task_desired_count # always 1 task from the desired count should be running # Do we need to worry about rounding?
   desired_count                      = var.sidekiq_task_desired_count
   enable_execute_command             = true
   force_new_deployment               = true

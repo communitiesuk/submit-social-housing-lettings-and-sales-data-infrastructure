@@ -48,9 +48,9 @@ module "application" {
 
   prefix                               = local.prefix
   app_host                             = ""
-  app_task_cpu                         = 512
-  app_task_desired_count               = 2
-  app_task_memory                      = 1024
+  app_task_cpu                         = 512 # To check
+  app_task_desired_count               = 2 # To check
+  app_task_memory                      = 1024 # To check
   application_port                     = local.application_port
   bulk_upload_bucket_access_policy_arn = module.bulk_upload.read_write_policy_arn
   bulk_upload_bucket_details           = module.bulk_upload.details
@@ -69,9 +69,9 @@ module "application" {
   rails_env                            = "staging"
   redis_port                           = local.redis_port
   redis_security_group_id              = module.redis.redis_security_group_id
-  sidekiq_task_cpu                     = 1024
-  sidekiq_task_desired_count           = 1
-  sidekiq_task_memory                  = 8192
+  sidekiq_task_cpu                     = 1024 # To check
+  sidekiq_task_desired_count           = 1 # To check
+  sidekiq_task_memory                  = 8192 # To check
   vpc_id                               = module.networking.vpc_id
 }
 
