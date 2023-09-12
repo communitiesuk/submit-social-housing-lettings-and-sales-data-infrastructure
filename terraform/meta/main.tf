@@ -22,8 +22,21 @@ provider "aws" {
   region = "eu-west-2"
 
   assume_role {
-    role_arn = "arn:aws:iam::815624722760:role/developer"
+    role_arn = local.provider_role_arn
   }
+}
+
+provider "aws" {
+  alias  = "eu-west-1"
+  region = "eu-west-1"
+
+  assume_role {
+    role_arn = local.provider_role_arn
+  }
+}
+
+locals {
+  provider_role_arn = "arn:aws:iam::815624722760:role/developer"
 }
 
 # We create two backends for managing the terraform state of different accounts:
@@ -32,11 +45,19 @@ provider "aws" {
 module "non_prod_backend" {
   source = "../modules/backend"
 
+  providers = {
+    aws.eu-west-1 = aws.eu-west-1
+  }
+
   prefix = "core-non-prod"
 }
 
 module "prod_backend" {
   source = "../modules/backend"
+
+  providers = {
+    aws.eu-west-1 = aws.eu-west-1
+  }
 
   prefix = "core-prod"
 }
