@@ -7,8 +7,6 @@ on:
       - synchronize
       - reopened
   push:
-    branches:
-      - "dev"
 
 jobs:
   tf_fmt:
