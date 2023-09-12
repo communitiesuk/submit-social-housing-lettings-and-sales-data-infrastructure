@@ -26,6 +26,15 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  alias  = "us-east-1"
+  region = "us-east-1"
+
+  assume_role {
+    role_arn = local.provider_role_arn
+  }
+}
+
 locals {
   prefix            = "core-dev"
   application_port  = 8080
@@ -92,6 +101,10 @@ module "database" {
 
 module "front_door" {
   source = "../modules/front_door"
+
+  providers = {
+    aws.us-east-1 = aws.us-east-1
+  }
 
   prefix                = local.prefix
   application_port      = local.application_port

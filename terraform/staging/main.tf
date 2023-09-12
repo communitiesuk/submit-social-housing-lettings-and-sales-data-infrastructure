@@ -26,6 +26,15 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  alias  = "us-east-1"
+  region = "us-east-1"
+
+  assume_role {
+    role_arn = local.provider_role_arn
+  }
+}
+
 locals {
   prefix            = "core-staging"
   application_port  = 8080
@@ -93,12 +102,15 @@ module "database" {
 module "front_door" {
   source = "../modules/front_door"
 
+  providers = {
+    aws.us-east-1 = aws.us-east-1
+  }
+
   prefix                = local.prefix
   application_port      = local.application_port
   ecs_security_group_id = module.application.ecs_security_group_id
   public_subnet_ids     = module.networking.public_subnet_ids
   vpc_id                = module.networking.vpc_id
-  provider_role_arn     = local.provider_role_arn
 }
 
 module "networking" {

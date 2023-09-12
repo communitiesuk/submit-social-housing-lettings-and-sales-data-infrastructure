@@ -1,17 +1,8 @@
-provider "aws" {
-  alias  = "north-virginia"
-  region = "us-east-1"
-
-  assume_role {
-    role_arn = var.provider_role_arn
-  }
-}
-
 resource "aws_wafv2_web_acl" "this" {
   #checkov:skip=CKV2_AWS_31:TODO CLDC-2781 setup WAF logging in cloudwatch
   name        = var.prefix
   description = "Web ACL to restrict traffic to CloudFront"
-  provider    = aws.north-virginia
+  provider    = aws.us-east-1
   scope       = "CLOUDFRONT"
 
   default_action {

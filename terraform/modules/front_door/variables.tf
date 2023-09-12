@@ -13,11 +13,6 @@ variable "prefix" {
   description = "The prefix to be prepended to resource names."
 }
 
-variable "provider_role_arn" {
-  type        = string
-  description = "The role arn to be assumed by the aws provider"
-}
-
 variable "public_subnet_ids" {
   type        = list(string)
   description = "The ids of all the public subnets"
