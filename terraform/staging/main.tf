@@ -85,6 +85,7 @@ module "cds_export" {
   source = "../modules/cds_export"
 
   prefix = local.prefix
+  cds_access_role_arn = "" # TODO CLDC-2764 provide role arn CDS team will use
 }
 
 module "database" {
