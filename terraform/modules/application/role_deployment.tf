@@ -57,8 +57,11 @@ data "aws_iam_policy_document" "allow_deployment" {
       "ecs:DescribeServices",
       "ecs:UpdateService"
     ]
-    resources = [aws_ecs_service.this.id]
-    effect    = "Allow"
+    resources = [
+      aws_ecs_service.app.id,
+      aws_ecs_service.sidekiq.id
+    ]
+    effect = "Allow"
   }
 }
 

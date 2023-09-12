@@ -3,6 +3,21 @@ variable "app_host" {
   description = "The value of the app host environment variable"
 }
 
+variable "app_task_cpu" {
+  type        = number
+  description = "The amount of cpu units used by the ecs app task"
+}
+
+variable "app_task_desired_count" {
+  type        = number
+  description = "The number of instances of the ecs app task definition desired"
+}
+
+variable "app_task_memory" {
+  type        = number
+  description = "The amount of memory used by the ecs app task"
+}
+
 variable "application_port" {
   type        = number
   description = "The network port the application runs on"
@@ -44,21 +59,6 @@ variable "db_security_group_id" {
 variable "ecr_repository_url" {
   type        = string
   description = "The URL of the ECR repository in the meta account"
-}
-
-variable "ecs_task_cpu" {
-  type        = number
-  description = "The amount of cpu units used by the ecs task"
-}
-
-variable "ecs_task_desired_count" {
-  type        = number
-  description = "The number of instances of the ecs task defintion desired"
-}
-
-variable "ecs_task_memory" {
-  type        = number
-  description = "The amount of memory used by the ecs task"
 }
 
 variable "export_bucket_access_policy_arn" {
@@ -117,6 +117,21 @@ variable "redis_port" {
 variable "redis_security_group_id" {
   type        = string
   description = "The id of the redis security group for ecs egress"
+}
+
+variable "sidekiq_task_cpu" {
+  type        = number
+  description = "The amount of cpu units used by the ecs sidekiq task"
+}
+
+variable "sidekiq_task_desired_count" {
+  type        = number
+  description = "The number of instances of the ecs sidekiq task definition desired"
+}
+
+variable "sidekiq_task_memory" {
+  type        = number
+  description = "The amount of memory used by the ecs sidekiq task"
 }
 
 variable "vpc_id" {

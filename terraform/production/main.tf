@@ -33,16 +33,36 @@ locals {
   redis_port       = 6379
 }
 
-module "database" {
-  source = "../modules/rds"
+module "application" {
+  source = "../modules/application"
 
-  prefix                = local.prefix
-  allocated_storage     = 100
-  database_port         = local.database_port
-  db_subnet_group_name  = module.networking.db_private_subnet_group_name
-  ecs_security_group_id = module.application.ecs_security_group_id
-  instance_class        = "db.t3.small"
-  vpc_id                = module.networking.vpc_id
+  prefix                               = local.prefix
+  app_host                             = ""
+  app_task_cpu                         = 512
+  app_task_desired_count               = 2
+  app_task_memory                      = 1024
+  application_port                     = local.application_port
+  bulk_upload_bucket_access_policy_arn = module.bulk_upload.read_write_policy_arn
+  bulk_upload_bucket_details           = module.bulk_upload.details
+  database_connection_string_arn       = module.database.rds_connection_string_arn
+  database_data_access_policy_arn      = module.database.rds_data_access_policy_arn
+  database_port                        = local.database_port
+  db_security_group_id                 = module.database.rds_security_group_id
+  ecr_repository_url                   = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core"
+  export_bucket_access_policy_arn      = module.cds_export.read_write_policy_arn
+  export_bucket_details                = module.cds_export.details
+  github_actions_role_arn              = "arn:aws:iam::815624722760:role/core-application-repo"
+  load_balancer_security_group_id      = module.front_door.load_balancer_security_group_id
+  load_balancer_target_group_arn       = module.front_door.load_balancer_target_group_arn
+  private_subnet_ids                   = module.networking.private_subnet_ids
+  redis_connection_string              = module.redis.redis_connection_string
+  rails_env                            = "production"
+  redis_port                           = local.redis_port
+  redis_security_group_id              = module.redis.redis_security_group_id
+  sidekiq_task_cpu                     = 1024
+  sidekiq_task_desired_count           = 1
+  sidekiq_task_memory                  = 8192
+  vpc_id                               = module.networking.vpc_id
 }
 
 module "bulk_upload" {
@@ -57,33 +77,16 @@ module "cds_export" {
   prefix = local.prefix
 }
 
-module "application" {
-  source = "../modules/application"
+module "database" {
+  source = "../modules/rds"
 
-  prefix                               = local.prefix
-  app_host                             = ""
-  application_port                     = local.application_port
-  bulk_upload_bucket_access_policy_arn = module.bulk_upload.read_write_policy_arn
-  bulk_upload_bucket_details           = module.bulk_upload.details
-  database_connection_string_arn       = module.database.rds_connection_string_arn
-  database_data_access_policy_arn      = module.database.rds_data_access_policy_arn
-  database_port                        = local.database_port
-  db_security_group_id                 = module.database.rds_security_group_id
-  ecr_repository_url                   = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core"
-  ecs_task_cpu                         = 512
-  ecs_task_desired_count               = 2
-  ecs_task_memory                      = 1024
-  export_bucket_access_policy_arn      = module.cds_export.read_write_policy_arn
-  export_bucket_details                = module.cds_export.details
-  github_actions_role_arn              = "arn:aws:iam::815624722760:role/core-application-repo"
-  load_balancer_security_group_id      = module.front_door.load_balancer_security_group_id
-  load_balancer_target_group_arn       = module.front_door.load_balancer_target_group_arn
-  private_subnet_ids                   = module.networking.private_subnet_ids
-  redis_connection_string              = module.redis.redis_connection_string
-  rails_env                            = "production"
-  redis_port                           = local.redis_port
-  redis_security_group_id              = module.redis.redis_security_group_id
-  vpc_id                               = module.networking.vpc_id
+  prefix                = local.prefix
+  allocated_storage     = 100
+  database_port         = local.database_port
+  db_subnet_group_name  = module.networking.db_private_subnet_group_name
+  ecs_security_group_id = module.application.ecs_security_group_id
+  instance_class        = "db.t3.small"
+  vpc_id                = module.networking.vpc_id
 }
 
 module "front_door" {
