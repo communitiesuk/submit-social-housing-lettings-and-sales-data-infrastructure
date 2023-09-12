@@ -28,6 +28,11 @@ variable "prefix" {
   description = "The prefix to be prepended to resource names."
 }
 
+variable "backup_retention_period" {
+  type        = number
+  description = "The number of days to retain db backups for."
+}
+
 variable "vpc_id" {
   type        = string
   description = "The ID of the VPC to be associated with"
