@@ -22,15 +22,25 @@ provider "aws" {
   region = "eu-west-2"
 
   assume_role {
-    role_arn = "arn:aws:iam::977287343304:role/developer"
+    role_arn = local.provider_role_arn
+  }
+}
+
+provider "aws" {
+  alias  = "us-east-1"
+  region = "us-east-1"
+
+  assume_role {
+    role_arn = local.provider_role_arn
   }
 }
 
 locals {
-  prefix           = "core-prod"
-  application_port = 8080
-  database_port    = 5432
-  redis_port       = 6379
+  prefix            = "core-prod"
+  application_port  = 8080
+  database_port     = 5432
+  provider_role_arn = "arn:aws:iam::977287343304:role/developer"
+  redis_port        = 6379
 }
 
 module "application" {
@@ -92,6 +102,10 @@ module "database" {
 
 module "front_door" {
   source = "../modules/front_door"
+
+  providers = {
+    aws.us-east-1 = aws.us-east-1
+  }
 
   prefix                = local.prefix
   application_port      = local.application_port

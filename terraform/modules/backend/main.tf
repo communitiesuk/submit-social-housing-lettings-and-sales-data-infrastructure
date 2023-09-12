@@ -3,20 +3,10 @@ terraform {
 
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
-      version = "~>5.0"
+      source                = "hashicorp/aws"
+      version               = "~>5.0"
+      configuration_aliases = [aws.eu-west-1]
     }
-  }
-}
-
-# The state replica bucket is kept in a separate region (eu-west-1) to the source bucket and where we generally
-# create our infrastructure (eu-west-2), so we define a provider here to be especially for this
-provider "aws" {
-  alias  = "ireland"
-  region = "eu-west-1"
-
-  assume_role {
-    role_arn = "arn:aws:iam::815624722760:role/developer"
   }
 }
 
@@ -154,7 +144,7 @@ module "tf_state_replica_log_bucket" {
   #checkov:skip=CKV_AWS_300:lifecycle configuration is set below for aborting failed uploads, looks like a false flag
   #checkov:skip=CKV2_AWS_34:use of ssm to store a parameter for the access key of an iam user isn't required nor created by cloudposse with our configuration, so we don't need to ensure encryption of the parameter
   #checkov:skip=CKV2_AWS_62:we don't require event notifications on this bucket as its storing logs continuously and will become a nuisance
-  providers = { aws = aws.ireland }
+  providers = { aws = aws.eu-west-1 }
   source    = "cloudposse/s3-bucket/aws"
   # Cloud Posse recommends pinning every module to a specific version
   version = "3.1.2"
@@ -206,7 +196,7 @@ module "tf_state_replica_bucket" {
   #checkov:skip=CKV_AWS_300:lifecycle configuration is set below for aborting failed uploads, looks like a false flag
   #checkov:skip=CKV2_AWS_34:use of ssm to store a parameter for the access key of an iam user isn't required nor created by cloudposse with our configuration, so we don't need to ensure encryption of the parameter
   #checkov:skip=CKV2_AWS_62:we don't require event notifications on this bucket as it's only replicating the tfstate files as a fallback
-  providers = { aws = aws.ireland }
+  providers = { aws = aws.eu-west-1 }
   source    = "cloudposse/s3-bucket/aws"
   # Cloud Posse recommends pinning every module to a specific version
   version = "3.1.2"
