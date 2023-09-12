@@ -5,5 +5,5 @@ resource "aws_iam_role" "cds" {
 
 resource "aws_iam_role_policy_attachment" "cds_export_bucket_access_policy" {
   role       = aws_iam_role.cds.name
-  policy_arn = data.aws_iam_policy_document.export_bucket_read_only_access.json
+  policy_arn = aws_iam_policy.export_bucket_read_only_access.arn
 }

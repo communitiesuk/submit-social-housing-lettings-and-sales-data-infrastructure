@@ -24,8 +24,13 @@ data "aws_iam_policy_document" "export_bucket_read_only_access" {
     effect = "Allow"
 
     resources = [
-      "aws_s3_bucket.this.arn",
-      "aws_s3_bucket.this.arn/*"
+      aws_s3_bucket.this.arn,
+      "${aws_s3_bucket.this.arn}/*"
     ]
   }
+}
+
+resource "aws_iam_policy" "export_bucket_read_only_access" {
+  name = "${var.prefix}-export-bucket-read-only-access"
+  policy = data.aws_iam_policy_document.export_bucket_read_only_access.json
 }
