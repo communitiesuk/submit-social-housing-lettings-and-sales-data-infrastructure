@@ -13,6 +13,7 @@ data "aws_iam_policy_document" "cds_assume_role" {
   }
 }
 
+#tfsec:ignore:aws-iam-no-policy-wildcards:wildcard required to allow access to all files at the root of the bucket
 data "aws_iam_policy_document" "export_bucket_read_only_access" {
   statement {
     actions = [
@@ -31,6 +32,6 @@ data "aws_iam_policy_document" "export_bucket_read_only_access" {
 }
 
 resource "aws_iam_policy" "export_bucket_read_only_access" {
-  name = "${var.prefix}-export-bucket-read-only-access"
+  name   = "${var.prefix}-export-bucket-read-only-access"
   policy = data.aws_iam_policy_document.export_bucket_read_only_access.json
 }

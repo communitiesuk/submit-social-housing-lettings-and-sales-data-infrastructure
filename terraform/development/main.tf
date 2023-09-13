@@ -84,7 +84,8 @@ module "bulk_upload" {
 module "cds_export" {
   source = "../modules/cds_export"
 
-  prefix = local.prefix
+  prefix              = local.prefix
+  cds_access_role_arn = "arn:aws:iam::837698168072:role/developer" # TODO CLDC-2764 update role arn to that the CDS team will use
 }
 
 module "database" {
