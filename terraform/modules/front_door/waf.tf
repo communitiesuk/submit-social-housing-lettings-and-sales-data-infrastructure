@@ -16,7 +16,7 @@ resource "aws_wafv2_web_acl" "this" {
   }
 
   rule {
-    name     = "AWS-Managed-Rules-Amazon-Ip-Reputation-List"
+    name     = "aws-managed-rules-amazon-ip-reputation-list"
     priority = 1
 
     override_action {
@@ -38,7 +38,7 @@ resource "aws_wafv2_web_acl" "this" {
   }
 
   rule {
-    name     = "AWS-Managed-Rules-Common-Rule-Set"
+    name     = "aws-managed-rules-common-rule-set"
     priority = 2
 
     override_action {
@@ -66,7 +66,7 @@ resource "aws_wafv2_web_acl" "this" {
   }
 
   rule {
-    name     = "AWS-Managed-Rules-Known-Bad-Inputs-Rule-Set"
+    name     = "aws-managed-rules-known-bad-inputs-rule-set"
     priority = 3
 
     override_action {
@@ -88,7 +88,7 @@ resource "aws_wafv2_web_acl" "this" {
   }
 
   rule {
-    name     = "AWS-Managed-Rules-SQLi-Rule-Set"
+    name     = "aws-managed-rules-sqli-rule-set"
     priority = 4
 
     override_action {
@@ -110,7 +110,7 @@ resource "aws_wafv2_web_acl" "this" {
   }
 
   rule {
-    name     = "AWS-Managed-Rules-Linux-Rule-Set"
+    name     = "aws-managed-rules-linux-rule-set"
     priority = 5
 
     override_action {
@@ -132,7 +132,7 @@ resource "aws_wafv2_web_acl" "this" {
   }
 
   rule {
-    name     = "AWS-Managed-Rules-Unix-Rule-Set"
+    name     = "aws-managed-rules-unix-rule-set"
     priority = 6
 
     override_action {
@@ -154,7 +154,7 @@ resource "aws_wafv2_web_acl" "this" {
   }
 
   rule {
-    name     = "Rate-Limiting"
+    name     = "rate-limiting"
     priority = 7
 
     action {
