@@ -91,7 +91,7 @@ module "database" {
   source = "../modules/rds"
 
   prefix                  = local.prefix
-  allocated_storage       = 5
+  allocated_storage       = 25
   backup_retention_period = 7
   database_port           = local.database_port
   db_subnet_group_name    = module.networking.db_private_subnet_group_name
@@ -127,7 +127,7 @@ module "redis" {
 
   prefix                  = local.prefix
   ecs_security_group_id   = module.application.ecs_security_group_id
-  node_type               = "cache.t2.micro"
+  node_type               = "cache.t4g.micro"
   redis_port              = local.redis_port
   redis_subnet_group_name = module.networking.redis_private_subnet_group_name
   vpc_id                  = module.networking.vpc_id
