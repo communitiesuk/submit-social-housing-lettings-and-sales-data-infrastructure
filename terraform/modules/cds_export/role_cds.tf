@@ -31,18 +31,15 @@ data "aws_iam_policy_document" "export_bucket_read_only_access" {
   count = local.create_cds_role ? 1 : 0
 
   statement {
-    actions = [
-      "s3:Get*",
-      "s3:List*",
-      "s3:Describe*"
-    ]
+    actions   = ["s3:ListBucket"]
+    resources = [aws_s3_bucket.this.arn]
+    effect    = "Allow"
+  }
 
-    effect = "Allow"
-
-    resources = [
-      aws_s3_bucket.this.arn,
-      "${aws_s3_bucket.this.arn}/*"
-    ]
+  statement {
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
+    effect    = "Allow"
   }
 }
 
