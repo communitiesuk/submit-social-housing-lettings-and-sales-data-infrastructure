@@ -3,7 +3,7 @@ resource "aws_iam_role" "cds" {
   assume_role_policy = data.aws_iam_policy_document.cds_assume_role.json
 }
 
-resource "aws_iam_role_policy_attachment" "cds_export_bucket_access_policy" {
+resource "aws_iam_role_policy_attachment" "export_bucket_read_only_access" {
   role       = aws_iam_role.cds.name
   policy_arn = aws_iam_policy.export_bucket_read_only_access.arn
 }
