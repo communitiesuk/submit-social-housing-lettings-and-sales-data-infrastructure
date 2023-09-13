@@ -9,6 +9,7 @@ on:
   push:
     branches:
       - '**'
+      - '!dev'
 
 jobs:
   tf_fmt:
