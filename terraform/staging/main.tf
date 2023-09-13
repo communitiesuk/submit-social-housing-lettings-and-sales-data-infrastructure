@@ -84,7 +84,7 @@ module "bulk_upload" {
 module "cds_export" {
   source = "../modules/cds_export"
 
-  prefix              = local.prefix
+  prefix = local.prefix
 }
 
 module "database" {
