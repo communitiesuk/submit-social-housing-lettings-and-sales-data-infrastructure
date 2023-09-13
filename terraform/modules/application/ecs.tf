@@ -47,9 +47,9 @@ resource "aws_ecs_task_definition" "app" {
         { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
         { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) }
       ]
-      essential         = true
-      image             = var.ecr_repository_url
-      user              = "nonroot"
+      essential = true
+      image     = var.ecr_repository_url
+      user      = "nonroot"
 
       logConfiguration = {
         logDriver = "awslogs"
@@ -112,9 +112,9 @@ resource "aws_ecs_task_definition" "sidekiq" {
         { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
         { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) }
       ]
-      essential         = true
-      image             = var.ecr_repository_url
-      user              = "nonroot"
+      essential = true
+      image     = var.ecr_repository_url
+      user      = "nonroot"
 
       logConfiguration = {
         logDriver = "awslogs"
@@ -171,9 +171,9 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
         { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
         { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) }
       ]
-      essential         = true
-      image             = var.ecr_repository_url
-      user              = "nonroot"
+      essential = true
+      image     = var.ecr_repository_url
+      user      = "nonroot"
 
       logConfiguration = {
         logDriver = "awslogs"
