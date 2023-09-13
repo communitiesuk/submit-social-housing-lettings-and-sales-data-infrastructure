@@ -16,7 +16,7 @@ resource "aws_wafv2_web_acl" "this" {
   }
 
   rule {
-    name     = "AWSManagedRulesAmazonIpReputationList"
+    name     = "AWS-Managed-Rules-Amazon-Ip-Reputation-List"
     priority = 1
 
     override_action {
@@ -38,7 +38,7 @@ resource "aws_wafv2_web_acl" "this" {
   }
 
   rule {
-    name     = "AWSManagedRulesCommonRuleSet"
+    name     = "AWS-Managed-Rules-Common-Rule-Set"
     priority = 2
 
     override_action {
@@ -66,7 +66,7 @@ resource "aws_wafv2_web_acl" "this" {
   }
 
   rule {
-    name     = "AWSManagedRulesKnownBadInputsRuleSet"
+    name     = "AWS-Managed-Rules-Known-Bad-Inputs-Rule-Set"
     priority = 3
 
     override_action {
@@ -88,7 +88,7 @@ resource "aws_wafv2_web_acl" "this" {
   }
 
   rule {
-    name     = "AWSManagedRulesSQLiRuleSet"
+    name     = "AWS-Managed-Rules-SQLi-Rule-Set"
     priority = 4
 
     override_action {
@@ -110,7 +110,7 @@ resource "aws_wafv2_web_acl" "this" {
   }
 
   rule {
-    name     = "AWSManagedRulesLinuxRuleSet"
+    name     = "AWS-Managed-Rules-Linux-Rule-Set"
     priority = 5
 
     override_action {
@@ -132,7 +132,7 @@ resource "aws_wafv2_web_acl" "this" {
   }
 
   rule {
-    name     = "AWSManagedRulesUnixRuleSet"
+    name     = "AWS-Managed-Rules-Unix-Rule-Set"
     priority = 6
 
     override_action {
@@ -149,6 +149,28 @@ resource "aws_wafv2_web_acl" "this" {
     visibility_config {
       cloudwatch_metrics_enabled = true
       metric_name                = "waf-block-unix-exploit"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  rule {
+    name     = "Rate-Limiting"
+    priority = 7
+
+    action {
+      block {}
+    }
+
+    statement {
+      rate_based_statement {
+        aggregate_key_type = "IP"
+        limit              = 1000
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "waf-rate-limit"
       sampled_requests_enabled   = true
     }
   }
