@@ -128,7 +128,7 @@ module "redis" {
 
   prefix                  = local.prefix
   ecs_security_group_id   = module.application.ecs_security_group_id
-  node_type               = "cache.t2.micro"
+  node_type               = "cache.t4g.micro"
   redis_port              = local.redis_port
   redis_subnet_group_name = module.networking.redis_private_subnet_group_name
   vpc_id                  = module.networking.vpc_id
