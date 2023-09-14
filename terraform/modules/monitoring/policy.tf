@@ -17,6 +17,14 @@ data "aws_iam_policy_document" "this" {
     ]
 
     principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+
+    condition {
+      test     = "ArnLike"
+      variable = "aws:SourceArn"
+      values   = []
     }
   }
 }
