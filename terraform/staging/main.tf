@@ -36,11 +36,13 @@ provider "aws" {
 }
 
 locals {
-  prefix            = "core-staging"
-  application_port  = 8080
-  database_port     = 5432
-  provider_role_arn = "arn:aws:iam::107155005276:role/developer"
-  redis_port        = 6379
+  prefix                    = "core-staging"
+  app_host                  = "staging.submit-social-housing-data.levellingup.gov.uk"
+  application_port          = 8080
+  database_port             = 5432
+  load_balancer_domain_name = "staging.lb.submit-social-housing-data.levellingup.gov.uk"
+  provider_role_arn         = "arn:aws:iam::107155005276:role/developer"
+  redis_port                = 6379
 }
 
 module "application" {
@@ -85,6 +87,17 @@ module "cds_export" {
   source = "../modules/cds_export"
 
   prefix = local.prefix
+}
+
+module "certificates" {
+  source = "../modules/certificates"
+
+  providers = {
+    aws = aws.us-east-1
+  }
+
+  cloudfront_domain_name    = local.app_host
+  load_balancer_domain_name = local.load_balancer_domain_name
 }
 
 module "database" {
