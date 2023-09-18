@@ -36,10 +36,9 @@ provider "aws" {
 }
 
 provider "awscc" {
-  alias  = "awscc"
   region = "eu-west-2"
 
-  assume_role {
+  assume_role = {
     role_arn = local.provider_role_arn
   }
 }
@@ -133,6 +132,10 @@ module "networking" {
 
 module "monitoring" {
   source = "../modules/monitoring"
+
+  providers = {
+    awscc = awscc
+  }
 
   prefix = local.prefix
   app_service_name = module.application.app_service_name
