@@ -122,6 +122,12 @@ module "networking" {
   vpc_flow_cloudwatch_log_expiration_days = 90
 }
 
+module "monitoring" {
+  source = "../modules/monitoring"
+
+  prefix = local.prefix
+}
+
 module "redis" {
   source = "../modules/elasticache"
 
