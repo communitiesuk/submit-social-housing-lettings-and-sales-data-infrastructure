@@ -35,6 +35,15 @@ provider "aws" {
   }
 }
 
+provider "awscc" {
+  alias  = "awscc"
+  region = "eu-west-2"
+
+  assume_role {
+    role_arn = local.provider_role_arn
+  }
+}
+
 locals {
   prefix            = "core-staging"
   application_port  = 8080
