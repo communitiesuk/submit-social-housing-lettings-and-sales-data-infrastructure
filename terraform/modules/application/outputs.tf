@@ -12,3 +12,8 @@ output "ecs_security_group_id" {
   value       = aws_security_group.ecs.id
   description = "The id of the ecs security group"
 }
+
+output "sidekiq_service_name" {
+  value       = aws_ecs_service.sidekiq.name
+  description = "The name of the sidekiq service"
+}

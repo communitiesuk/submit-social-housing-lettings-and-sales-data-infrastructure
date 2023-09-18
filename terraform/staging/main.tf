@@ -128,6 +128,7 @@ module "monitoring" {
   prefix = local.prefix
   app_service_name = module.application.app_service_name
   ecs_cluster_name = module.application.ecs_cluster_name
+  sidekiq_service_name = module.application.sidekiq_service_name
 }
 
 module "redis" {
