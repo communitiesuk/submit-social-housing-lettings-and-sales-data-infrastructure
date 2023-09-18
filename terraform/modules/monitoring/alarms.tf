@@ -77,3 +77,37 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_memory" {
     ServiceName = var.sidekiq_service_name
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "rds_storage" {
+  alarm_actions             = [aws_sns_topic.this.arn]
+  alarm_name                = "${var.prefix}-rds-storage"
+  comparison_operator       = "LessThanOrEqualToThreshold"
+  datapoints_to_alarm       = 1
+  evaluation_periods        = 1
+  ok_actions                = [aws_sns_topic.this.arn]
+  threshold                 = 15
+  insufficient_data_actions = []
+
+  metric_query {
+    id          = "${var.prefix}-free-storage-space-percentage"
+    expression  = "${var.prefix}-free-storage-space/25"
+    period      = 60
+    return_data = "true"
+  }
+
+  metric_query {
+    id = "${var.prefix}-free-storage-space"
+
+    metric {
+      metric_name = "FreeStorageSpace"
+      namespace   = "AWS/RDS"
+      period      = 60
+      stat        = "Minimum"
+      # unit        = "Bytes"
+
+      dimensions = {
+        DBInstanceIdentifier = var.prefix
+      }
+    }
+  }
+}
