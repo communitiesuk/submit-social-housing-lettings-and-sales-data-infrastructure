@@ -125,6 +125,7 @@ module "front_door" {
   cloudfront_certificate_arn = module.certificates.cloudfront_certificate_arn
   cloudfront_domain_name = local.app_host
   ecs_security_group_id = module.application.ecs_security_group_id
+  load_balancer_certificate_arn = module.certificates.load_balancer_certificate_arn
   public_subnet_ids     = module.networking.public_subnet_ids
   vpc_id                = module.networking.vpc_id
 }
