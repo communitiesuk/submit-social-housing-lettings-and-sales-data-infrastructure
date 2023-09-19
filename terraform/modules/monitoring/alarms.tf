@@ -89,25 +89,28 @@ resource "aws_cloudwatch_metric_alarm" "rds_storage" {
   insufficient_data_actions = []
 
   metric_query {
-    id          = "${var.prefix}-free-storage-space-percentage"
-    expression  = "${var.prefix}-free-storage-space/25"
+    id = "freeStorageSpacePercentage"
+    expression  = "freeStorageSpace/${var.database_allocated_storage}"
     period      = 60
     return_data = "true"
   }
 
   metric_query {
-    id = "${var.prefix}-free-storage-space"
+    id = "freeStorageSpace"
 
     metric {
       metric_name = "FreeStorageSpace"
       namespace   = "AWS/RDS"
       period      = 60
       stat        = "Minimum"
-      # unit        = "Bytes"
 
       dimensions = {
-        DBInstanceIdentifier = var.prefix
+        DBInstanceIdentifier = var.database_id
       }
     }
+  }
+
+  lifecycle {
+    replace_triggered_by = [var.database_id]
   }
 }

@@ -13,3 +13,8 @@ output "rds_connection_string_arn" {
   description = "The arn of the database connection string in the parameter store"
   sensitive   = true
 }
+
+output "rds_id" {
+  value       = aws_db_instance.this.id
+  description = "The id of the rds database"
+}
