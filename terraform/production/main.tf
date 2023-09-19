@@ -97,7 +97,7 @@ module "certificates" {
   source = "../modules/certificates"
 
   providers = {
-    aws = aws.us-east-1
+    aws.us-east-1 = aws.us-east-1
   }
 
   cloudfront_domain_name    = local.app_host
