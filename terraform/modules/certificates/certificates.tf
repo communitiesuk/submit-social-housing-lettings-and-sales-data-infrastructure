@@ -2,6 +2,8 @@ resource "aws_acm_certificate" "cloudfront" {
   domain_name       = var.cloudfront_domain_name
   validation_method = "DNS"
 
+  provider          = aws.us-east-1
+
   lifecycle {
     create_before_destroy = true
   }
