@@ -1,7 +1,7 @@
-variable "cds_access_role_arn" {
-  type        = string
+variable "cds_access_role_arns" {
+  type        = list(string)
   default     = null
-  description = "The arn of the role the CDS team will use to assume a role we define"
+  description = "The arn's of the roles the CDS team will use to assume a role we define"
 }
 
 variable "prefix" {
