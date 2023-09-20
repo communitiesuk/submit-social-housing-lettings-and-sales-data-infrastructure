@@ -1,4 +1,3 @@
-#tfsec:ignore:aws-elb-alb-not-public:load balancer is exposed to internet as it receives traffic from public
 resource "aws_lb" "this" {
   #checkov:skip=CKV_AWS_91:setup access logs on load balancer TODO CLDC-2705
   #checkov:skip=CKV2_AWS_28:WAF protection to be setup TODO CLDC-2546
