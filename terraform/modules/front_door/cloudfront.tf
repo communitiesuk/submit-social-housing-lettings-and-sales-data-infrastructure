@@ -24,7 +24,7 @@ resource "aws_cloudfront_distribution" "this" {
   web_acl_id      = aws_wafv2_web_acl.this.arn
 
   origin {
-    domain_name = aws_lb.this.dns_name
+    domain_name = var.load_balancer_domain_name
     origin_id   = local.origin_id
 
     custom_origin_config {
