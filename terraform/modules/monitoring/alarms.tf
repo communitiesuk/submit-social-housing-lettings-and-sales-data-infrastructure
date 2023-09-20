@@ -91,7 +91,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_storage" {
   metric_query {
     id = "freeStorageSpacePercentage"
     expression  = "freeStorageSpace/${var.database_allocated_storage}"
-    period      = 60
+    period      = 300
     return_data = "true"
   }
 
@@ -101,7 +101,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_storage" {
     metric {
       metric_name = "FreeStorageSpace"
       namespace   = "AWS/RDS"
-      period      = 60
+      period      = 300
       stat        = "Minimum"
 
       dimensions = {
