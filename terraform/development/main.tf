@@ -93,7 +93,7 @@ module "certificates" {
   source = "../modules/certificates"
 
   providers = {
-    aws = aws.us-east-1
+    aws.us-east-1 = aws.us-east-1
   }
 
   cloudfront_domain_name    = local.app_host
@@ -120,11 +120,14 @@ module "front_door" {
     aws.us-east-1 = aws.us-east-1
   }
 
-  prefix                = local.prefix
-  application_port      = local.application_port
-  ecs_security_group_id = module.application.ecs_security_group_id
-  public_subnet_ids     = module.networking.public_subnet_ids
-  vpc_id                = module.networking.vpc_id
+  prefix                        = local.prefix
+  application_port              = local.application_port
+  cloudfront_certificate_arn    = module.certificates.cloudfront_certificate_arn
+  cloudfront_domain_name        = local.app_host
+  ecs_security_group_id         = module.application.ecs_security_group_id
+  load_balancer_certificate_arn = module.certificates.load_balancer_certificate_arn
+  public_subnet_ids             = module.networking.public_subnet_ids
+  vpc_id                        = module.networking.vpc_id
 }
 
 module "networking" {
@@ -138,7 +141,10 @@ module "networking" {
 module "monitoring" {
   source = "../modules/monitoring"
 
-  prefix = local.prefix
+  prefix               = local.prefix
+  app_service_name     = module.application.app_service_name
+  ecs_cluster_name     = module.application.ecs_cluster_name
+  sidekiq_service_name = module.application.sidekiq_service_name
 }
 
 module "redis" {

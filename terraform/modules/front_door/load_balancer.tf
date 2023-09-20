@@ -1,7 +1,6 @@
 #tfsec:ignore:aws-elb-alb-not-public:load balancer is exposed to internet as it receives traffic from public
 resource "aws_lb" "this" {
   #checkov:skip=CKV_AWS_91:setup access logs on load balancer TODO CLDC-2705
-  #checkov:skip=CKV2_AWS_20:redirect http requests to https TODO CLDC-2654
   #checkov:skip=CKV2_AWS_28:WAF protection to be setup TODO CLDC-2546
   name                       = var.prefix
   drop_invalid_header_fields = true
@@ -15,14 +14,14 @@ resource "aws_lb" "this" {
 resource "aws_lb_target_group" "this" {
   name        = var.prefix
   port        = var.application_port
-  protocol    = "HTTP"
+  protocol    = "HTTPS"
   vpc_id      = var.vpc_id
   target_type = "ip"
 
   health_check {
     healthy_threshold   = "3"
     interval            = "30"
-    protocol            = "HTTP"
+    protocol            = "HTTPS"
     matcher             = "204"
     timeout             = "3"
     path                = "/health"
@@ -30,13 +29,12 @@ resource "aws_lb_target_group" "this" {
   }
 }
 
-#tfsec:ignore:aws-elb-http-not-used:https between cloudfront and load balancer will be implemented here TODO CLDC-2654
-resource "aws_lb_listener" "http" {
-  #checkov:skip=CKV_AWS_103:ssl policy for https listener will be implemented here TODO CLDC-2654
-  #checkov:skip=CKV_AWS_2:https between cloudfront and load balancer will be implemented here TODO CLDC-2654
+resource "aws_lb_listener" "https" {
+  certificate_arn   = var.load_balancer_certificate_arn
   load_balancer_arn = aws_lb.this.id
-  port              = 80
-  protocol          = "HTTP"
+  port              = 443
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
 
   default_action {
     type = "fixed-response"
@@ -54,7 +52,7 @@ resource "aws_lb_listener" "http" {
 }
 
 resource "aws_lb_listener_rule" "forward_cloudfront" {
-  listener_arn = aws_lb_listener.http.arn
+  listener_arn = aws_lb_listener.https.arn
   priority     = 1
 
   action {
