@@ -77,3 +77,46 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_memory" {
     ServiceName = var.sidekiq_service_name
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "rds_storage" {
+  alarm_actions             = [aws_sns_topic.this.arn]
+  alarm_name                = "${var.prefix}-rds-storage"
+  comparison_operator       = "LessThanOrEqualToThreshold"
+  datapoints_to_alarm       = 1
+  evaluation_periods        = 1
+  ok_actions                = [aws_sns_topic.this.arn]
+  threshold                 = 15
+  insufficient_data_actions = []
+
+  metric_query {
+    id = "freeStorageSpacePercentage"
+    expression  = "freeStorageSpace/${var.database_allocated_storage}"
+    period      = 300
+    return_data = "true"
+  }
+
+  metric_query {
+    id = "freeStorageSpace"
+
+    metric {
+      metric_name = "FreeStorageSpace"
+      namespace   = "AWS/RDS"
+      period      = 300
+      stat        = "Minimum"
+
+      dimensions = {
+        DBInstanceIdentifier = var.database_id
+      }
+    }
+  }
+
+  lifecycle {
+    replace_triggered_by = [terraform_data.database_allocated_storage]
+  }
+}
+
+resource "terraform_data" "database_allocated_storage" {
+  # Changes to the database allocated storage amount will cause this resource to be replaced.
+  # This will cause the rds storage alarm to be replaced using the new allocated storage size as the denominator of the metric.
+  input = var.database_allocated_storage
+}

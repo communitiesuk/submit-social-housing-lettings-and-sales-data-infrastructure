@@ -48,6 +48,7 @@ locals {
   app_host                  = "staging.submit-social-housing-data.levellingup.gov.uk"
   application_port          = 8080
   database_port             = 5432
+  database_allocated_storage = 25
   load_balancer_domain_name = "staging.lb.submit-social-housing-data.levellingup.gov.uk"
   provider_role_arn         = "arn:aws:iam::107155005276:role/developer"
   redis_port                = 6379
@@ -116,7 +117,7 @@ module "database" {
   source = "../modules/rds"
 
   prefix                  = local.prefix
-  allocated_storage       = 25
+  allocated_storage       = local.database_allocated_storage
   backup_retention_period = 7
   database_port           = local.database_port
   db_subnet_group_name    = module.networking.db_private_subnet_group_name
@@ -160,6 +161,8 @@ module "monitoring" {
 
   prefix               = local.prefix
   app_service_name     = module.application.app_service_name
+  database_allocated_storage = local.database_allocated_storage
+  database_id = module.database.rds_id
   ecs_cluster_name     = module.application.ecs_cluster_name
   sidekiq_service_name = module.application.sidekiq_service_name
 }

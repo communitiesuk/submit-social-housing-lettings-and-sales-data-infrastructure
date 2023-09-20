@@ -3,6 +3,16 @@ variable "app_service_name" {
   description = "The name of the app service"
 }
 
+variable "database_allocated_storage" {
+  type        = string
+  description = "The allocated DB storage in gibibytes."
+}
+
+variable "database_id" {
+  type        = string
+  description = "The id of the rds database"
+}
+
 variable "ecs_cluster_name" {
   type        = string
   description = "The name of the ecs cluster"
