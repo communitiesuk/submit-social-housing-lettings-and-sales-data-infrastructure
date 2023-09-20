@@ -8,16 +8,6 @@ resource "aws_security_group" "load_balancer" {
   }
 }
 
-resource "aws_vpc_security_group_ingress_rule" "load_balancer_http_ingress" {
-  #checkov:skip=CKV_AWS_260:ingress from all IPs to port 80 required as load balancer is public
-  description       = "Allow http ingress from all IP addresses"
-  cidr_ipv4         = "0.0.0.0/0"
-  ip_protocol       = "tcp"
-  from_port         = 80
-  to_port           = 80
-  security_group_id = aws_security_group.load_balancer.id
-}
-
 resource "aws_vpc_security_group_ingress_rule" "load_balancer_https_ingress" {
   description       = "Allow https ingress from all IP addresses"
   cidr_ipv4         = "0.0.0.0/0"
