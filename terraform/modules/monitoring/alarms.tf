@@ -136,6 +136,6 @@ resource "aws_cloudwatch_metric_alarm" "rds_storage" {
 
 resource "terraform_data" "database_allocated_storage" {
   # Changes to the database allocated storage amount will cause this resource to be replaced.
-  # This will cause the rds storage alarm to be replaced using the new allocated storage size as the denominator of the metric.
+  # This will cause the rds storage alarm to be replaced using the new allocated storage size as the denominator of the metric expression.
   input = var.database_allocated_storage
 }
