@@ -1,5 +1,5 @@
 locals {
-  create_cds_role = var.cds_access_role_arn != null
+  create_cds_role = var.cds_access_role_arns != null
 }
 
 data "aws_iam_policy_document" "cds_assume_role" {
@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "cds_assume_role" {
 
     principals {
       type        = "AWS"
-      identifiers = [var.cds_access_role_arn]
+      identifiers = var.cds_access_role_arns
     }
   }
 }
