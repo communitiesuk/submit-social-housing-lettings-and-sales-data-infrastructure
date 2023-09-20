@@ -78,6 +78,25 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_memory" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "rds_cpu" {
+  alarm_actions             = [aws_sns_topic.this.arn]
+  alarm_name                = "${var.prefix}-rds-cpu"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  datapoints_to_alarm       = 3
+  evaluation_periods        = 5
+  metric_name               = "CPUUtilization"
+  namespace                 = "AWS/RDS"
+  ok_actions                = [aws_sns_topic.this.arn]
+  period                    = 60
+  statistic                 = "Average"
+  threshold                 = 90
+  insufficient_data_actions = []
+
+  dimensions = {
+    DBInstanceIdentifier = var.database_id
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "rds_storage" {
   alarm_actions             = [aws_sns_topic.this.arn]
   alarm_name                = "${var.prefix}-rds-storage"
