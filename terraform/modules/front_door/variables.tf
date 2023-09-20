@@ -23,6 +23,11 @@ variable "load_balancer_certificate_arn" {
   description = "The arn of the certifcate to be associated with the load balancer HTTPS listener"
 }
 
+variable "load_balancer_domain_name" {
+  type        = string
+  description = "Then domain name of the load balancer"
+}
+
 variable "prefix" {
   type        = string
   description = "The prefix to be prepended to resource names."

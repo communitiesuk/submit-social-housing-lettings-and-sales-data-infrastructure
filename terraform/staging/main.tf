@@ -138,6 +138,7 @@ module "front_door" {
   cloudfront_domain_name        = local.app_host
   ecs_security_group_id         = module.application.ecs_security_group_id
   load_balancer_certificate_arn = module.certificates.load_balancer_certificate_arn
+  load_balancer_domain_name     = local.load_balancer_domain_name
   public_subnet_ids             = module.networking.public_subnet_ids
   vpc_id                        = module.networking.vpc_id
 }
