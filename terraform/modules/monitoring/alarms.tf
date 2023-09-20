@@ -78,6 +78,25 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_memory" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "rds_cpu" {
+  alarm_actions             = [aws_sns_topic.this.arn]
+  alarm_name                = "${var.prefix}-rds-cpu"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  datapoints_to_alarm       = 3
+  evaluation_periods        = 5
+  metric_name               = "CPUUtilization"
+  namespace                 = "AWS/RDS"
+  ok_actions                = [aws_sns_topic.this.arn]
+  period                    = 60
+  statistic                 = "Average"
+  threshold                 = 90
+  insufficient_data_actions = []
+
+  dimensions = {
+    DBInstanceIdentifier = var.database_id
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "rds_storage" {
   alarm_actions             = [aws_sns_topic.this.arn]
   alarm_name                = "${var.prefix}-rds-storage"
@@ -117,6 +136,6 @@ resource "aws_cloudwatch_metric_alarm" "rds_storage" {
 
 resource "terraform_data" "database_allocated_storage" {
   # Changes to the database allocated storage amount will cause this resource to be replaced.
-  # This will cause the rds storage alarm to be replaced using the new allocated storage size as the denominator of the metric.
+  # This will cause the rds storage alarm to be replaced using the new allocated storage size as the denominator of the metric expression.
   input = var.database_allocated_storage
 }
