@@ -8,22 +8,16 @@ resource "aws_security_group" "load_balancer" {
   }
 }
 
-resource "aws_vpc_security_group_ingress_rule" "load_balancer_http_ingress" {
-  #checkov:skip=CKV_AWS_260:ingress from all IPs to port 80 required as load balancer is public
-  description       = "Allow http ingress from all IP addresses"
-  cidr_ipv4         = "0.0.0.0/0"
-  ip_protocol       = "tcp"
-  from_port         = 80
-  to_port           = 80
-  security_group_id = aws_security_group.load_balancer.id
+data "aws_ec2_managed_prefix_list" "cloudfront" {
+  name = "com.amazonaws.global.cloudfront.origin-facing"
 }
 
 resource "aws_vpc_security_group_ingress_rule" "load_balancer_https_ingress" {
-  description       = "Allow https ingress from all IP addresses"
-  cidr_ipv4         = "0.0.0.0/0"
+  description       = "Allow https ingress from cloudfront only"
   ip_protocol       = "tcp"
   from_port         = 443
   to_port           = 443
+  prefix_list_id    = data.aws_ec2_managed_prefix_list.cloudfront.id
   security_group_id = aws_security_group.load_balancer.id
 }
 

@@ -1,4 +1,4 @@
-#tfsec:ignore:aws-elb-alb-not-public:load balancer is exposed to internet as it receives traffic from public
+#tfsec:ignore:aws-elb-alb-not-public:the load balancer must be exposed to the internet in order to communicate with cloudfront
 resource "aws_lb" "this" {
   #checkov:skip=CKV_AWS_91:setup access logs on load balancer TODO CLDC-2705
   #checkov:skip=CKV2_AWS_28:WAF protection to be setup TODO CLDC-2546
@@ -14,14 +14,14 @@ resource "aws_lb" "this" {
 resource "aws_lb_target_group" "this" {
   name        = var.prefix
   port        = var.application_port
-  protocol    = "HTTPS"
+  protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
 
   health_check {
     healthy_threshold   = "3"
     interval            = "30"
-    protocol            = "HTTPS"
+    protocol            = "HTTP"
     matcher             = "204"
     timeout             = "3"
     path                = "/health"
