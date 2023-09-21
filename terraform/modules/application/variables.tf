@@ -134,6 +134,11 @@ variable "sidekiq_task_memory" {
   description = "The amount of memory used by the ecs sidekiq task"
 }
 
+variable "sns_topic_arn" {
+  type        = string
+  description = "The arn of the sns topic"
+}
+
 variable "vpc_id" {
   type        = string
   description = "The ID of the VPC to be associated with"

@@ -9,11 +9,6 @@ output "rds_data_access_policy_arn" {
   description = "The arn of the iam policy enabling access to the rds data"
 }
 
-output "rds_id" {
-  value       = aws_db_instance.this.id
-  description = "The id of the rds database"
-}
-
 output "rds_security_group_id" {
   value       = aws_security_group.this.id
   description = "The id of the rds security group"
