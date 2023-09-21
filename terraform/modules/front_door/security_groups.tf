@@ -9,7 +9,7 @@ resource "aws_security_group" "load_balancer" {
 }
 
 data "aws_ec2_managed_prefix_list" "cloudfront" {
- name = "com.amazonaws.global.cloudfront.origin-facing"
+  name = "com.amazonaws.global.cloudfront.origin-facing"
 }
 
 resource "aws_vpc_security_group_ingress_rule" "load_balancer_https_ingress" {
