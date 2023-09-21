@@ -74,6 +74,7 @@ module "application" {
   sidekiq_task_cpu                     = 1024
   sidekiq_task_desired_count           = 1
   sidekiq_task_memory                  = 8192
+  sns_topic_arn                        = module.monitoring.sns_topic_arn
   vpc_id                               = module.networking.vpc_id
 }
 
@@ -114,6 +115,7 @@ module "database" {
   db_subnet_group_name    = module.networking.db_private_subnet_group_name
   ecs_security_group_id   = module.application.ecs_security_group_id
   instance_class          = "db.t3.small"
+  sns_topic_arn           = module.monitoring.sns_topic_arn
   vpc_id                  = module.networking.vpc_id
 }
 
@@ -145,10 +147,7 @@ module "networking" {
 module "monitoring" {
   source = "../modules/monitoring"
 
-  prefix               = local.prefix
-  app_service_name     = module.application.app_service_name
-  ecs_cluster_name     = module.application.ecs_cluster_name
-  sidekiq_service_name = module.application.sidekiq_service_name
+  prefix = local.prefix
 }
 
 module "redis" {

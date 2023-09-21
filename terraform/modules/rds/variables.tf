@@ -33,6 +33,11 @@ variable "backup_retention_period" {
   description = "The number of days to retain db backups for."
 }
 
+variable "sns_topic_arn" {
+  type        = string
+  description = "The arn of the sns topic"
+}
+
 variable "vpc_id" {
   type        = string
   description = "The ID of the VPC to be associated with"
