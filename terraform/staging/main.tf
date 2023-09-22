@@ -39,6 +39,7 @@ locals {
   prefix                    = "core-staging"
   app_host                  = "staging.submit-social-housing-data.levellingup.gov.uk"
   application_port          = 8080
+  create_db_migration_infra = false
   database_port             = 5432
   load_balancer_domain_name = "staging.lb.submit-social-housing-data.levellingup.gov.uk"
   provider_role_arn         = "arn:aws:iam::107155005276:role/developer"
@@ -117,6 +118,26 @@ module "database" {
   instance_class          = "db.t3.micro"
   sns_topic_arn           = module.monitoring.sns_topic_arn
   vpc_id                  = module.networking.vpc_id
+}
+
+module "database_migration" {
+  source = "../modules/rds_migration"
+
+  count = local.create_db_migration_infra ? 1 : 0
+
+  prefix                         = local.prefix
+  database_connection_string_arn = module.database.rds_connection_string_arn
+  database_port                  = local.database_port
+  db_migration_task_cpu          = 4096
+  db_migration_task_memory       = 16384
+  db_security_group_id           = module.database.rds_security_group_id
+  ecr_repository_url             = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/db-migration"
+  ecs_task_role_arn              = module.application.ecs_task_role_arn
+  ecs_task_execution_role_arn    = module.application.ecs_task_execution_role_arn
+  ecs_task_execution_role_name   = module.application.ecs_task_execution_role_name
+  ecs_task_ephemeral_storage     = 200 #GiB
+  private_subnet_ids             = module.networking.private_subnet_ids
+  vpc_id                         = module.networking.vpc_id
 }
 
 module "front_door" {
