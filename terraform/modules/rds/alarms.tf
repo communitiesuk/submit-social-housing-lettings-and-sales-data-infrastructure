@@ -13,7 +13,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_cpu" {
   insufficient_data_actions = []
 
   dimensions = {
-    DBInstanceIdentifier = aws_db_instance.this.id
+    DBInstanceIdentifier = aws_db_instance.this.identifier
   }
 }
 
@@ -32,6 +32,6 @@ resource "aws_cloudwatch_metric_alarm" "rds_storage" {
   insufficient_data_actions = []
 
   dimensions = {
-    DBInstanceIdentifier = aws_db_instance.this.id
+    DBInstanceIdentifier = aws_db_instance.this.identifier
   }
 }
