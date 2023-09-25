@@ -60,7 +60,7 @@ module "application" {
   prefix                               = local.prefix
   app_host                             = ""
   app_task_cpu                         = 512
-  app_task_desired_count               = 4
+  app_task_desired_count               = 2
   app_task_memory                      = 1024
   application_port                     = local.application_port
   bulk_upload_bucket_access_policy_arn = module.bulk_upload.read_write_policy_arn
