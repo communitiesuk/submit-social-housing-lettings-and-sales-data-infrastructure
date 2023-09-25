@@ -14,14 +14,14 @@ resource "aws_lb" "this" {
 resource "aws_lb_target_group" "this" {
   name        = var.prefix
   port        = var.application_port
-  protocol    = "HTTP"
+  protocol    = "HTTPS"
   vpc_id      = var.vpc_id
   target_type = "ip"
 
   health_check {
     healthy_threshold   = "3"
     interval            = "30"
-    protocol            = "HTTP"
+    protocol            = "HTTPS"
     matcher             = "204"
     timeout             = "3"
     path                = "/health"
