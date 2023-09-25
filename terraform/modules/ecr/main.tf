@@ -10,9 +10,20 @@ terraform {
 }
 
 #tfsec:ignore:aws-ecr-repository-customer-key:encryption using KMS CMK not required
-resource "aws_ecr_repository" "this" {
+resource "aws_ecr_repository" "core" {
   #checkov:skip=CKV_AWS_136:encryption using KMS not required
   name                 = "core"
+  image_tag_mutability = "IMMUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
+#tfsec:ignore:aws-ecr-repository-customer-key:encryption using KMS CMK not required
+resource "aws_ecr_repository" "db_migration" {
+  #checkov:skip=CKV_AWS_136:encryption using KMS not required
+  name                 = "db-migration"
   image_tag_mutability = "IMMUTABLE"
 
   image_scanning_configuration {
@@ -37,7 +48,12 @@ data "aws_iam_policy_document" "this" {
   }
 }
 
-resource "aws_ecr_repository_policy" "this" {
-  repository = aws_ecr_repository.this.name
+resource "aws_ecr_repository_policy" "core" {
+  repository = aws_ecr_repository.core.name
+  policy     = data.aws_iam_policy_document.this.json
+}
+
+resource "aws_ecr_repository_policy" "db_migration" {
+  repository = aws_ecr_repository.db_migration.name
   policy     = data.aws_iam_policy_document.this.json
 }
