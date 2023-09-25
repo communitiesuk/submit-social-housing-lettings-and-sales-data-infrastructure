@@ -38,6 +38,25 @@ resource "aws_cloudwatch_metric_alarm" "app_memory" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "app_tasks_exited" {
+  alarm_actions             = [var.sns_topic_arn]
+  alarm_name                = "${var.prefix}-app-tasks-exited"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  datapoints_to_alarm       = 2 * var.app_task_desired_count
+  evaluation_periods        = 8
+  metric_name               = "TriggeredRules"
+  namespace                 = "AWS/Events"
+  ok_actions                = [var.sns_topic_arn]
+  period                    = 60
+  statistic                 = "Sum"
+  threshold                 = 1
+  insufficient_data_actions = []
+
+  dimensions = {
+    RuleName = aws_cloudwatch_event_rule.app_task_exited.name
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "sidekiq_cpu" {
   alarm_actions             = [var.sns_topic_arn]
   alarm_name                = "${var.prefix}-sidekiq-cpu"
