@@ -5,6 +5,7 @@ resource "aws_ecs_cluster" "this" {
 }
 
 resource "aws_ecs_task_definition" "db_migration" {
+  #checkov:skip=CKV_AWS_336:setting readonlyRootFilesystem to true breaks the task, as it needs to write to open/root/.cf/temp-config... for example
   family                   = "${var.prefix}-db-migration"
   cpu                      = var.db_migration_task_cpu
   execution_role_arn       = var.ecs_task_execution_role_arn
@@ -18,7 +19,6 @@ resource "aws_ecs_task_definition" "db_migration" {
       name      = "db-migration"
       essential = true
       image     = var.ecr_repository_url
-      readonlyRootFilesystem = true
 
       logConfiguration = {
         logDriver = "awslogs"
@@ -51,7 +51,7 @@ resource "aws_ecs_task_definition" "db_migration" {
 
 # This ECS task just runs continuously in the background doing nothing. This is so we can exec into it later and check the DB
 resource "aws_ecs_task_definition" "exec_placeholder" {
-  #checkov:skip=CKV_AWS_336:using readonlyRootFilesystem to true breaks the app, as it needs to write to app/tmp/pids for example
+  #checkov:skip=CKV_AWS_336:setting readonlyRootFilesystem to true might restrict our ability to use exec to debug things e.g. a cf command might need to write to open/root/.cf/temp-config...
   family                   = "${var.prefix}-exec-placeholder"
   cpu                      = var.db_migration_task_cpu
   execution_role_arn       = var.ecs_task_execution_role_arn
