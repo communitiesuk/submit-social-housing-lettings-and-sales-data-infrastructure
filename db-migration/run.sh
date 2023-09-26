@@ -24,8 +24,8 @@ while [ ! -e  "$dumpfile"]; do
 done
 
 while fuser dumpfile; do
-    echo "Dump file is still being written to. Waiting for write operations to finish"
-    sleep 1
+  echo "Dump file is still being written to. Waiting for write operations to finish"
+  sleep 1
 done
 
 echo 'Dump file ready for pg restore'
