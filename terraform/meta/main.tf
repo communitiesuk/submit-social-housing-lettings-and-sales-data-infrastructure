@@ -37,7 +37,7 @@ provider "aws" {
 
 locals {
   create_db_migration_infra = false
-  provider_role_arn = "arn:aws:iam::815624722760:role/developer"
+  provider_role_arn         = "arn:aws:iam::815624722760:role/developer"
 }
 
 # We create two backends for managing the terraform state of different accounts:
