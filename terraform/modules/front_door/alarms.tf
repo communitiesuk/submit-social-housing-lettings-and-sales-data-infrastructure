@@ -13,7 +13,7 @@ resource "aws_cloudwatch_metric_alarm" "unhealthy_hosts_count" {
   insufficient_data_actions = []
 
   dimensions = {
-    LoadBalancer = aws_lb.this.name
-    TargetGroup  = aws_lb_target_group.this.name
+    LoadBalancer = aws_lb.this.arn_suffix
+    TargetGroup  = aws_lb_target_group.this.arn_suffix
   }
 }
