@@ -4,9 +4,8 @@ resource "aws_ecs_cluster" "this" {
   name = "${var.prefix}-db-migration"
 }
 
-resource "aws_ecs_task_definition" "ad_hoc_db_migration" {
-  #checkov:skip=CKV_AWS_336:using readonlyRootFilesystem to true breaks the app, as it needs to write to app/tmp/pids for example
-  family                   = "${var.prefix}-ad-hoc-db-migration"
+resource "aws_ecs_task_definition" "db_migration" {
+  family                   = "${var.prefix}-db-migration"
   cpu                      = var.db_migration_task_cpu
   execution_role_arn       = var.ecs_task_execution_role_arn
   memory                   = var.db_migration_task_memory #MiB
@@ -19,6 +18,7 @@ resource "aws_ecs_task_definition" "ad_hoc_db_migration" {
       name      = "db-migration"
       essential = true
       image     = var.ecr_repository_url
+      readonlyRootFilesystem = true
 
       logConfiguration = {
         logDriver = "awslogs"
@@ -47,13 +47,6 @@ resource "aws_ecs_task_definition" "ad_hoc_db_migration" {
     operating_system_family = "LINUX"
     cpu_architecture        = "X86_64"
   }
-
-  lifecycle {
-    # The image will be updated by deployments - irritatingly we can't ignore changes just to the image
-    # If changing other aspects of the container definition we'll need to temporarily not ignore changes
-    # to force the update, ensuring the referenced image is the correct current one
-    ignore_changes = [container_definitions]
-  }
 }
 
 # This ECS task just runs continuously in the background doing nothing. This is so we can exec into it later and check the DB
@@ -70,7 +63,7 @@ resource "aws_ecs_task_definition" "exec_placeholder" {
   container_definitions = jsonencode([
     {
       name = "db-migration"
-      #A command that will keep the placeholding task running. Keeps looking for changes in the file (which should always exist) to display
+      # A command that just keeps the placeholding task running, by continuously looking for changes in a file to display (which doesn't change but should always exist)
       command   = ["tail", "-f", "/dev/null"]
       essential = true
       image     = var.ecr_repository_url
@@ -94,13 +87,6 @@ resource "aws_ecs_task_definition" "exec_placeholder" {
     operating_system_family = "LINUX"
     cpu_architecture        = "X86_64"
   }
-
-  lifecycle {
-    # The image will be updated by deployments - irritatingly we can't ignore changes just to the image
-    # If changing other aspects of the container definition we'll need to temporarily not ignore changes
-    # to force the update, ensuring the referenced image is the correct current one
-    ignore_changes = [container_definitions]
-  }
 }
 
 resource "aws_ecs_service" "db_migration" {
@@ -119,10 +105,5 @@ resource "aws_ecs_service" "db_migration" {
     security_groups  = [aws_security_group.ecs.id]
     subnets          = var.private_subnet_ids
     assign_public_ip = false
-  }
-
-  lifecycle {
-    # The task definition revision will be updated by the deployment process
-    ignore_changes = [task_definition]
   }
 }
