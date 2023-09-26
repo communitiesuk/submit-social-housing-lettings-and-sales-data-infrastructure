@@ -18,7 +18,3 @@ output "ecs_task_role_arn" {
   description = "The arn of the ecs task role"
 }
 
-output "sidekiq_service_name" {
-  value       = aws_ecs_service.sidekiq.name
-  description = "The name of the sidekiq service"
-}
