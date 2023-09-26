@@ -42,14 +42,14 @@ resource "aws_cloudwatch_metric_alarm" "app_tasks_exited" {
   alarm_actions             = [var.sns_topic_arn]
   alarm_name                = "${var.prefix}-app-tasks-exited"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
-  datapoints_to_alarm       = 2 * var.app_task_desired_count
-  evaluation_periods        = 8
+  datapoints_to_alarm       = 1
+  evaluation_periods        = 1
   metric_name               = "TriggeredRules"
   namespace                 = "AWS/Events"
   ok_actions                = [var.sns_topic_arn]
-  period                    = 60
+  period                    = 8 * 60
   statistic                 = "Sum"
-  threshold                 = 1
+  threshold                 = 2 * var.app_task_desired_count
   insufficient_data_actions = []
 
   dimensions = {
