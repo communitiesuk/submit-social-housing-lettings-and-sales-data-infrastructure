@@ -11,6 +11,7 @@ terraform {
 
 #tfsec:ignore:aws-ecr-repository-customer-key:encryption using KMS CMK not required
 resource "aws_ecr_repository" "db_migration" {
+  #checkov:skip=CKV_AWS_51:mutable image tags preferred as we always want the latest image and don't need to track previous ones
   #checkov:skip=CKV_AWS_136:encryption using KMS not required
   name                 = "db-migration"
   image_tag_mutability = "MUTABLE"
