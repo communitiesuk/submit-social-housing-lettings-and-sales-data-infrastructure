@@ -19,5 +19,4 @@ resource "aws_cloudwatch_event_rule" "app_task_exited" {
         }
     }
   )
-
 }
