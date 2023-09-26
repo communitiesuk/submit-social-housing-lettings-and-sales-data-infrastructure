@@ -38,6 +38,11 @@ variable "public_subnet_ids" {
   description = "The ids of all the public subnets"
 }
 
+variable "sns_topic_arn" {
+  type        = string
+  description = "The arn of the sns topic"
+}
+
 variable "vpc_id" {
   type        = string
   description = "The ID of the VPC to be associated with."
