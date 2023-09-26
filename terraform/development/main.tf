@@ -151,6 +151,7 @@ module "front_door" {
   load_balancer_certificate_arn = module.certificates.load_balancer_certificate_arn
   load_balancer_domain_name     = local.load_balancer_domain_name
   public_subnet_ids             = module.networking.public_subnet_ids
+  sns_topic_arn                 = module.monitoring.sns_topic_arn
   vpc_id                        = module.networking.vpc_id
 }
 
