@@ -1,7 +1,11 @@
+resource "aws_wafv2_web_acl_association" "this" {
+  resource_arn = aws_lb.this.arn
+  web_acl_arn  = aws_wafv2_web_acl.load_balancer.arn
+}
+
 #tfsec:ignore:aws-elb-alb-not-public:the load balancer must be exposed to the internet in order to communicate with cloudfront
 resource "aws_lb" "this" {
   #checkov:skip=CKV_AWS_91:setup access logs on load balancer TODO CLDC-2705
-  #checkov:skip=CKV2_AWS_28:WAF protection to be setup TODO CLDC-2546
   name                       = var.prefix
   drop_invalid_header_fields = true
   enable_deletion_protection = true
