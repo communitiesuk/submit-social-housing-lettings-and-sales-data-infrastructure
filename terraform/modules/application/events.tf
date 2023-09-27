@@ -34,7 +34,7 @@ resource "aws_cloudwatch_event_rule" "app_service_action_problem" {
         "ECS Service Action"
       ],
       "resources" : [
-        aws_ecs_service.app.arn
+        aws_ecs_service.app.id
       ],
       "detail" : {
         "eventType" : ["WARN", "ERROR"]
