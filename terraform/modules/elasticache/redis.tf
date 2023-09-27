@@ -1,7 +1,4 @@
-#tfsec:ignore:aws-elasticache-enable-backup-retention:TODO CLDC-2679 setup a snapshot retention limit
 resource "aws_elasticache_replication_group" "this" {
-  #checkov:skip=CKV_AWS_134:TODO CLDC-2679 setup a snapshot retention limit
-  #TODO CLDC-2682 setup redis logging
   apply_immediately           = true
   auto_minor_version_upgrade  = true
   automatic_failover_enabled  = true
