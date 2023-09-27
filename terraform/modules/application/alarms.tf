@@ -47,7 +47,7 @@ resource "aws_cloudwatch_metric_alarm" "app_tasks_exited" {
   metric_name               = "TriggeredRules"
   namespace                 = "AWS/Events"
   ok_actions                = [var.sns_topic_arn]
-  period                    = 8 * 60
+  period                    = 8 * 60 # By causing the app to fail repeatedly (with both 2 tasks and 4 tasks running) I found that double the desired count would reliably fail in an 8 minute period.
   statistic                 = "Sum"
   threshold                 = 2 * var.app_task_desired_count
   insufficient_data_actions = []
