@@ -248,6 +248,7 @@ resource "aws_wafv2_web_acl" "load_balancer" {
   }
 }
 
+# When updating this load balancer WAF regex pattern, consider making the same change for the cloudfront WAF regex pattern, as they generally need to be the same
 resource "aws_wafv2_regex_pattern_set" "waf_rate_limit_urls_load_balancer" {
   name  = "${var.prefix}-waf-load-balancer-login-url-regex-patterns"
   scope = "REGIONAL"
