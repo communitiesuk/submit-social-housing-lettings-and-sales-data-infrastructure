@@ -39,14 +39,11 @@ resource "aws_db_instance" "this" {
 }
 
 #tfsec:ignore:aws-rds-enable-performance-insights:TODO CLDC-2660 if necessary
-#tfsec:ignore:AVD-AWS-0176:iam authentication not suitable as tokens only last 15minutes, password authentication preferred
 resource "aws_db_instance" "replica" {
   #checkov:skip=CKV_AWS_129:cloudwatch logs TODO CLDC-2660
   #checkov:skip=CKV_AWS_118:monitoring TODO CLDC-2660
-  #checkov:skip=CKV_AWS_161:iam authentication not suitable as tokens only last 15minutes, password authentication preferred
   #checkov:skip=CKV_AWS_353:performance insights TODO CLDC-2660 if necessary
   #checkov:skip=CKV_AWS_354:performance insights TODO CLDC-2660 if insights are necessary
-  #checkov:skip=CKV2_AWS_30:query logging TODO CLDC-2660
   count = var.create_replica_standby_db ? 1 : 0
 
   identifier                 = "${var.prefix}-replica"
