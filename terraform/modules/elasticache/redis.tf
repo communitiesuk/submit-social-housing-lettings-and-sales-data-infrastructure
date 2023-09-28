@@ -1,5 +1,6 @@
 resource "aws_elasticache_replication_group" "this" {
   apply_immediately           = true
+  at_rest_encryption_enabled  = true
   auto_minor_version_upgrade  = true
   automatic_failover_enabled  = true
   description                 = "Redis replication group, containing a primary node and a replica."
