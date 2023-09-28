@@ -39,29 +39,26 @@ resource "aws_db_instance" "this" {
 }
 
 #tfsec:ignore:aws-rds-enable-performance-insights:TODO CLDC-2660 if necessary
-#tfsec:ignore:AVD-AWS-0176:iam authentication not suitable as tokens only last 15minutes, password authentication preferred
 resource "aws_db_instance" "replica" {
   #checkov:skip=CKV_AWS_129:cloudwatch logs TODO CLDC-2660
   #checkov:skip=CKV_AWS_118:monitoring TODO CLDC-2660
-  #checkov:skip=CKV_AWS_161:iam authentication not suitable as tokens only last 15minutes, password authentication preferred
   #checkov:skip=CKV_AWS_353:performance insights TODO CLDC-2660 if necessary
   #checkov:skip=CKV_AWS_354:performance insights TODO CLDC-2660 if insights are necessary
-  #checkov:skip=CKV2_AWS_30:query logging TODO CLDC-2660
-  count               = var.create_replica_standby_db ? 1 : 0
-  identifier          = "${var.prefix}-replica"
-  replicate_source_db = aws_db_instance.this.identifier
+  count = var.create_replica_standby_db ? 1 : 0
 
+  identifier                 = "${var.prefix}-replica"
   apply_immediately          = aws_db_instance.this.apply_immediately
   auto_minor_version_upgrade = aws_db_instance.this.auto_minor_version_upgrade
   copy_tags_to_snapshot      = aws_db_instance.this.copy_tags_to_snapshot
-  db_subnet_group_name       = aws_db_instance.this.db_subnet_group_name
   delete_automated_backups   = aws_db_instance.this.delete_automated_backups
+  deletion_protection        = true
   final_snapshot_identifier  = aws_db_instance.this.final_snapshot_identifier
   instance_class             = aws_db_instance.this.instance_class
   maintenance_window         = aws_db_instance.this.maintenance_window
   multi_az                   = aws_db_instance.this.multi_az
   port                       = aws_db_instance.this.port
   publicly_accessible        = aws_db_instance.this.publicly_accessible
+  replicate_source_db        = aws_db_instance.this.identifier
   skip_final_snapshot        = aws_db_instance.this.skip_final_snapshot
   storage_encrypted          = aws_db_instance.this.storage_encrypted
   storage_type               = aws_db_instance.this.storage_type
