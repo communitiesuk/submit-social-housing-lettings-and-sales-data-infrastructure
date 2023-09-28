@@ -3,6 +3,9 @@ resource "aws_elasticache_replication_group" "this" {
   #checkov:skip=CKV_AWS_30:TODO CLDC-2848 potentially introduce encryption in transit later
   #checkov:skip=CKV_AWS_31:TODO CLDC-2848 potentially introduce encryption in transit later
   #checkov:skip=CKV_AWS_191:default encryption key is sufficient
+
+  count = var.highly_available ? 1 : 0
+
   apply_immediately           = true
   at_rest_encryption_enabled  = true
   auto_minor_version_upgrade  = true
@@ -20,4 +23,24 @@ resource "aws_elasticache_replication_group" "this" {
   replication_group_id        = var.prefix
   security_group_ids          = [aws_security_group.this.id]
   subnet_group_name           = var.redis_subnet_group_name
+}
+
+#tfsec:ignore:aws-elasticache-enable-backup-retention:TODO CLDC-2679 setup a snapshot retention limit
+resource "aws_elasticache_cluster" "this" {
+  #checkov:skip=CKV_AWS_134:TODO CLDC-2679 setup a snapshot retention limit
+
+  count = var.highly_available ? 0 : 1
+
+  cluster_id                 = var.prefix
+  auto_minor_version_upgrade = true
+  apply_immediately          = true
+  engine                     = "redis"
+  engine_version             = "6.2"
+  maintenance_window         = "sun:23:00-mon:01:30"
+  node_type                  = var.node_type
+  num_cache_nodes            = 1
+  parameter_group_name       = aws_elasticache_parameter_group.this.id
+  port                       = var.redis_port
+  security_group_ids         = [aws_security_group.this.id]
+  subnet_group_name          = var.redis_subnet_group_name
 }

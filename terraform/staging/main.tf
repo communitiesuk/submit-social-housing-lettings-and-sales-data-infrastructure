@@ -155,6 +155,7 @@ module "redis" {
   source = "../modules/elasticache"
 
   prefix                  = local.prefix
+  highly_available        = true
   ecs_security_group_id   = module.application.ecs_security_group_id
   node_type               = "cache.t4g.micro"
   redis_port              = local.redis_port
