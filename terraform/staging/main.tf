@@ -46,6 +46,7 @@ provider "awscc" {
 locals {
   prefix                    = "core-staging"
   app_host                  = "staging.submit-social-housing-data.levellingup.gov.uk"
+  app_task_desired_count    = 2
   application_port          = 8080
   create_replica_standby_db = true
   create_db_migration_infra = false
@@ -61,7 +62,7 @@ module "application" {
   prefix                               = local.prefix
   app_host                             = ""
   app_task_cpu                         = 512
-  app_task_desired_count               = 2
+  app_task_desired_count               = local.app_task_desired_count
   app_task_memory                      = 1024
   application_port                     = local.application_port
   bulk_upload_bucket_access_policy_arn = module.bulk_upload.read_write_policy_arn
@@ -158,6 +159,7 @@ module "front_door" {
   }
 
   prefix                        = local.prefix
+  app_task_desired_count        = local.app_task_desired_count
   application_port              = local.application_port
   cloudfront_certificate_arn    = module.certificates.cloudfront_certificate_arn
   cloudfront_domain_name        = local.app_host

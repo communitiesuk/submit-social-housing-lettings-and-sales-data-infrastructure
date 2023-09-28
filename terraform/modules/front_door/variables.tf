@@ -1,3 +1,8 @@
+variable "app_task_desired_count" {
+  type        = number
+  description = "The number of instances of the ecs app task definition desired"
+}
+
 variable "application_port" {
   type        = number
   description = "The network port the application runs on"
