@@ -47,7 +47,7 @@ locals {
   prefix                    = "core-staging"
   app_host                  = "staging.submit-social-housing-data.levellingup.gov.uk"
   application_port          = 8080
-  create_replica_standby_db = false
+  create_replica_standby_db = true
   create_db_migration_infra = false
   database_port             = 5432
   load_balancer_domain_name = "staging.lb.submit-social-housing-data.levellingup.gov.uk"
