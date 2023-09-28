@@ -49,14 +49,13 @@ resource "aws_db_instance" "replica" {
   #checkov:skip=CKV2_AWS_30:query logging TODO CLDC-2660
   count               = var.create_replica_standby_db ? 1 : 0
   identifier          = "${var.prefix}-replica"
-  replicate_source_db = aws_db_instance.this.arn
+  replicate_source_db = aws_db_instance.this.identifier
 
   apply_immediately          = aws_db_instance.this.apply_immediately
   auto_minor_version_upgrade = aws_db_instance.this.auto_minor_version_upgrade
   copy_tags_to_snapshot      = aws_db_instance.this.copy_tags_to_snapshot
   db_subnet_group_name       = aws_db_instance.this.db_subnet_group_name
   delete_automated_backups   = aws_db_instance.this.delete_automated_backups
-  deletion_protection        = true # needs to be set to false and applied if you need to delete the DB
   final_snapshot_identifier  = aws_db_instance.this.final_snapshot_identifier
   instance_class             = aws_db_instance.this.instance_class
   maintenance_window         = aws_db_instance.this.maintenance_window
