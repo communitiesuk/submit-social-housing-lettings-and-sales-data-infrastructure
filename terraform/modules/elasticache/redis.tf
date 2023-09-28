@@ -32,8 +32,8 @@ resource "aws_elasticache_cluster" "this" {
   count = var.highly_available ? 0 : 1
 
   cluster_id                 = var.prefix
-  auto_minor_version_upgrade = true
   apply_immediately          = true
+  auto_minor_version_upgrade = true
   engine                     = "redis"
   engine_version             = "6.2"
   maintenance_window         = "sun:23:00-mon:01:30"
