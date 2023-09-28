@@ -52,11 +52,7 @@ resource "aws_iam_role_policy" "secret_access" {
         ]
         Effect = "Allow"
         Resource = [
-          aws_secretsmanager_secret.api_key.arn,
-          aws_secretsmanager_secret.govuk_notify_api_key.arn,
-          aws_secretsmanager_secret.os_data_key.arn,
-          aws_secretsmanager_secret.rails_master_key.arn,
-          aws_secretsmanager_secret.sentry_dsn.arn
+          "*"
         ]
       }
     ]

@@ -13,6 +13,15 @@ resource "aws_vpc_security_group_ingress_rule" "redis_ingress" {
   ip_protocol                  = "tcp"
   from_port                    = var.redis_port
   to_port                      = var.redis_port
-  referenced_security_group_id = var.ecs_security_group_id
+  referenced_security_group_id = var.ecs_security_group_id_one
+  security_group_id            = aws_security_group.this.id
+}
+
+resource "aws_vpc_security_group_ingress_rule" "redis_ingress_two" {
+  description                  = "Allow ingress on port ${var.redis_port} from ecs"
+  ip_protocol                  = "tcp"
+  from_port                    = var.redis_port
+  to_port                      = var.redis_port
+  referenced_security_group_id = var.ecs_security_group_id_two
   security_group_id            = aws_security_group.this.id
 }

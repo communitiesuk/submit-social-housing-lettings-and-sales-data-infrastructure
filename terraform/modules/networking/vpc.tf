@@ -9,35 +9,7 @@ resource "aws_vpc" "this" {
   }
 }
 
-resource "aws_flow_log" "vpc_accepted" {
-  iam_role_arn    = aws_iam_role.vpc_flow_logs.arn
-  log_destination = aws_cloudwatch_log_group.vpc_flow_logs_accepted.arn
-  traffic_type    = "ACCEPT"
-  vpc_id          = aws_vpc.this.id
-}
 
-resource "aws_flow_log" "vpc_rejected" {
-  iam_role_arn    = aws_iam_role.vpc_flow_logs.arn
-  log_destination = aws_cloudwatch_log_group.vpc_flow_logs_rejected.arn
-  traffic_type    = "REJECT"
-  vpc_id          = aws_vpc.this.id
-}
-
-# tfsec:ignore:aws-cloudwatch-log-group-customer-key:flow logs are non-sensitive
-resource "aws_cloudwatch_log_group" "vpc_flow_logs_accepted" {
-  #checkov:skip=CKV_AWS_158:flow logs are non-sensitive
-  #checkov:skip=CKV_AWS_338:we think that a minimum log retention of at least 1 year is excessive and are ok with less
-  name              = "${var.prefix}-vpc-flow-logs-accepted"
-  retention_in_days = var.vpc_flow_cloudwatch_log_expiration_days
-}
-
-# tfsec:ignore:aws-cloudwatch-log-group-customer-key:flow logs are non-sensitive
-resource "aws_cloudwatch_log_group" "vpc_flow_logs_rejected" {
-  #checkov:skip=CKV_AWS_158:flow logs are non-sensitive
-  #checkov:skip=CKV_AWS_338:we think that a minimum log retention of at least 1 year is excessive and are ok with less
-  name              = "${var.prefix}-vpc-flow-logs-rejected"
-  retention_in_days = var.vpc_flow_cloudwatch_log_expiration_days
-}
 
 # https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-cwl.html#flow-logs-iam-role
 resource "aws_iam_role" "vpc_flow_logs" {

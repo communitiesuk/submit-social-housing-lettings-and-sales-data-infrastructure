@@ -14,7 +14,7 @@ resource "aws_db_instance" "this" {
   backup_retention_period    = var.backup_retention_period
   backup_window              = "23:09-23:39"
   copy_tags_to_snapshot      = true
-  db_name                    = "data_collector"
+  #db_name                    = "data_collector"
   db_subnet_group_name       = var.db_subnet_group_name
   delete_automated_backups   = false
   deletion_protection        = true # needs to be set to false and applied if you need to delete the DB
@@ -27,20 +27,24 @@ resource "aws_db_instance" "this" {
   password                   = random_password.this.result
   port                       = var.database_port
   publicly_accessible        = false
-  skip_final_snapshot        = false
+  skip_final_snapshot        = true
   storage_encrypted          = true
   storage_type               = "gp2"
   username                   = "postgres"
   vpc_security_group_ids     = [aws_security_group.this.id]
 
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
-resource "aws_ssm_parameter" "database_connection_string" {
+resource "aws_ssm_parameter" "database_connection_string_one" {
   #checkov:skip=CKV_AWS_337:default encryption not using a kms cmk sufficient
-  name  = "DATA_COLLECTOR_DATABASE_URL"
+  name  = "database-url-one"
   type  = "SecureString"
-  value = "postgresql://${aws_db_instance.this.username}:${aws_db_instance.this.password}@${aws_db_instance.this.endpoint}/${aws_db_instance.this.db_name}"
+  value = "postgresql://${aws_db_instance.this.username}:${aws_db_instance.this.password}@${aws_db_instance.this.endpoint}/one"
+}
+
+resource "aws_ssm_parameter" "database_connection_string_two" {
+  #checkov:skip=CKV_AWS_337:default encryption not using a kms cmk sufficient
+  name  = "database-url-two"
+  type  = "SecureString"
+  value = "postgresql://${aws_db_instance.this.username}:${aws_db_instance.this.password}@${aws_db_instance.this.endpoint}/two"
 }

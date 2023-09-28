@@ -138,3 +138,33 @@ variable "vpc_id" {
   type        = string
   description = "The ID of the VPC to be associated with"
 }
+
+variable "api_key" {
+  type        = string
+  description = "The ID of the VPC to be associated with"
+}
+
+variable "notify" {
+  type        = string
+  description = "The ID of the VPC to be associated with"
+}
+
+variable "os" {
+  type        = string
+  description = "The ID of the VPC to be associated with"
+}
+
+variable "rails" {
+  type        = string
+  description = "The ID of the VPC to be associated with"
+}
+
+variable "sentry" {
+  type        = string
+  description = "The ID of the VPC to be associated with"
+}
+
+variable "root" {
+  type        = string
+  description = "The ID of the VPC to be associated with"
+}

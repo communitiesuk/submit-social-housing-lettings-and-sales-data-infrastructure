@@ -45,10 +45,11 @@ resource "aws_ecs_task_definition" "app" {
         { Name = "RAILS_LOG_TO_STDOUT", Value = "true" },
         { Name = "RAILS_SERVE_STATIC_FILES", Value = "true" },
         { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
-        { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) }
+        { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) },
+        { Name = "RAILS_RELATIVE_URL_ROOT", Value = var.root }
       ]
       essential = true
-      image     = var.ecr_repository_url
+      image     = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core:relative-root-test-2"
       user      = "nonroot"
 
       logConfiguration = {
@@ -69,12 +70,12 @@ resource "aws_ecs_task_definition" "app" {
       ]
 
       secrets = [
-        { Name = "API_KEY", valueFrom = aws_secretsmanager_secret.api_key.arn },
+        { Name = "API_KEY", valueFrom = var.api_key },
         { Name = "DATABASE_URL", valueFrom = var.database_connection_string_arn },
-        { Name = "GOVUK_NOTIFY_API_KEY", valueFrom = aws_secretsmanager_secret.govuk_notify_api_key.arn },
-        { Name = "OS_DATA_KEY", valueFrom = aws_secretsmanager_secret.os_data_key.arn },
-        { Name = "RAILS_MASTER_KEY", valueFrom = aws_secretsmanager_secret.rails_master_key.arn },
-        { Name = "SENTRY_DSN", valueFrom = aws_secretsmanager_secret.sentry_dsn.arn }
+        { Name = "GOVUK_NOTIFY_API_KEY", valueFrom = var.notify },
+        { Name = "OS_DATA_KEY", valueFrom = var.os },
+        { Name = "RAILS_MASTER_KEY", valueFrom = var.rails },
+        { Name = "SENTRY_DSN", valueFrom = var.sentry }
       ]
     }
   ])
@@ -113,7 +114,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
         { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) }
       ]
       essential = true
-      image     = var.ecr_repository_url
+      image     = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core:relative-root-test-2"
       user      = "nonroot"
 
       logConfiguration = {
@@ -127,7 +128,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
 
       secrets = [
         { Name = "DATABASE_URL", valueFrom = var.database_connection_string_arn },
-        { Name = "RAILS_MASTER_KEY", valueFrom = aws_secretsmanager_secret.rails_master_key.arn },
+        { Name = "RAILS_MASTER_KEY", valueFrom = var.rails },
       ]
     }
   ])
@@ -172,7 +173,7 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
         { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) }
       ]
       essential = true
-      image     = var.ecr_repository_url
+      image     = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core:relative-root-test-2"
       user      = "nonroot"
 
       logConfiguration = {
@@ -193,12 +194,12 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
       ]
 
       secrets = [
-        { Name = "API_KEY", valueFrom = aws_secretsmanager_secret.api_key.arn },
+        { Name = "API_KEY", valueFrom = var.api_key },
         { Name = "DATABASE_URL", valueFrom = var.database_connection_string_arn },
-        { Name = "GOVUK_NOTIFY_API_KEY", valueFrom = aws_secretsmanager_secret.govuk_notify_api_key.arn },
-        { Name = "OS_DATA_KEY", valueFrom = aws_secretsmanager_secret.os_data_key.arn },
-        { Name = "RAILS_MASTER_KEY", valueFrom = aws_secretsmanager_secret.rails_master_key.arn },
-        { Name = "SENTRY_DSN", valueFrom = aws_secretsmanager_secret.sentry_dsn.arn }
+        { Name = "GOVUK_NOTIFY_API_KEY", valueFrom = var.notify },
+        { Name = "OS_DATA_KEY", valueFrom = var.os },
+        { Name = "RAILS_MASTER_KEY", valueFrom = var.rails },
+        { Name = "SENTRY_DSN", valueFrom = var.sentry }
       ]
     }
   ])
@@ -251,7 +252,7 @@ resource "aws_ecs_service" "sidekiq" {
   cluster                            = aws_ecs_cluster.this.arn
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 100 # There should always be at least the desired count running during a deployment
-  desired_count                      = var.sidekiq_task_desired_count
+  desired_count                      = 1
   enable_execute_command             = true
   force_new_deployment               = true
   launch_type                        = "FARGATE"

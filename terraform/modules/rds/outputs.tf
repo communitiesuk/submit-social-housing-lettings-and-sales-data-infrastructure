@@ -8,8 +8,14 @@ output "rds_data_access_policy_arn" {
   description = "The arn of the iam policy enabling access to the rds data"
 }
 
-output "rds_connection_string_arn" {
-  value       = aws_ssm_parameter.database_connection_string.arn
+output "one_connection_string_arn" {
+  value       = aws_ssm_parameter.database_connection_string_one.arn
+  description = "The arn of the database connection string in the parameter store"
+  sensitive   = true
+}
+
+output "two_connection_string_arn" {
+  value       = aws_ssm_parameter.database_connection_string_two.arn
   description = "The arn of the database connection string in the parameter store"
   sensitive   = true
 }

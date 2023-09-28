@@ -1,4 +1,9 @@
-variable "ecs_security_group_id" {
+variable "ecs_security_group_id_one" {
+  type        = string
+  description = "The id of the ecs security group for ecs ingress"
+}
+
+variable "ecs_security_group_id_two" {
   type        = string
   description = "The id of the ecs security group for ecs ingress"
 }
