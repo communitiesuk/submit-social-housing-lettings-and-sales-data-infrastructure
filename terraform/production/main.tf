@@ -39,6 +39,7 @@ locals {
   prefix                    = "core-prod"
   app_host                  = "submit-social-housing-data.levellingup.gov.uk"
   application_port          = 8080
+  create_replica_standby_db = true
   database_port             = 5432
   load_balancer_domain_name = "lb.submit-social-housing-data.levellingup.gov.uk"
   provider_role_arn         = "arn:aws:iam::977287343304:role/developer"
@@ -108,15 +109,16 @@ module "certificates" {
 module "database" {
   source = "../modules/rds"
 
-  prefix                  = local.prefix
-  allocated_storage       = 100
-  backup_retention_period = 7
-  database_port           = local.database_port
-  db_subnet_group_name    = module.networking.db_private_subnet_group_name
-  ecs_security_group_id   = module.application.ecs_security_group_id
-  instance_class          = "db.t3.small"
-  sns_topic_arn           = module.monitoring.sns_topic_arn
-  vpc_id                  = module.networking.vpc_id
+  prefix                    = local.prefix
+  allocated_storage         = 100
+  backup_retention_period   = 7
+  create_replica_standby_db = local.create_replica_standby_db
+  database_port             = local.database_port
+  db_subnet_group_name      = module.networking.db_private_subnet_group_name
+  ecs_security_group_id     = module.application.ecs_security_group_id
+  instance_class            = "db.t3.small"
+  sns_topic_arn             = module.monitoring.sns_topic_arn
+  vpc_id                    = module.networking.vpc_id
 }
 
 module "front_door" {
