@@ -63,11 +63,6 @@ variable "prefix" {
   description = "The prefix to be prepended to resource names."
 }
 
-variable "private_subnet_ids" {
-  type        = list(string)
-  description = "The ids of all the private subnets"
-}
-
 variable "vpc_id" {
   type        = string
   description = "The ID of the VPC to be associated with"
