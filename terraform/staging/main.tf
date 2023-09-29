@@ -116,6 +116,7 @@ module "database" {
   database_port           = local.database_port
   db_subnet_group_name    = module.networking.db_private_subnet_group_name
   ecs_security_group_id   = module.application.ecs_security_group_id
+  highly_available        = false
   instance_class          = "db.t3.micro"
   sns_topic_arn           = module.monitoring.sns_topic_arn
   vpc_id                  = module.networking.vpc_id
