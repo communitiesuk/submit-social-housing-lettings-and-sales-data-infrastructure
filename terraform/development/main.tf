@@ -40,7 +40,6 @@ locals {
   app_host                  = ""
   app_task_desired_count    = 2
   application_port          = 8080
-  create_replica_standby_db = false
   database_port             = 5432
   load_balancer_domain_name = ""
   provider_role_arn         = "arn:aws:iam::837698168072:role/developer"
@@ -109,7 +108,6 @@ module "database" {
   prefix                    = local.prefix
   allocated_storage         = 5
   backup_retention_period   = 7
-  create_replica_standby_db = local.create_replica_standby_db
   db_subnet_group_name      = module.networking.db_private_subnet_group_name
   database_port             = local.database_port
   ecs_security_group_id     = module.application.ecs_security_group_id
