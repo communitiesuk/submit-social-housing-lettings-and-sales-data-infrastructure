@@ -199,7 +199,7 @@ resource "aws_wafv2_web_acl" "load_balancer" {
 
         scope_down_statement {
           regex_pattern_set_reference_statement {
-            arn = aws_wafv2_regex_pattern_set.waf_load_balancer_rate_limit_urls.arn
+            arn = aws_wafv2_regex_pattern_set.waf_rate_limit_urls_load_balancer.arn
 
             field_to_match {
               uri_path {}
@@ -249,7 +249,7 @@ resource "aws_wafv2_web_acl" "load_balancer" {
 }
 
 # When updating this load balancer WAF regex pattern, consider making the same change for the cloudfront WAF regex pattern, as they generally need to be the same
-resource "aws_wafv2_regex_pattern_set" "waf_load_balancer_rate_limit_urls" {
+resource "aws_wafv2_regex_pattern_set" "waf_rate_limit_urls_load_balancer" {
   name  = "${var.prefix}-waf-load-balancer-login-url-regex-patterns"
   scope = "REGIONAL"
 
