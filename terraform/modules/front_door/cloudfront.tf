@@ -5,6 +5,9 @@ locals {
 
 #tfsec:ignore:aws-cloudfront-enable-logging:TODO we will be implementing logging later
 resource "aws_cloudfront_distribution" "this" {
+  #checkov:skip=CKV2_AWS_47:The checkov Log4j vulnerability guidance (see link below) suggests implementing the AWSManagedRulesAnonymousIpList and AWSManagedRulesKnownBadInputsRuleSet WAF rules,
+  #however AWSManagedRulesAnonymousIpList may cause issues for local authorities / housing associations that use VPNs, and we already implement the other rule
+  #https://docs.bridgecrew.io/docs/ensure-aws-cloudfront-attached-wafv2-webacl-is-configured-with-amr-for-log4j-vulnerability
   #checkov:skip=CKV_AWS_86:TODO we will be implementing logging later
   #checkov:skip=CKV_AWS_305:no need to define a default root object because the root of our distribution is just the app's homepage
   #checkov:skip=CKV_AWS_310:we have decided that we're unlikely to need a secondary load balancer
@@ -13,7 +16,7 @@ resource "aws_cloudfront_distribution" "this" {
   http_version    = "http2and3"
   is_ipv6_enabled = true
   price_class     = "PriceClass_100" # Affects which edge locations are used by cloudfront, which affects the latency users will experience in different geographic areas
-  web_acl_id      = aws_wafv2_web_acl.cloudfront.arn
+  web_acl_id      = aws_wafv2_web_acl.this.arn
 
   origin {
     domain_name = var.load_balancer_domain_name
