@@ -1,3 +1,13 @@
+variable "cloudfoundry_service" {
+  type        = string
+  description = "The cloudfoundry service to use for migrating the db from gov paas"
+}
+
+variable "cloudfoundry_space" {
+  type        = string
+  description = "The cloudfoundry space to use for migrating the db from gov paas"
+}
+
 variable "database_connection_string_arn" {
   type        = string
   description = "The arn of the datbase connection string in parameter store"

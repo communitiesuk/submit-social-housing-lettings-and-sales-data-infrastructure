@@ -128,6 +128,8 @@ module "database_migration" {
   count = local.create_db_migration_infra ? 1 : 0
 
   prefix                         = local.prefix
+  cloudfoundry_service           = "dluhc-core-production-postgres"
+  cloudfoundry_space             = "production"
   database_connection_string_arn = module.database.rds_connection_string_arn
   database_port                  = local.database_port
   db_migration_task_cpu          = 4096

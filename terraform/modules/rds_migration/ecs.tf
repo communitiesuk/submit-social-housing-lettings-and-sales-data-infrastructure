@@ -29,11 +29,14 @@ resource "aws_ecs_task_definition" "db_migration" {
         }
       }
 
+      environment = [
+        { Name = "CF_SERVICE", valueFrom = var.cloudfoundry_service },
+        { Name = "CF_SPACE", valueFrom = var.cloudfoundry_space }
+      ]
+
       secrets = [
         { Name = "DATABASE_URL", valueFrom = var.database_connection_string_arn },
         { Name = "CF_PASSWORD", valueFrom = aws_secretsmanager_secret.cloudfoundry_password.arn },
-        { Name = "CF_SERVICE", valueFrom = aws_secretsmanager_secret.cloudfoundry_service.arn },
-        { Name = "CF_SPACE", valueFrom = aws_secretsmanager_secret.cloudfoundry_space.arn },
         { Name = "CF_USERNAME", valueFrom = aws_secretsmanager_secret.cloudfoundry_username.arn }
       ]
     }
@@ -94,12 +97,12 @@ resource "aws_ecs_service" "db_migration" {
   cluster                            = aws_ecs_cluster.this.arn
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 100 # There should always be at least the desired count running during a deployment
-  desired_count                      = 1
+  desired_count                      = 0
   enable_execute_command             = true
   force_new_deployment               = true
   launch_type                        = "FARGATE"
   scheduling_strategy                = "REPLICA"
-  task_definition                    = aws_ecs_task_definition.exec_placeholder.arn
+  task_definition                    = aws_ecs_task_definition.db_migration.arn
 
   network_configuration {
     security_groups  = [aws_security_group.ecs.id]
