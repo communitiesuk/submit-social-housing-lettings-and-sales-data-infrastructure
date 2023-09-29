@@ -199,7 +199,6 @@ module "database_migration" {
   ecs_task_execution_role_arn    = module.application.ecs_task_execution_role_arn
   ecs_task_execution_role_name   = module.application.ecs_task_execution_role_name
   ecs_task_ephemeral_storage     = 200 #GiB
-  private_subnet_ids             = module.networking.private_subnet_ids
   vpc_id                         = module.networking.vpc_id
 }
 
