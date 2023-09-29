@@ -1,10 +1,10 @@
 variable "cloudfoundry_service" {
-  type = string
+  type        = string
   description = "The cloudfoundry service to use for migrating the db from gov paas"
 }
 
 variable "cloudfoundry_space" {
-  type = string
+  type        = string
   description = "The cloudfoundry space to use for migrating the db from gov paas"
 }
 
