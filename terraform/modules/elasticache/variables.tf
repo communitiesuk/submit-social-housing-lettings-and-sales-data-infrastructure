@@ -3,6 +3,11 @@ variable "ecs_security_group_id" {
   description = "The id of the ecs security group for ecs ingress"
 }
 
+variable "highly_available" {
+  type        = bool
+  description = "Whether or not to make redis highly available (whether to have replicas or not)."
+}
+
 variable "node_type" {
   type        = string
   description = "The type of node for the redis elasticache."
