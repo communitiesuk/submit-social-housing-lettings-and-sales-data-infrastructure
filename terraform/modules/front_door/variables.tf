@@ -1,3 +1,8 @@
+variable "app_task_desired_count" {
+  type        = number
+  description = "The number of instances of the ecs app task definition desired"
+}
+
 variable "application_port" {
   type        = number
   description = "The network port the application runs on"
@@ -36,6 +41,11 @@ variable "prefix" {
 variable "public_subnet_ids" {
   type        = list(string)
   description = "The ids of all the public subnets"
+}
+
+variable "sns_topic_arn" {
+  type        = string
+  description = "The arn of the sns topic"
 }
 
 variable "vpc_id" {

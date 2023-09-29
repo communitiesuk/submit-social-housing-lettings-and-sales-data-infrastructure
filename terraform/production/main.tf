@@ -38,6 +38,7 @@ provider "aws" {
 locals {
   prefix                    = "core-prod"
   app_host                  = "submit-social-housing-data.levellingup.gov.uk"
+  app_task_desired_count    = 2
   application_port          = 8080
   database_port             = 5432
   load_balancer_domain_name = "lb.submit-social-housing-data.levellingup.gov.uk"
@@ -51,7 +52,7 @@ module "application" {
   prefix                               = local.prefix
   app_host                             = ""
   app_task_cpu                         = 512
-  app_task_desired_count               = 2
+  app_task_desired_count               = local.app_task_desired_count
   app_task_memory                      = 1024
   application_port                     = local.application_port
   bulk_upload_bucket_access_policy_arn = module.bulk_upload.read_write_policy_arn
@@ -127,6 +128,7 @@ module "front_door" {
   }
 
   prefix                        = local.prefix
+  app_task_desired_count        = local.app_task_desired_count
   application_port              = local.application_port
   cloudfront_certificate_arn    = module.certificates.cloudfront_certificate_arn
   cloudfront_domain_name        = local.app_host
@@ -134,6 +136,7 @@ module "front_door" {
   load_balancer_certificate_arn = module.certificates.load_balancer_certificate_arn
   load_balancer_domain_name     = local.load_balancer_domain_name
   public_subnet_ids             = module.networking.public_subnet_ids
+  sns_topic_arn                 = module.monitoring.sns_topic_arn
   vpc_id                        = module.networking.vpc_id
 }
 
@@ -156,6 +159,7 @@ module "redis" {
 
   prefix                  = local.prefix
   ecs_security_group_id   = module.application.ecs_security_group_id
+  highly_available        = true
   node_type               = "cache.t4g.micro"
   redis_port              = local.redis_port
   redis_subnet_group_name = module.networking.redis_private_subnet_group_name
