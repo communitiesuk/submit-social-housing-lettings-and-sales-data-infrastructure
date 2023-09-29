@@ -1,9 +1,9 @@
-# When updating this load balancer WAF acl, consider making the same change for the cloudfront WAF acl, as they generally need to be the same
-resource "aws_wafv2_web_acl" "load_balancer" {
+resource "aws_wafv2_web_acl" "this" {
   #checkov:skip=CKV2_AWS_31:TODO CLDC-2781 setup WAF logging in cloudwatch
-  name        = "${var.prefix}-load-balancer"
-  description = "Web ACL to restrict traffic to the Load Balancer"
-  scope       = "REGIONAL"
+  name        = var.prefix
+  description = "Web ACL to restrict traffic to CloudFront"
+  provider    = aws.us-east-1
+  scope       = "CLOUDFRONT"
 
   default_action {
     allow {}
@@ -38,30 +38,8 @@ resource "aws_wafv2_web_acl" "load_balancer" {
   }
 
   rule {
-    name     = "aws-managed-rules-amazon-anonymous-ip-list"
-    priority = 2
-
-    override_action {
-      none {}
-    }
-
-    statement {
-      managed_rule_group_statement {
-        name        = "AWSManagedRulesAnonymousIpList"
-        vendor_name = "AWS"
-      }
-    }
-
-    visibility_config {
-      cloudwatch_metrics_enabled = true
-      metric_name                = "waf-block-anonymous-ip"
-      sampled_requests_enabled   = true
-    }
-  }
-
-  rule {
     name     = "aws-managed-rules-common-rule-set"
-    priority = 3
+    priority = 2
 
     override_action {
       none {}
@@ -94,7 +72,7 @@ resource "aws_wafv2_web_acl" "load_balancer" {
 
   rule {
     name     = "aws-managed-rules-known-bad-inputs-rule-set"
-    priority = 4
+    priority = 3
 
     override_action {
       none {}
@@ -116,7 +94,7 @@ resource "aws_wafv2_web_acl" "load_balancer" {
 
   rule {
     name     = "aws-managed-rules-sqli-rule-set"
-    priority = 5
+    priority = 4
 
     override_action {
       none {}
@@ -138,7 +116,7 @@ resource "aws_wafv2_web_acl" "load_balancer" {
 
   rule {
     name     = "aws-managed-rules-linux-rule-set"
-    priority = 6
+    priority = 5
 
     override_action {
       none {}
@@ -160,7 +138,7 @@ resource "aws_wafv2_web_acl" "load_balancer" {
 
   rule {
     name     = "aws-managed-rules-unix-rule-set"
-    priority = 7
+    priority = 6
 
     override_action {
       none {}
@@ -182,7 +160,7 @@ resource "aws_wafv2_web_acl" "load_balancer" {
 
   rule {
     name     = "login-ip-rate-limit"
-    priority = 8
+    priority = 7
 
     action {
       block {
@@ -199,7 +177,7 @@ resource "aws_wafv2_web_acl" "load_balancer" {
 
         scope_down_statement {
           regex_pattern_set_reference_statement {
-            arn = aws_wafv2_regex_pattern_set.waf_rate_limit_urls_load_balancer.arn
+            arn = aws_wafv2_regex_pattern_set.waf_rate_limit_urls.arn
 
             field_to_match {
               uri_path {}
@@ -223,7 +201,7 @@ resource "aws_wafv2_web_acl" "load_balancer" {
 
   rule {
     name     = "overall-ip-rate-limit"
-    priority = 9
+    priority = 8
 
     action {
       block {
@@ -248,9 +226,10 @@ resource "aws_wafv2_web_acl" "load_balancer" {
   }
 }
 
-resource "aws_wafv2_regex_pattern_set" "waf_rate_limit_urls_load_balancer" {
-  name  = "${var.prefix}-waf-load-balancer-login-url-regex-patterns"
-  scope = "REGIONAL"
+resource "aws_wafv2_regex_pattern_set" "waf_rate_limit_urls" {
+  name     = "${var.prefix}-waf-login-url-regex-patterns"
+  provider = aws.us-east-1
+  scope    = "CLOUDFRONT"
 
   regular_expression {
     regex_string = "/account/password/new"
