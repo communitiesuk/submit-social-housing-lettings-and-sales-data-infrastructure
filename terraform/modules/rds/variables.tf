@@ -3,11 +3,6 @@ variable "allocated_storage" {
   description = "The allocated DB storage in gibibytes."
 }
 
-variable "create_replica_standby_db" {
-  type        = bool
-  description = "Flag for whether a replica standy DB should be made in case the main DB fails"
-}
-
 variable "database_port" {
   type        = number
   description = "The network port the database runs on"
@@ -21,6 +16,11 @@ variable "db_subnet_group_name" {
 variable "ecs_security_group_id" {
   type        = string
   description = "The id of the ecs security group for ecs ingress"
+}
+
+variable "highly_available" {
+  type        = bool
+  description = "Whether or not to make the db highly available (whether to have replicas or not)."
 }
 
 variable "instance_class" {

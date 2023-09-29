@@ -48,7 +48,6 @@ locals {
   app_host                  = "staging.submit-social-housing-data.levellingup.gov.uk"
   app_task_desired_count    = 2
   application_port          = 8080
-  create_replica_standby_db = true
   create_db_migration_infra = false
   database_port             = 5432
   load_balancer_domain_name = "staging.lb.submit-social-housing-data.levellingup.gov.uk"
@@ -122,10 +121,10 @@ module "database" {
   prefix                    = local.prefix
   allocated_storage         = 25
   backup_retention_period   = 7
-  create_replica_standby_db = local.create_replica_standby_db
   database_port             = local.database_port
   db_subnet_group_name      = module.networking.db_private_subnet_group_name
   ecs_security_group_id     = module.application.ecs_security_group_id
+  highly_available          = true
   instance_class            = "db.t3.micro"
   sns_topic_arn             = module.monitoring.sns_topic_arn
   vpc_id                    = module.networking.vpc_id
