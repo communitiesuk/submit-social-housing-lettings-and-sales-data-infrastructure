@@ -97,6 +97,7 @@ module "application_security_group" {
   source = "../modules/application_security_group"
 
   prefix                          = local.prefix
+  application_port                = local.application_port
   database_port                   = local.database_port
   db_security_group_id            = module.database.rds_security_group_id
   load_balancer_security_group_id = module.front_door.load_balancer_security_group_id
@@ -251,7 +252,7 @@ module "redis" {
   node_type        = "cache.t4g.micro"
 
   prefix                  = local.prefix
-  ecs_security_group_id   = module.application.ecs_security_group_id
+  ecs_security_group_id   = module.application_security_group.ecs_security_group_id
   redis_port              = local.redis_port
   redis_subnet_group_name = module.networking.redis_private_subnet_group_name
   vpc_id                  = module.networking.vpc_id
