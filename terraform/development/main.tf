@@ -124,6 +124,7 @@ module "database" {
 
   allocated_storage       = 5
   backup_retention_period = 7
+  highly_available        = false
   instance_class          = "db.t3.micro"
 
   prefix = local.prefix

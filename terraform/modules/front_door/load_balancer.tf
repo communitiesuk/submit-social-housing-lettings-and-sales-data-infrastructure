@@ -1,7 +1,7 @@
 #tfsec:ignore:aws-elb-alb-not-public:the load balancer must be exposed to the internet in order to communicate with cloudfront
 resource "aws_lb" "this" {
   #checkov:skip=CKV_AWS_91:setup access logs on load balancer TODO CLDC-2705
-  #checkov:skip=CKV2_AWS_28:WAF protection to be setup TODO CLDC-2546
+  #checkov:skip=CKV2_AWS_28:WAF on LB is unnecessary as we have protections preventing traffic from bypassing cloudfront which already has WAF protection
   name                       = var.prefix
   drop_invalid_header_fields = true
   enable_deletion_protection = false
