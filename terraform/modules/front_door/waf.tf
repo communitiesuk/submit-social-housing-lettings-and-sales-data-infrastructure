@@ -15,9 +15,38 @@ resource "aws_wafv2_web_acl" "this" {
     sampled_requests_enabled   = false
   }
 
+  dynamic "rule" {
+    # Will not be applied for the empty list, i.e. when restrict_by_ip is false
+    for_each = var.restrict_by_ip ? [1] : []
+    content {
+      name     = "ip-allowlist"
+      priority = 1
+
+      action {
+        block {}
+      }
+
+      statement {
+        not_statement {
+          statement {
+            ip_set_reference_statement {
+              arn = aws_wafv2_ip_set.allowed_ips[0].arn
+            }
+          }
+        }
+      }
+
+      visibility_config {
+        cloudwatch_metrics_enabled = true
+        metric_name                = waf-restrict-by-ip
+        sampled_requests_enabled   = true
+      }
+    }
+  }
+
   rule {
     name     = "aws-managed-rules-amazon-ip-reputation-list"
-    priority = 1
+    priority = 2
 
     override_action {
       none {}
@@ -39,7 +68,7 @@ resource "aws_wafv2_web_acl" "this" {
 
   rule {
     name     = "aws-managed-rules-common-rule-set"
-    priority = 2
+    priority = 3
 
     override_action {
       none {}
@@ -72,7 +101,7 @@ resource "aws_wafv2_web_acl" "this" {
 
   rule {
     name     = "aws-managed-rules-known-bad-inputs-rule-set"
-    priority = 3
+    priority = 4
 
     override_action {
       none {}
@@ -94,7 +123,7 @@ resource "aws_wafv2_web_acl" "this" {
 
   rule {
     name     = "aws-managed-rules-sqli-rule-set"
-    priority = 4
+    priority = 5
 
     override_action {
       none {}
@@ -116,7 +145,7 @@ resource "aws_wafv2_web_acl" "this" {
 
   rule {
     name     = "aws-managed-rules-linux-rule-set"
-    priority = 5
+    priority = 6
 
     override_action {
       none {}
@@ -138,7 +167,7 @@ resource "aws_wafv2_web_acl" "this" {
 
   rule {
     name     = "aws-managed-rules-unix-rule-set"
-    priority = 6
+    priority = 7
 
     override_action {
       none {}
@@ -160,7 +189,7 @@ resource "aws_wafv2_web_acl" "this" {
 
   rule {
     name     = "login-ip-rate-limit"
-    priority = 7
+    priority = 8
 
     action {
       block {
@@ -201,7 +230,7 @@ resource "aws_wafv2_web_acl" "this" {
 
   rule {
     name     = "overall-ip-rate-limit"
-    priority = 8
+    priority = 9
 
     action {
       block {
@@ -250,4 +279,14 @@ resource "aws_wafv2_regex_pattern_set" "waf_rate_limit_urls" {
   regular_expression {
     regex_string = "/account/two-factor-authentication/resend"
   }
+}
+
+resource "aws_wafv2_ip_set" "allowed_ips" {
+  provider = aws.us-east-1
+  count    = var.restrict_by_ip ? 1 : 0
+
+  name               = "${var.prefix}-waf-allowed-ip-set"
+  scope              = "CLOUDFRONT"
+  ip_address_version = "IPV4"
+  addresses          = local.ip_allowlist
 }

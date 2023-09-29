@@ -73,19 +73,27 @@ module "application" {
   bulk_upload_bucket_details           = module.bulk_upload.details
   database_connection_string_arn       = module.database.rds_connection_string_arn
   database_data_access_policy_arn      = module.database.rds_data_access_policy_arn
-  database_port                        = local.database_port
-  db_security_group_id                 = module.database.rds_security_group_id
+  ecs_security_group_id                = module.application_security_group.ecs_security_group_id
   export_bucket_access_policy_arn      = module.cds_export.read_write_policy_arn
   export_bucket_details                = module.cds_export.details
-  load_balancer_security_group_id      = module.front_door.load_balancer_security_group_id
   load_balancer_target_group_arn       = module.front_door.load_balancer_target_group_arn
   private_subnet_ids                   = module.networking.private_subnet_ids
   rails_env                            = local.rails_env
   redis_connection_string              = module.redis.redis_connection_string
-  redis_port                           = local.redis_port
-  redis_security_group_id              = module.redis.redis_security_group_id
   sns_topic_arn                        = module.monitoring.sns_topic_arn
-  vpc_id                               = module.networking.vpc_id
+}
+
+module "application_security_group" {
+  source = "../modules/application_security_group"
+
+  prefix                          = local.prefix
+  application_port                = local.application_port
+  database_port                   = local.database_port
+  db_security_group_id            = module.database.rds_security_group_id
+  load_balancer_security_group_id = module.front_door.load_balancer_security_group_id
+  redis_port                      = local.redis_port
+  redis_security_group_id         = module.redis.redis_security_group_id
+  vpc_id                          = module.networking.vpc_id
 }
 
 module "bulk_upload" {
@@ -126,7 +134,7 @@ module "database" {
 
   database_port         = local.database_port
   db_subnet_group_name  = module.networking.db_private_subnet_group_name
-  ecs_security_group_id = module.application.ecs_security_group_id
+  ecs_security_group_id = module.application_security_group.ecs_security_group_id
   sns_topic_arn         = module.monitoring.sns_topic_arn
   vpc_id                = module.networking.vpc_id
 }
@@ -138,17 +146,21 @@ module "front_door" {
     aws.us-east-1 = aws.us-east-1
   }
 
+  restrict_by_ip = false
+
   prefix                        = local.prefix
   app_task_desired_count        = local.app_task_desired_count
   application_port              = local.application_port
   cloudfront_certificate_arn    = module.certificates.cloudfront_certificate_arn
   cloudfront_domain_name        = local.app_host
-  ecs_security_group_id         = module.application.ecs_security_group_id
+  ecs_security_group_id         = module.application_security_group.ecs_security_group_id
   load_balancer_certificate_arn = module.certificates.load_balancer_certificate_arn
   load_balancer_domain_name     = local.load_balancer_domain_name
   public_subnet_ids             = module.networking.public_subnet_ids
   sns_topic_arn                 = module.monitoring.sns_topic_arn
   vpc_id                        = module.networking.vpc_id
+
+  initial_create = var.initial_create
 }
 
 module "networking" {
@@ -172,7 +184,7 @@ module "redis" {
   node_type        = "cache.t4g.micro"
 
   prefix                  = local.prefix
-  ecs_security_group_id   = module.application.ecs_security_group_id
+  ecs_security_group_id   = module.application_security_group.ecs_security_group_id
   redis_port              = local.redis_port
   redis_subnet_group_name = module.networking.redis_private_subnet_group_name
   vpc_id                  = module.networking.vpc_id

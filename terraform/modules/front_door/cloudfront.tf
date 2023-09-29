@@ -11,7 +11,7 @@ resource "aws_cloudfront_distribution" "this" {
   #checkov:skip=CKV_AWS_86:TODO we will be implementing logging later
   #checkov:skip=CKV_AWS_305:no need to define a default root object because the root of our distribution is just the app's homepage
   #checkov:skip=CKV_AWS_310:we have decided that we're unlikely to need a secondary load balancer
-  aliases         = [var.cloudfront_domain_name]
+  aliases         = var.initial_create ? [] : [var.cloudfront_domain_name]
   enabled         = true
   http_version    = "http2and3"
   is_ipv6_enabled = true
@@ -19,13 +19,13 @@ resource "aws_cloudfront_distribution" "this" {
   web_acl_id      = aws_wafv2_web_acl.this.arn
 
   origin {
-    domain_name = var.load_balancer_domain_name
+    domain_name = var.initial_create ? aws_lb.this.dns_name : var.load_balancer_domain_name
     origin_id   = local.origin_id
 
     custom_origin_config {
       http_port              = 80
       https_port             = 443
-      origin_protocol_policy = "https-only"
+      origin_protocol_policy = var.initial_create ? "http-only" : "https-only"
       origin_ssl_protocols   = ["TLSv1.2"]
     }
 
@@ -47,9 +47,10 @@ resource "aws_cloudfront_distribution" "this" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = var.cloudfront_certificate_arn
-    minimum_protocol_version = "TLSv1.2_2021"
-    ssl_support_method       = "sni-only"
+    cloudfront_default_certificate = var.initial_create ? true : false
+    acm_certificate_arn            = var.initial_create ? null : var.cloudfront_certificate_arn
+    minimum_protocol_version       = var.initial_create ? null : "TLSv1.2_2021"
+    ssl_support_method             = "sni-only"
   }
 
   restrictions {

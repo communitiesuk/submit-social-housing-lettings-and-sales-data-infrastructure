@@ -235,7 +235,7 @@ resource "aws_ecs_service" "app" {
   }
 
   network_configuration {
-    security_groups  = [aws_security_group.ecs.id]
+    security_groups  = [var.ecs_security_group_id]
     subnets          = var.private_subnet_ids
     assign_public_ip = false
   }
@@ -259,7 +259,7 @@ resource "aws_ecs_service" "sidekiq" {
   task_definition                    = aws_ecs_task_definition.sidekiq.arn
 
   network_configuration {
-    security_groups  = [aws_security_group.ecs.id]
+    security_groups  = [var.ecs_security_group_id]
     subnets          = var.private_subnet_ids
     assign_public_ip = false
   }

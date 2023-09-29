@@ -46,19 +46,14 @@ variable "database_data_access_policy_arn" {
   description = "The arn of the policy allowing database data access"
 }
 
-variable "database_port" {
-  type        = number
-  description = "The network port the database runs on"
-}
-
-variable "db_security_group_id" {
-  type        = string
-  description = "The id of the db security group for ecs egress"
-}
-
 variable "ecr_repository_url" {
   type        = string
   description = "The URL of the ECR repository in the meta account"
+}
+
+variable "ecs_security_group_id" {
+  type        = string
+  description = "The id of the ecs security group for ecs ingress"
 }
 
 variable "export_bucket_access_policy_arn" {
@@ -77,11 +72,6 @@ variable "export_bucket_details" {
 variable "github_actions_role_arn" {
   type        = string
   description = "The arn of the role that github actions assumes in the meta account"
-}
-
-variable "load_balancer_security_group_id" {
-  type        = string
-  description = "The id of the load balancer security group for ecs egress"
 }
 
 variable "load_balancer_target_group_arn" {
@@ -109,16 +99,6 @@ variable "redis_connection_string" {
   description = "The value of the redis connection string"
 }
 
-variable "redis_port" {
-  type        = number
-  description = "The network port redis runs on"
-}
-
-variable "redis_security_group_id" {
-  type        = string
-  description = "The id of the redis security group for ecs egress"
-}
-
 variable "sidekiq_task_cpu" {
   type        = number
   description = "The amount of cpu units used by the ecs sidekiq task"
@@ -137,9 +117,4 @@ variable "sidekiq_task_memory" {
 variable "sns_topic_arn" {
   type        = string
   description = "The arn of the sns topic"
-}
-
-variable "vpc_id" {
-  type        = string
-  description = "The ID of the VPC to be associated with"
 }

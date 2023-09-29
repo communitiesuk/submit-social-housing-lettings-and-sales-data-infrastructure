@@ -4,7 +4,7 @@ resource "aws_lb" "this" {
   #checkov:skip=CKV2_AWS_28:WAF protection to be setup TODO CLDC-2546
   name                       = var.prefix
   drop_invalid_header_fields = true
-  enable_deletion_protection = true
+  enable_deletion_protection = false
   internal                   = false
   load_balancer_type         = "application"
   security_groups            = [aws_security_group.load_balancer.id]
@@ -30,6 +30,8 @@ resource "aws_lb_target_group" "this" {
 }
 
 resource "aws_lb_listener" "https" {
+  count = var.initial_create ? 0 : 1
+
   certificate_arn   = var.load_balancer_certificate_arn
   load_balancer_arn = aws_lb.this.id
   port              = 443
@@ -51,8 +53,15 @@ resource "aws_lb_listener" "https" {
   }
 }
 
+moved {
+  from = aws_lb_listener.https
+  to   = aws_lb_listener.https[0]
+}
+
 resource "aws_lb_listener_rule" "forward_cloudfront" {
-  listener_arn = aws_lb_listener.https.arn
+  count = var.initial_create ? 0 : 1
+
+  listener_arn = aws_lb_listener.https[0].arn
   priority     = 1
 
   action {
@@ -66,4 +75,9 @@ resource "aws_lb_listener_rule" "forward_cloudfront" {
       values           = [random_password.cloudfront_header.result]
     }
   }
+}
+
+moved {
+  from = aws_lb_listener_rule.forward_cloudfront
+  to   = aws_lb_listener_rule.forward_cloudfront[0]
 }
