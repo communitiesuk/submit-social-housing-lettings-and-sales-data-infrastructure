@@ -1,5 +1,7 @@
 resource "aws_wafv2_web_acl" "this" {
   #checkov:skip=CKV2_AWS_31:TODO CLDC-2781 setup WAF logging in cloudwatch
+  #checkov:skip=CKV_AWS_192: We do use the AWSManagedRulesKnownBadInputsRuleSet as this check recommends, 
+  # it looks like checkov can't analyse properly because of the dynamic rule?
   name        = var.prefix
   description = "Web ACL to restrict traffic to CloudFront"
   provider    = aws.us-east-1
