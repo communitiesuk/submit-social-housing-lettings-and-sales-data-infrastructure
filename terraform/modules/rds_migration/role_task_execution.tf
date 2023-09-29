@@ -12,8 +12,6 @@ resource "aws_iam_policy" "secret_access" {
         Resource = [
           aws_secretsmanager_secret.cloudfoundry_username.arn,
           aws_secretsmanager_secret.cloudfoundry_password.arn,
-          aws_secretsmanager_secret.cloudfoundry_space.arn,
-          aws_secretsmanager_secret.cloudfoundry_service.arn
         ]
       }
     ]

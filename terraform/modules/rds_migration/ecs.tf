@@ -29,11 +29,14 @@ resource "aws_ecs_task_definition" "db_migration" {
         }
       }
 
+      environment = [
+        { Name = "CF_SERVICE", valueFrom = var.cloudfoundry_service },
+        { Name = "CF_SPACE", valueFrom = var.cloudfoundry_space }
+      ]
+
       secrets = [
         { Name = "DATABASE_URL", valueFrom = var.database_connection_string_arn },
         { Name = "CF_PASSWORD", valueFrom = aws_secretsmanager_secret.cloudfoundry_password.arn },
-        { Name = "CF_SERVICE", valueFrom = aws_secretsmanager_secret.cloudfoundry_service.arn },
-        { Name = "CF_SPACE", valueFrom = aws_secretsmanager_secret.cloudfoundry_space.arn },
         { Name = "CF_USERNAME", valueFrom = aws_secretsmanager_secret.cloudfoundry_username.arn }
       ]
     }
