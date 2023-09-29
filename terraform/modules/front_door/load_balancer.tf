@@ -4,7 +4,7 @@ resource "aws_lb" "this" {
   #checkov:skip=CKV2_AWS_28:WAF on LB is unnecessary as we have protections preventing traffic from bypassing cloudfront which already has WAF protection
   name                       = var.prefix
   drop_invalid_header_fields = true
-  enable_deletion_protection = false
+  enable_deletion_protection = true
   internal                   = false
   load_balancer_type         = "application"
   security_groups            = [aws_security_group.load_balancer.id]
