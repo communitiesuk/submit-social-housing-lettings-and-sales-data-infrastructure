@@ -115,3 +115,41 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_memory" {
     ServiceName = aws_ecs_service.sidekiq.name
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "sidekiq_tasks_exited" {
+  alarm_actions             = [var.sns_topic_arn]
+  alarm_name                = "${var.prefix}-sidekiq-tasks-exited"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  datapoints_to_alarm       = 1
+  evaluation_periods        = 1
+  metric_name               = "TriggeredRules"
+  namespace                 = "AWS/Events"
+  ok_actions                = [var.sns_topic_arn]
+  period                    = 3 * 60 # By causing sidekiq to fail repeatedly (with both 1 tasks and 2 tasks running) I found that double the desired count would reliably fail in a 3 minute period.
+  statistic                 = "Sum"
+  threshold                 = 2 * var.sidekiq_task_desired_count
+  insufficient_data_actions = []
+
+  dimensions = {
+    RuleName = aws_cloudwatch_event_rule.sidekiq_task_exited.name
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sidekiq_service_action_problem" {
+  alarm_actions             = [var.sns_topic_arn]
+  alarm_name                = "${var.prefix}-sidekiq-service-action-problem"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  datapoints_to_alarm       = 1
+  evaluation_periods        = 1
+  metric_name               = "TriggeredRules"
+  namespace                 = "AWS/Events"
+  ok_actions                = [var.sns_topic_arn]
+  period                    = 60
+  statistic                 = "Sum"
+  threshold                 = 1
+  insufficient_data_actions = []
+
+  dimensions = {
+    RuleName = aws_cloudwatch_event_rule.sidekiq_service_action_problem.name
+  }
+}
