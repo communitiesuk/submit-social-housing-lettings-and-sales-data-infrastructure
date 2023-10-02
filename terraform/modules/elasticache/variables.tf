@@ -1,3 +1,8 @@
+variable "apply_changes_immediately" {
+  type        = bool
+  description = "Whether to apply changes to redis immediately or to wait for the next maintenance window."
+}
+
 variable "ecs_security_group_id" {
   type        = string
   description = "The id of the ecs security group for ecs ingress"
