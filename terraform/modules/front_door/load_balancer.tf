@@ -53,11 +53,6 @@ resource "aws_lb_listener" "https" {
   }
 }
 
-moved {
-  from = aws_lb_listener.https
-  to   = aws_lb_listener.https[0]
-}
-
 resource "aws_lb_listener_rule" "forward_cloudfront" {
   count = var.initial_create ? 0 : 1
 
@@ -75,9 +70,4 @@ resource "aws_lb_listener_rule" "forward_cloudfront" {
       values           = [random_password.cloudfront_header.result]
     }
   }
-}
-
-moved {
-  from = aws_lb_listener_rule.forward_cloudfront
-  to   = aws_lb_listener_rule.forward_cloudfront[0]
 }

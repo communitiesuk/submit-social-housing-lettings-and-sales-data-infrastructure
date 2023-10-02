@@ -96,37 +96,6 @@ module "application_security_group" {
   vpc_id                          = module.networking.vpc_id
 }
 
-# Can remove these after apply - here for tracking for the moment
-moved {
-  from = module.application.aws_security_group.ecs
-  to   = module.application_security_group.aws_security_group.ecs
-}
-
-moved {
-  from = module.application.aws_vpc_security_group_ingress_rule.ingress_from_load_balancer
-  to   = module.application_security_group.aws_vpc_security_group_ingress_rule.ingress_from_load_balancer
-}
-
-moved {
-  from = module.application.aws_vpc_security_group_egress_rule.egress_to_db
-  to   = module.application_security_group.aws_vpc_security_group_egress_rule.egress_to_db
-}
-
-moved {
-  from = module.application.aws_vpc_security_group_egress_rule.egress_to_redis
-  to   = module.application_security_group.aws_vpc_security_group_egress_rule.egress_to_redis
-}
-
-moved {
-  from = module.application.aws_vpc_security_group_egress_rule.http_egress
-  to   = module.application_security_group.aws_vpc_security_group_egress_rule.http_egress
-}
-
-moved {
-  from = module.application.aws_vpc_security_group_egress_rule.https_egress
-  to   = module.application_security_group.aws_vpc_security_group_egress_rule.https_egress
-}
-
 module "bulk_upload" {
   source = "../modules/bulk_upload"
 
