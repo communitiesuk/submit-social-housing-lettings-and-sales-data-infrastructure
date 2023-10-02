@@ -123,6 +123,7 @@ module "database" {
   source = "../modules/rds"
 
   allocated_storage       = 5
+  apply_changes_immediately = true
   backup_retention_period = 7
   highly_available        = false
   instance_class          = "db.t3.micro"
@@ -177,6 +178,7 @@ module "monitoring" {
 module "redis" {
   source = "../modules/elasticache"
 
+  apply_changes_immediately = true
   highly_available = false
   node_type        = "cache.t4g.micro"
 
