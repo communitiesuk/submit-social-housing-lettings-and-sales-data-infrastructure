@@ -1,4 +1,5 @@
 resource "aws_security_group" "ecs" {
+  #checkov:skip=CKV2_AWS_5: security group is attached to a resource outside of this module
   name        = "${var.prefix}-ecs"
   description = "ECS security group"
   vpc_id      = var.vpc_id
