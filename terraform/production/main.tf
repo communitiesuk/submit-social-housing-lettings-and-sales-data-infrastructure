@@ -126,11 +126,11 @@ module "certificates" {
 module "database" {
   source = "../modules/rds"
 
-  allocated_storage       = 100
+  allocated_storage         = 100
   apply_changes_immediately = false
-  backup_retention_period = 7
-  highly_available        = true
-  instance_class          = "db.t3.small"
+  backup_retention_period   = 7
+  highly_available          = true
+  instance_class            = "db.t3.small"
 
   prefix = local.prefix
 
@@ -183,8 +183,8 @@ module "redis" {
   source = "../modules/elasticache"
 
   apply_changes_immediately = false
-  highly_available = true
-  node_type        = "cache.t4g.micro"
+  highly_available          = true
+  node_type                 = "cache.t4g.micro"
 
   prefix                  = local.prefix
   ecs_security_group_id   = module.application_security_group.ecs_security_group_id
