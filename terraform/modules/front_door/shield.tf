@@ -23,6 +23,7 @@ resource "aws_shield_application_layer_automatic_response" "load_balancer" {
 }
 
 resource "aws_shield_protection_group" "this" {
+  count        = var.enable_aws_shield ? 1 : 0
   protection_group_id = var.prefix
   aggregation         = "MAX"
   pattern             = "ALL"
