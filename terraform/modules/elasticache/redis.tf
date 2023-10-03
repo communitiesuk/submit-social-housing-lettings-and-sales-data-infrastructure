@@ -6,7 +6,7 @@ resource "aws_elasticache_replication_group" "this" {
 
   count = var.highly_available ? 1 : 0
 
-  apply_immediately           = true
+  apply_immediately           = var.apply_changes_immediately
   at_rest_encryption_enabled  = true
   auto_minor_version_upgrade  = true
   automatic_failover_enabled  = true
@@ -32,7 +32,7 @@ resource "aws_elasticache_cluster" "this" {
   count = var.highly_available ? 0 : 1
 
   cluster_id                 = var.prefix
-  apply_immediately          = true
+  apply_immediately          = var.apply_changes_immediately
   auto_minor_version_upgrade = true
   engine                     = "redis"
   engine_version             = "6.2"
