@@ -47,6 +47,8 @@ locals {
 
   app_task_desired_count = 4
 
+  enable_aws_shield = false
+
   application_port = 8080
   database_port    = 5432
   redis_port       = 6379
@@ -155,6 +157,7 @@ module "front_door" {
   cloudfront_certificate_arn    = module.certificates.cloudfront_certificate_arn
   cloudfront_domain_name        = local.app_host
   ecs_security_group_id         = module.application_security_group.ecs_security_group_id
+  enable_aws_shield             = local.enable_aws_shield
   load_balancer_certificate_arn = module.certificates.load_balancer_certificate_arn
   load_balancer_domain_name     = local.load_balancer_domain_name
   public_subnet_ids             = module.networking.public_subnet_ids
