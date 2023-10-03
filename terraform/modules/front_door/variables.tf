@@ -23,6 +23,11 @@ variable "ecs_security_group_id" {
   description = "The id of the ecs security group for ecs egress"
 }
 
+variable "enable_aws_shield" {
+  type        = bool
+  description = "Whether to enable aws shield advanced or not."
+}
+
 variable "initial_create" {
   type        = bool
   description = "Set to true for an initial create on a new environment, which will assume certs are not yet validated and so use default domain names"
