@@ -3,6 +3,11 @@ variable "allocated_storage" {
   description = "The allocated DB storage in gibibytes."
 }
 
+variable "apply_changes_immediately" {
+  type        = bool
+  description = "Whether to apply changes to the db immediately or to wait for the next maintenance window."
+}
+
 variable "database_port" {
   type        = number
   description = "The network port the database runs on"

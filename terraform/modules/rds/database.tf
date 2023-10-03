@@ -8,7 +8,7 @@ resource "aws_db_instance" "this" {
   #checkov:skip=CKV_AWS_354:performance insights TODO CLDC-2660 if insights are necessary
   #checkov:skip=CKV2_AWS_30:query logging TODO CLDC-2660
   identifier                 = var.prefix
-  apply_immediately          = true
+  apply_immediately          = var.apply_changes_immediately
   auto_minor_version_upgrade = true
   allocated_storage          = var.allocated_storage #units are GiB
   backup_retention_period    = var.backup_retention_period
