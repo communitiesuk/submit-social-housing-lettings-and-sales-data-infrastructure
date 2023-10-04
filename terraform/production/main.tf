@@ -170,7 +170,7 @@ module "networking" {
 
   prefix                                  = local.prefix
   vpc_cidr_block                          = "10.0.0.0/16"
-  vpc_flow_cloudwatch_log_expiration_days = 90
+  vpc_flow_cloudwatch_log_expiration_days = 60
 }
 
 module "monitoring" {
