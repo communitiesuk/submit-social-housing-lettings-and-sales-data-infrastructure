@@ -26,6 +26,8 @@ resource "aws_ecs_task_definition" "db_migration" {
           awslogs-group         = aws_cloudwatch_log_group.this.id
           awslogs-region        = "eu-west-2"
           awslogs-stream-prefix = var.prefix
+          mode                  = "non-blocking"
+          max-buffer-size       = "4m" # See this analysis of how to choose a buffer size in non-blocking mode: https://github.com/moby/moby/issues/45999.
         }
       }
 
@@ -77,6 +79,8 @@ resource "aws_ecs_task_definition" "exec_placeholder" {
           awslogs-group         = aws_cloudwatch_log_group.this.id
           awslogs-region        = "eu-west-2"
           awslogs-stream-prefix = var.prefix
+          mode                  = "non-blocking"
+          max-buffer-size       = "4m" # See this analysis of how to choose a buffer size in non-blocking mode: https://github.com/moby/moby/issues/45999.
         }
       }
 
