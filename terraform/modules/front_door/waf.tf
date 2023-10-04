@@ -40,7 +40,7 @@ resource "aws_wafv2_web_acl" "this" {
 
       visibility_config {
         cloudwatch_metrics_enabled = true
-        metric_name                = waf-restrict-by-ip
+        metric_name                = "waf-restrict-by-ip"
         sampled_requests_enabled   = true
       }
     }

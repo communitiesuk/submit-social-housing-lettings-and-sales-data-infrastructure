@@ -149,7 +149,7 @@ module "front_door" {
     aws.us-east-1 = aws.us-east-1
   }
 
-  restrict_by_ip = false
+  restrict_by_ip = true
 
   prefix                        = local.prefix
   app_task_desired_count        = local.app_task_desired_count
