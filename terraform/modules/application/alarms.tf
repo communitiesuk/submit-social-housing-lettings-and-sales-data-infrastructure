@@ -157,7 +157,7 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_service_action_problem" {
 resource "aws_cloudwatch_metric_alarm" "sidekiq_running_tasks" {
   alarm_actions             = [var.sns_topic_arn]
   alarm_name                = "${var.prefix}-sidekiq-running-tasks"
-  comparison_operator       = "LessOrEqualToThanThreshold"
+  comparison_operator       = "LessThanOrEqualToThreshold"
   datapoints_to_alarm       = 1
   evaluation_periods        = 1
   metric_name               = "RunningTaskCount"
