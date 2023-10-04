@@ -2,6 +2,11 @@
 resource "aws_ecs_cluster" "this" {
   #checkov:skip=CKV_AWS_65:TODO CLDC-2542 enable container insights if necessary for logging/monitoring
   name = "${var.prefix}-app"
+
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
 }
 
 locals {

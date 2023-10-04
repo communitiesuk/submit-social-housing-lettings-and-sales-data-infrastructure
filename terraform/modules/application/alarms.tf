@@ -153,3 +153,23 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_service_action_problem" {
     RuleName = aws_cloudwatch_event_rule.sidekiq_service_action_problem.name
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "sidekiq_running_tasks" {
+  alarm_actions             = [var.sns_topic_arn]
+  alarm_name                = "${var.prefix}-sidekiq-running-tasks"
+  comparison_operator       = "LessOrEqualToThanThreshold"
+  datapoints_to_alarm       = 1
+  evaluation_periods        = 1
+  metric_name               = "RunningTaskCount"
+  namespace                 = "ECS/ContainerInsights"
+  ok_actions                = [var.sns_topic_arn]
+  period                    = 60
+  statistic                 = "Minimum"
+  threshold                 = var.sidekiq_task_desired_count
+  insufficient_data_actions = []
+
+  dimensions = {
+    ClusterName = aws_ecs_cluster.this.name
+    ServiceName = aws_ecs_service.sidekiq.name
+  }
+}
