@@ -34,7 +34,8 @@ This will be;
 
 Once these have been done, run a complete apply
 
-
 ### Set up the database
 
 If not restoring the database from a backup, or migrating it from elsewhere, run the db:setup rake task (use the ad_hoc task definition to spin it up from the app image with a command override).
+
+Alternatively you probably need to run an app deployment to sort out using the right image, which will include a db migration - you can then just run db:seed as a separate task.
