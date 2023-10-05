@@ -1,4 +1,5 @@
 resource "aws_security_group" "ecs" {
+  #checkov:skip=CKV2_AWS_5: Security group is used when triggering the db migration task, which is done manually
   name        = "${var.prefix}-db-migration-ecs"
   description = "DB migration ECS security group"
   vpc_id      = var.vpc_id
