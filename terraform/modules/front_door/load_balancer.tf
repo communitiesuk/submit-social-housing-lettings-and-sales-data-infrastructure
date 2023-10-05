@@ -30,6 +30,8 @@ resource "aws_lb_target_group" "this" {
 }
 
 resource "aws_lb_listener" "https" {
+  count = var.initial_create ? 0 : 1
+
   certificate_arn   = var.load_balancer_certificate_arn
   load_balancer_arn = aws_lb.this.id
   port              = 443
@@ -52,7 +54,9 @@ resource "aws_lb_listener" "https" {
 }
 
 resource "aws_lb_listener_rule" "forward_cloudfront" {
-  listener_arn = aws_lb_listener.https.arn
+  count = var.initial_create ? 0 : 1
+
+  listener_arn = aws_lb_listener.https[0].arn
   priority     = 1
 
   action {

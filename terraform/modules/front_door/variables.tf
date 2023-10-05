@@ -15,12 +15,17 @@ variable "cloudfront_certificate_arn" {
 
 variable "cloudfront_domain_name" {
   type        = string
-  description = "Then domain name of the cloudfront distribution"
+  description = "The domain name of the cloudfront distribution"
 }
 
 variable "ecs_security_group_id" {
   type        = string
   description = "The id of the ecs security group for ecs egress"
+}
+
+variable "initial_create" {
+  type        = bool
+  description = "Set to true for an initial create on a new environment, which will assume certs are not yet validated and so use default domain names"
 }
 
 variable "load_balancer_certificate_arn" {
@@ -41,6 +46,11 @@ variable "prefix" {
 variable "public_subnet_ids" {
   type        = list(string)
   description = "The ids of all the public subnets"
+}
+
+variable "restrict_by_ip" {
+  type        = bool
+  description = "True if access to cloudfront should be restricted by ip, e.g. before release or for a test environment"
 }
 
 variable "sns_topic_arn" {
