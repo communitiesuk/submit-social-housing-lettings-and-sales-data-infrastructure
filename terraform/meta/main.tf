@@ -36,7 +36,8 @@ provider "aws" {
 }
 
 locals {
-  provider_role_arn = "arn:aws:iam::815624722760:role/developer"
+  create_db_migration_infra = false
+  provider_role_arn         = "arn:aws:iam::815624722760:role/developer"
 }
 
 # We create two backends for managing the terraform state of different accounts:
@@ -64,6 +65,15 @@ module "prod_backend" {
 
 module "ecr" {
   source = "../modules/ecr"
+
+  # This will need updating to include dev and production roles
+  allow_access_by_roles = ["arn:aws:iam::107155005276:role/core-staging-task-execution"]
+}
+
+module "ecr_rds_migration" {
+  source = "../modules/ecr_rds_migration"
+
+  count = local.create_db_migration_infra ? 1 : 0
 
   # This will need updating to include dev and production roles
   allow_access_by_roles = ["arn:aws:iam::107155005276:role/core-staging-task-execution"]
