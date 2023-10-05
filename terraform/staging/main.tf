@@ -50,6 +50,8 @@ locals {
   application_port = 8080
   database_port    = 5432
   redis_port       = 6379
+
+  create_db_migration_infra = false
 }
 
 module "application" {
@@ -139,6 +141,27 @@ module "database" {
   ecs_security_group_id = module.application_security_group.ecs_security_group_id
   sns_topic_arn         = module.monitoring.sns_topic_arn
   vpc_id                = module.networking.vpc_id
+}
+
+module "database_migration" {
+  source = "../modules/rds_migration"
+
+  count = local.create_db_migration_infra ? 1 : 0
+
+  prefix                         = local.prefix
+  cloudfoundry_service           = "dluhc-core-staging-postgres"
+  cloudfoundry_space             = "staging"
+  database_connection_string_arn = module.database.rds_connection_string_arn
+  database_port                  = local.database_port
+  db_migration_task_cpu          = 4096
+  db_migration_task_memory       = 16384
+  db_security_group_id           = module.database.rds_security_group_id
+  ecr_repository_url             = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/db-migration"
+  ecs_task_role_arn              = module.application.ecs_task_role_arn
+  ecs_task_execution_role_arn    = module.application.ecs_task_execution_role_arn
+  ecs_task_execution_role_name   = module.application.ecs_task_execution_role_name
+  ecs_task_ephemeral_storage     = 200 #GiB
+  vpc_id                         = module.networking.vpc_id
 }
 
 module "front_door" {
