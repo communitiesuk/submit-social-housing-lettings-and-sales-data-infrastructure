@@ -160,11 +160,11 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_running_tasks" {
   comparison_operator       = "LessThanThreshold"
   datapoints_to_alarm       = 1
   evaluation_periods        = 1
-  metric_name               = "RunningTaskCount"
-  namespace                 = "ECS/ContainerInsights"
+  metric_name               = "CPUUtilization"
+  namespace                 = "AWS/ECS"
   ok_actions                = [var.sns_topic_arn]
   period                    = 60
-  statistic                 = "Minimum"
+  statistic                 = "SampleCount"
   threshold                 = var.sidekiq_task_desired_count
   insufficient_data_actions = []
 
