@@ -109,7 +109,8 @@ module "bulk_upload" {
 module "cds_export" {
   source = "../modules/cds_export"
 
-  prefix = local.prefix
+  prefix        = local.prefix
+  bucket_suffix = "-cds"
   cds_access_role_arns = [
     "arn:aws:iam::062321884391:role/DSQL1",
     "arn:aws:iam::062321884391:role/DSQSS"

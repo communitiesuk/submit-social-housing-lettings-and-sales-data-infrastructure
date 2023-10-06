@@ -1,3 +1,9 @@
+variable "bucket_suffix" {
+  type        = string
+  description = "Optional additional suffix to add to the bucket name (for uniqueness)"
+  default     = ""
+}
+
 variable "cds_access_role_arns" {
   type        = list(string)
   default     = null
