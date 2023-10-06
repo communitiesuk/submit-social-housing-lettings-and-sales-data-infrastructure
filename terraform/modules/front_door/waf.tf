@@ -32,7 +32,7 @@ resource "aws_wafv2_web_acl" "this" {
         not_statement {
           statement {
             ip_set_reference_statement {
-              arn = aws_wafv2_ip_set.allowed_ips[0].arn
+              arn = aws_wafv2_ip_set.allowed_ips.arn
             }
           }
         }
@@ -285,7 +285,6 @@ resource "aws_wafv2_regex_pattern_set" "waf_rate_limit_urls" {
 
 resource "aws_wafv2_ip_set" "allowed_ips" {
   provider = aws.us-east-1
-  count    = var.restrict_by_ip ? 1 : 0
 
   name               = "${var.prefix}-waf-allowed-ip-set"
   scope              = "CLOUDFRONT"
