@@ -232,7 +232,8 @@ module "networking" {
 module "monitoring" {
   source = "../modules/monitoring"
 
-  prefix = local.prefix
+  prefix                               = local.prefix
+  service_identifier_publishing_to_sns = "cloudwatch.amazonaws.com"
 }
 
 module "redis" {
