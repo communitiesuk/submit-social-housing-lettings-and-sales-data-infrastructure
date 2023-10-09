@@ -71,12 +71,12 @@ resource "aws_ecs_task_definition" "app" {
       ]
 
       secrets = [
-        { Name = "API_KEY", valueFrom = aws_secretsmanager_secret.api_key.arn },
+        { Name = "API_KEY", valueFrom = var.api_key_secret_arn },
         { Name = "DATABASE_URL", valueFrom = var.database_connection_string_arn },
-        { Name = "GOVUK_NOTIFY_API_KEY", valueFrom = aws_secretsmanager_secret.govuk_notify_api_key.arn },
-        { Name = "OS_DATA_KEY", valueFrom = aws_secretsmanager_secret.os_data_key.arn },
-        { Name = "RAILS_MASTER_KEY", valueFrom = aws_secretsmanager_secret.rails_master_key.arn },
-        { Name = "SENTRY_DSN", valueFrom = aws_secretsmanager_secret.sentry_dsn.arn }
+        { Name = "GOVUK_NOTIFY_API_KEY", valueFrom = var.govuk_notify_api_key_secret_arn },
+        { Name = "OS_DATA_KEY", valueFrom = var.os_data_key_secret_arn },
+        { Name = "RAILS_MASTER_KEY", valueFrom = var.rails_master_key_secret_arn },
+        { Name = "SENTRY_DSN", valueFrom = var.sentry_dsn_secret_arn }
       ]
     }
   ])
@@ -131,7 +131,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
 
       secrets = [
         { Name = "DATABASE_URL", valueFrom = var.database_connection_string_arn },
-        { Name = "RAILS_MASTER_KEY", valueFrom = aws_secretsmanager_secret.rails_master_key.arn },
+        { Name = "RAILS_MASTER_KEY", valueFrom = var.rails_master_key_secret_arn },
       ]
     }
   ])
@@ -199,12 +199,12 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
       ]
 
       secrets = [
-        { Name = "API_KEY", valueFrom = aws_secretsmanager_secret.api_key.arn },
+        { Name = "API_KEY", valueFrom = var.api_key_secret_arn },
         { Name = "DATABASE_URL", valueFrom = var.database_connection_string_arn },
-        { Name = "GOVUK_NOTIFY_API_KEY", valueFrom = aws_secretsmanager_secret.govuk_notify_api_key.arn },
-        { Name = "OS_DATA_KEY", valueFrom = aws_secretsmanager_secret.os_data_key.arn },
-        { Name = "RAILS_MASTER_KEY", valueFrom = aws_secretsmanager_secret.rails_master_key.arn },
-        { Name = "SENTRY_DSN", valueFrom = aws_secretsmanager_secret.sentry_dsn.arn }
+        { Name = "GOVUK_NOTIFY_API_KEY", valueFrom = var.govuk_notify_api_key_secret_arn },
+        { Name = "OS_DATA_KEY", valueFrom = var.os_data_key_secret_arn },
+        { Name = "RAILS_MASTER_KEY", valueFrom = var.rails_master_key_secret_arn },
+        { Name = "SENTRY_DSN", valueFrom = var.sentry_dsn_secret_arn }
       ]
     }
   ])
