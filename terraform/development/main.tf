@@ -94,27 +94,27 @@ module "application" {
 
 moved {
   from = module.application.aws_secretsmanager_secret.api_key
-  to = module.application_secrets.aws_secretsmanager_secret.api_key
+  to   = module.application_secrets.aws_secretsmanager_secret.api_key
 }
 
 moved {
   from = module.application.aws_secretsmanager_secret.govuk_notify_api_key
-  to = module.application_secrets.aws_secretsmanager_secret.govuk_notify_api_key
+  to   = module.application_secrets.aws_secretsmanager_secret.govuk_notify_api_key
 }
 
 moved {
   from = module.application.aws_secretsmanager_secret.os_data_key
-  to = module.application_secrets.aws_secretsmanager_secret.os_data_key
+  to   = module.application_secrets.aws_secretsmanager_secret.os_data_key
 }
 
 moved {
   from = module.application.aws_secretsmanager_secret.rails_master_key
-  to = module.application_secrets.aws_secretsmanager_secret.rails_master_key
+  to   = module.application_secrets.aws_secretsmanager_secret.rails_master_key
 }
 
 moved {
   from = module.application.aws_secretsmanager_secret.sentry_dsn
-  to = module.application_secrets.aws_secretsmanager_secret.sentry_dsn
+  to   = module.application_secrets.aws_secretsmanager_secret.sentry_dsn
 }
 
 module "application_secrets" {
