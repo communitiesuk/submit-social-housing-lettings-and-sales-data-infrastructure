@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_event_rule" "ecr_image_scan_results" {
-  name        = "${var.prefix}-ecr-image-scan-results"
+  name        = "${aws_ecr_repository.core.name}-ecr-image-scan-results"
   description = "ECR image scan results that identify MEDIUM and/or HIGH and/or CRITICAL severity vulnerabilities"
   event_pattern = jsonencode(
     {
