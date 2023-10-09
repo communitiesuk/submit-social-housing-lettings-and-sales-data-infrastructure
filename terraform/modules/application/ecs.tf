@@ -171,7 +171,6 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
         { Name = "RAILS_ENV", Value = var.rails_env },
         { Name = "RAILS_LOG_TO_STDOUT", Value = "true" },
         { Name = "RAILS_SERVE_STATIC_FILES", Value = "true" },
-        { Name = "REDIS_INSTANCE_NAME", Value = "" },
         { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
         { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) }
       ]
