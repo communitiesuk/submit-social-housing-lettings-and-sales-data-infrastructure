@@ -35,13 +35,13 @@ provider "aws" {
   }
 }
 
-provider "awscc" {
-  region = "eu-west-2"
+# provider "awscc" {
+#   region = "us-east-2"
 
-  assume_role = {
-    role_arn = local.provider_role_arn
-  }
-}
+#   assume_role = {
+#     role_arn = local.provider_role_arn
+#   }
+# }
 
 locals {
   prefix            = "core-staging"
@@ -133,9 +133,9 @@ module "networking" {
 module "monitoring" {
   source = "../modules/monitoring"
 
-  providers = {
-    awscc = awscc
-  }
+  # providers = {
+  #   awscc = awscc
+  # }
 
   prefix = local.prefix
   app_service_name = module.application.app_service_name
