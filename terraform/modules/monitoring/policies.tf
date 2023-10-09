@@ -33,16 +33,16 @@ data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "chatbot" {
   name               = "${var.prefix}-chatbot"
-  assume_role_policy = data.aws_iam_policy_document.sns_assume_role_policy.json
+  assume_role_policy = data.aws_iam_policy_document.chatbot_assume_role_policy.json
 }
 
-data "aws_iam_policy_document" "sns_assume_role_policy" {
+data "aws_iam_policy_document" "chatbot_assume_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]
 
     principals {
       type        = "Service"
-      identifiers = ["sns.amazonaws.com"]
+      identifiers = ["chatbot.amazonaws.com.com", "sns.amazonaws.com"]
     }
   }
 }
@@ -60,26 +60,9 @@ resource "aws_iam_policy" "chatbot" {
 data "aws_iam_policy_document" "chatbot_policy" {
   statement {
     actions = [
-      "sns:ListTagsForResource",
-      "sns:ListSubscriptionsByTopic",
-      "sns:GetTopicAttributes",
-      "sns:ListSMSSandboxPhoneNumbers",
-      "sns:ListTopics",
-      "sns:GetPlatformApplicationAttributes",
-      "sns:GetSubscriptionAttributes",
-      "sns:ListSubscriptions",
-      "sns:CheckIfPhoneNumberIsOptedOut",
-      "sns:GetDataProtectionPolicy",
-      "sns:ListOriginationNumbers",
-      "sns:ListPhoneNumbersOptedOut",
-      "sns:ListEndpointsByPlatformApplication",
-      "sns:GetEndpointAttributes",
-      "sns:Publish",
-      "sns:GetSMSSandboxAccountStatus",
-      "sns:Subscribe",
-      "sns:ConfirmSubscription",
-      "sns:GetSMSAttributes",
-      "sns:ListPlatformApplications"
+      "cloudwatch:Describe*",
+      "cloudwatch:Get*",
+      "cloudwatch:List*"
     ]
     resources = [
       "*"
