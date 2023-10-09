@@ -36,8 +36,11 @@ provider "aws" {
 }
 
 locals {
+  prefix = "core-meta"
+
+  provider_role_arn = "arn:aws:iam::815624722760:role/developer"
+
   create_db_migration_infra = false
-  provider_role_arn         = "arn:aws:iam::815624722760:role/developer"
 }
 
 # We create two backends for managing the terraform state of different accounts:
@@ -71,6 +74,7 @@ module "ecr" {
     "arn:aws:iam::107155005276:role/core-staging-task-execution",
     "arn:aws:iam::977287343304:role/core-prod-task-execution"
   ]
+  sns_topic_arn = module.monitoring.sns_topic_arn
 }
 
 module "ecr_rds_migration" {
@@ -80,6 +84,13 @@ module "ecr_rds_migration" {
 
   # This will need updating to include dev and production roles
   allow_access_by_roles = ["arn:aws:iam::107155005276:role/core-staging-task-execution"]
+}
+
+module "monitoring" {
+  source = "../modules/monitoring"
+
+  prefix                               = local.prefix
+  service_identifier_publishing_to_sns = "events.amazonaws.com"
 }
 
 data "aws_caller_identity" "current" {}
