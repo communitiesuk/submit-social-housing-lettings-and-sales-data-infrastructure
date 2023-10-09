@@ -69,7 +69,6 @@ module "prod_backend" {
 module "ecr" {
   source = "../modules/ecr"
 
-  prefix = local.prefix
   # This will need updating to include dev and production roles
   allow_access_by_roles = [
     "arn:aws:iam::107155005276:role/core-staging-task-execution",
