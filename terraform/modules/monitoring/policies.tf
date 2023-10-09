@@ -18,7 +18,7 @@ data "aws_iam_policy_document" "this" {
 
     principals {
       type        = "Service"
-      identifiers = ["cloudwatch.amazonaws.com"]
+      identifiers = [var.service_identifier_publishing_to_sns]
     }
 
     condition {
