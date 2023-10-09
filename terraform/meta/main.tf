@@ -75,7 +75,7 @@ module "ecr" {
     "arn:aws:iam::107155005276:role/core-staging-task-execution",
     "arn:aws:iam::977287343304:role/core-prod-task-execution"
   ]
-  sns_topic_arn         = module.monitoring.sns_topic_arn
+  sns_topic_arn = module.monitoring.sns_topic_arn
 }
 
 module "ecr_rds_migration" {
