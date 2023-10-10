@@ -56,6 +56,11 @@ variable "ecr_repository_url" {
   description = "The URL of the ECR repository in the meta account"
 }
 
+variable "ecs_deployment_role_name" {
+  type        = string
+  description = "The name of the ecs deployment role"
+}
+
 variable "ecs_security_group_id" {
   type        = string
   description = "The id of the ecs security group for ecs ingress"
@@ -72,12 +77,6 @@ variable "export_bucket_details" {
 variable "govuk_notify_api_key_secret_arn" {
   type        = string
   description = "The arn of the govuk notify api key secret"
-}
-
-
-variable "github_actions_role_arn" {
-  type        = string
-  description = "The arn of the role that github actions assumes in the meta account"
 }
 
 variable "load_balancer_target_group_arn" {

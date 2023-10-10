@@ -67,7 +67,6 @@ module "application" {
   sidekiq_task_memory        = 1024
 
   ecr_repository_url      = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core"
-  github_actions_role_arn = "arn:aws:iam::815624722760:role/core-application-repo"
 
   prefix                          = local.prefix
   api_key_secret_arn              = module.application_secrets.api_key_secret_arn
@@ -78,6 +77,7 @@ module "application" {
   application_port                = local.application_port
   bulk_upload_bucket_details      = module.bulk_upload.details
   database_connection_string_arn  = module.database.rds_connection_string_arn
+  ecs_deployment_role_name        = module.application_roles.ecs_deployment_role_name
   ecs_security_group_id           = module.application_security_group.ecs_security_group_id
   export_bucket_details           = module.cds_export.details
   govuk_notify_api_key_secret_arn = module.application_secrets.govuk_notify_api_key_secret_arn
@@ -151,8 +151,25 @@ moved {
   to   = module.application_roles.aws_iam_role_policy.secret_access
 }
 
+moved {
+  from = module.application.aws_iam_role.deployment
+  to   = module.application_roles.aws_iam_role.deployment
+}
+
+moved {
+  from = module.application.aws_iam_policy.allow_deployment
+  to   = module.application_roles.aws_iam_policy.allow_deployment
+}
+
+moved {
+  from = module.application.aws_iam_role_policy_attachment.allow_deployment
+  to   = module.application_roles.aws_iam_role_policy_attachment.allow_deployment
+}
+
 module "application_roles" {
   source = "../modules/application_roles"
+
+  github_actions_role_arn = "arn:aws:iam::815624722760:role/core-application-repo"
 
   prefix                               = local.prefix
   api_key_secret_arn                   = module.application_secrets.api_key_secret_arn

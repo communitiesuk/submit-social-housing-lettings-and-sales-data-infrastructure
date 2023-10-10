@@ -23,6 +23,11 @@ variable "export_bucket_access_policy_arn" {
   description = "The arn of the policy allowing access to the export bucket"
 }
 
+variable "github_actions_role_arn" {
+  type        = string
+  description = "The arn of the role that github actions assumes in the meta account"
+}
+
 variable "govuk_notify_api_key_secret_arn" {
   type        = string
   description = "The arn of the govuk notify api key secret"
