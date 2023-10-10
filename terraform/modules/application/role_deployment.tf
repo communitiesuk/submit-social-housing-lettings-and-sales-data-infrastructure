@@ -35,8 +35,8 @@ data "aws_iam_policy_document" "allow_deployment" {
       "iam:PassRole"
     ]
     resources = [
-      aws_iam_role.task.arn,
-      aws_iam_role.task_execution.arn
+      var.app_task_role_arn,
+      var.app_task_execution_role_arn
     ]
     effect = "Allow"
   }
