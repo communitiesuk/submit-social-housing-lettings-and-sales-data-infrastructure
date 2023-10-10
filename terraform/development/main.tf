@@ -66,7 +66,7 @@ module "application" {
   sidekiq_task_desired_count = 1
   sidekiq_task_memory        = 1024
 
-  ecr_repository_url      = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core"
+  ecr_repository_url = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core"
 
   prefix                          = local.prefix
   api_key_secret_arn              = module.application_secrets.api_key_secret_arn
@@ -89,81 +89,6 @@ module "application" {
   redis_connection_string         = module.redis.redis_connection_string
   sentry_dsn_secret_arn           = module.application_secrets.sentry_dsn_secret_arn
   sns_topic_arn                   = module.monitoring.sns_topic_arn
-}
-
-moved {
-  from = module.application.aws_iam_role.task
-  to   = module.application_roles.aws_iam_role.task
-}
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.ecs_task_database_data_access
-  to   = module.application_roles.aws_iam_role_policy_attachment.ecs_task_database_data_access
-}
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.ecs_task_redis_access
-  to   = module.application_roles.aws_iam_role_policy_attachment.ecs_task_redis_access
-}
-
-moved {
-  from = module.application.aws_iam_role_policy.cloudwatch_logs_access
-  to   = module.application_roles.aws_iam_role_policy.cloudwatch_logs_access
-}
-
-moved {
-  from = module.application.aws_iam_policy.allow_ecs_exec
-  to   = module.application_roles.aws_iam_policy.allow_ecs_exec
-}
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.task_allow_ecs_exec
-  to   = module.application_roles.aws_iam_role_policy_attachment.task_allow_ecs_exec
-}
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.task_bulk_upload_bucket_access
-  to   = module.application_roles.aws_iam_role_policy_attachment.task_bulk_upload_bucket_access
-}
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.task_export_bucket_access
-  to   = module.application_roles.aws_iam_role_policy_attachment.task_export_bucket_access
-}
-
-moved {
-  from = module.application.aws_iam_role.task_execution
-  to   = module.application_roles.aws_iam_role.task_execution
-}
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.task_execution_managed_policy
-  to   = module.application_roles.aws_iam_role_policy_attachment.task_execution_managed_policy
-}
-
-moved {
-  from = module.application.aws_iam_role_policy.parameter_access
-  to   = module.application_roles.aws_iam_role_policy.parameter_access
-}
-
-moved {
-  from = module.application.aws_iam_role_policy.secret_access
-  to   = module.application_roles.aws_iam_role_policy.secret_access
-}
-
-moved {
-  from = module.application.aws_iam_role.deployment
-  to   = module.application_roles.aws_iam_role.deployment
-}
-
-moved {
-  from = module.application.aws_iam_policy.allow_deployment
-  to   = module.application_roles.aws_iam_policy.allow_deployment
-}
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.allow_deployment
-  to   = module.application_roles.aws_iam_role_policy_attachment.allow_deployment
 }
 
 module "application_roles" {

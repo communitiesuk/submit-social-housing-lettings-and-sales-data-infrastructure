@@ -66,7 +66,7 @@ module "application" {
   sidekiq_task_desired_count = 2
   sidekiq_task_memory        = 8192
 
-  ecr_repository_url      = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core"
+  ecr_repository_url = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core"
 
   prefix                          = local.prefix
   api_key_secret_arn              = module.application_secrets.api_key_secret_arn
