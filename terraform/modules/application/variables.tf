@@ -1,3 +1,8 @@
+variable "api_key_secret_arn" {
+  type        = string
+  description = "The arn of the api key secret"
+}
+
 variable "app_host" {
   type        = string
   description = "The value of the app host environment variable"
@@ -69,6 +74,12 @@ variable "export_bucket_details" {
   description = "Details block for export bucket"
 }
 
+variable "govuk_notify_api_key_secret_arn" {
+  type        = string
+  description = "The arn of the govuk notify api key secret"
+}
+
+
 variable "github_actions_role_arn" {
   type        = string
   description = "The arn of the role that github actions assumes in the meta account"
@@ -77,6 +88,11 @@ variable "github_actions_role_arn" {
 variable "load_balancer_target_group_arn" {
   type        = string
   description = "The arn of the load balancer target group to be associated with the ecs"
+}
+
+variable "os_data_key_secret_arn" {
+  type        = string
+  description = "The arn of the os data key secret"
 }
 
 variable "prefix" {
@@ -94,9 +110,19 @@ variable "rails_env" {
   description = "The value of the rails environment variable"
 }
 
+variable "rails_master_key_secret_arn" {
+  type        = string
+  description = "The arn of the rails master key secret"
+}
+
 variable "redis_connection_string" {
   type        = string
   description = "The value of the redis connection string"
+}
+
+variable "sentry_dsn_secret_arn" {
+  type        = string
+  description = "The arn of the sentry dsn secret"
 }
 
 variable "sidekiq_task_cpu" {

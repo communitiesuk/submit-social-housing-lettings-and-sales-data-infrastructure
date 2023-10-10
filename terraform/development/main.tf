@@ -70,6 +70,7 @@ module "application" {
   github_actions_role_arn = "arn:aws:iam::815624722760:role/core-application-repo"
 
   prefix                               = local.prefix
+  api_key_secret_arn                   = module.application_secrets.api_key_secret_arn
   app_host                             = local.app_host
   app_task_desired_count               = local.app_task_desired_count
   application_port                     = local.application_port
@@ -80,11 +81,19 @@ module "application" {
   ecs_security_group_id                = module.application_security_group.ecs_security_group_id
   export_bucket_access_policy_arn      = module.cds_export.read_write_policy_arn
   export_bucket_details                = module.cds_export.details
+  govuk_notify_api_key_secret_arn      = module.application_secrets.govuk_notify_api_key_secret_arn
   load_balancer_target_group_arn       = module.front_door.load_balancer_target_group_arn
+  os_data_key_secret_arn               = module.application_secrets.os_data_key_secret_arn
   private_subnet_ids                   = module.networking.private_subnet_ids
   rails_env                            = local.rails_env
+  rails_master_key_secret_arn          = module.application_secrets.rails_master_key_secret_arn
   redis_connection_string              = module.redis.redis_connection_string
+  sentry_dsn_secret_arn                = module.application_secrets.sentry_dsn_secret_arn
   sns_topic_arn                        = module.monitoring.sns_topic_arn
+}
+
+module "application_secrets" {
+  source = "../modules/application_secrets"
 }
 
 module "application_security_group" {
