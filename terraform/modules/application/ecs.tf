@@ -109,6 +109,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
       name    = local.sidekiq_container_name
       command = ["bundle", "exec", "sidekiq", "-t", "3"]
       environment = [
+        { Name = "APP_HOST", Value = var.app_host },
         { Name = "CSV_DOWNLOAD_PAAS_INSTANCE", Value = local.bulk_upload_bucket_key },
         { Name = "EXPORT_PAAS_INSTANCE", Value = local.export_bucket_key },
         { Name = "RAILS_ENV", Value = var.rails_env },
