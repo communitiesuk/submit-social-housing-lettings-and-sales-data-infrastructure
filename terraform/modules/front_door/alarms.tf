@@ -14,7 +14,7 @@ resource "aws_cloudwatch_metric_alarm" "healthy_hosts_count" {
 
   dimensions = {
     LoadBalancer = aws_lb.this.arn_suffix
-    TargetGroup  = aws_lb_target_group.this.arn_suffix
+    TargetGroup  = var.load_balancer_target_group_arn_suffix
   }
 }
 
@@ -34,6 +34,6 @@ resource "aws_cloudwatch_metric_alarm" "unhealthy_hosts_count" {
 
   dimensions = {
     LoadBalancer = aws_lb.this.arn_suffix
-    TargetGroup  = aws_lb_target_group.this.arn_suffix
+    TargetGroup  = var.load_balancer_target_group_arn_suffix
   }
 }

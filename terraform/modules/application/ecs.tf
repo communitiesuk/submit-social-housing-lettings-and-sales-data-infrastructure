@@ -236,7 +236,7 @@ resource "aws_ecs_service" "app" {
   load_balancer {
     container_name   = local.app_container_name
     container_port   = var.application_port
-    target_group_arn = var.load_balancer_target_group_arn
+    target_group_arn = aws_lb_target_group.this.arn
   }
 
   network_configuration {
