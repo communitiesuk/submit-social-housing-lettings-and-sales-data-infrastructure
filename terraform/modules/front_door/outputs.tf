@@ -3,7 +3,18 @@ output "load_balancer_security_group_id" {
   description = "The id of the load balancer security group"
 }
 
-output "load_balancer_target_group_arn" {
-  value       = aws_lb_target_group.this.arn
-  description = "The arn of the load balancer target group to be associated with the ecs"
+output "load_balancer_listener_arn" {
+  value       = aws_lb_listener.https[0].arn
+  description = "The arn of the load balancer listener"
+}
+
+output "cloudfront_header_name" {
+  value       = local.cloudfront_header_name
+  description = "The name of the custom header used for cloudfront"
+}
+
+output "cloudfront_header_password" {
+  value       = random_password.cloudfront_header.result
+  description = "The password on the custom header used for cloudfront"
+  sensitive   = true
 }
