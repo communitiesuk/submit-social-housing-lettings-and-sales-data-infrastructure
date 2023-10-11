@@ -72,13 +72,13 @@ module "application" {
   api_key_secret_arn              = module.application_secrets.api_key_secret_arn
   app_host                        = local.app_host
   app_task_desired_count          = local.app_task_desired_count
-  app_task_execution_role_arn     = module.application_roles.ecs_task_execution_role_arn
-  app_task_role_arn               = module.application_roles.ecs_task_role_arn
   application_port                = local.application_port
   bulk_upload_bucket_details      = module.bulk_upload.details
   database_connection_string_arn  = module.database.rds_connection_string_arn
   ecs_deployment_role_name        = module.application_roles.ecs_deployment_role_name
   ecs_security_group_id           = module.application_security_group.ecs_security_group_id
+  ecs_task_execution_role_arn     = module.application_roles.ecs_task_execution_role_arn
+  ecs_task_role_arn               = module.application_roles.ecs_task_role_arn
   export_bucket_details           = module.cds_export.details
   govuk_notify_api_key_secret_arn = module.application_secrets.govuk_notify_api_key_secret_arn
   load_balancer_target_group_arn  = module.front_door.load_balancer_target_group_arn
