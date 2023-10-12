@@ -66,6 +66,16 @@ moved {
   to   = module.application.aws_lb_listener_rule.forward_cloudfront
 }
 
+moved {
+  from = module.application.aws_iam_policy.ecs_tasks_and_services
+  to   = module.application.aws_iam_policy.run_ecs_task_and_update_service
+}
+
+moved {
+  from = module.application.aws_iam_role_policy_attachment.ecs_tasks_and_services
+  to   = module.application.aws_iam_role_policy_attachment.run_ecs_task_and_update_service
+}
+
 module "application" {
   source = "../modules/application"
 
@@ -82,8 +92,6 @@ module "application" {
   api_key_secret_arn              = module.application_secrets.api_key_secret_arn
   app_host                        = local.app_host
   app_task_desired_count          = local.app_task_desired_count
-  app_task_execution_role_arn     = module.application_roles.ecs_task_execution_role_arn
-  app_task_role_arn               = module.application_roles.ecs_task_role_arn
   application_port                = local.application_port
   bulk_upload_bucket_details      = module.bulk_upload.details
   cloudfront_header_name               = module.front_door.cloudfront_header_name
@@ -91,6 +99,8 @@ module "application" {
   database_connection_string_arn  = module.database.rds_connection_string_arn
   ecs_deployment_role_name        = module.application_roles.ecs_deployment_role_name
   ecs_security_group_id           = module.application_security_group.ecs_security_group_id
+  ecs_task_execution_role_arn     = module.application_roles.ecs_task_execution_role_arn
+  ecs_task_role_arn               = module.application_roles.ecs_task_role_arn
   export_bucket_details           = module.cds_export.details
   govuk_notify_api_key_secret_arn = module.application_secrets.govuk_notify_api_key_secret_arn
   load_balancer_listener_arn           = module.front_door.load_balancer_listener_arn
@@ -173,15 +183,18 @@ module "application_roles" {
   github_actions_role_arn = "arn:aws:iam::815624722760:role/core-application-repo"
 
   prefix                               = local.prefix
-  api_key_secret_arn                   = module.application_secrets.api_key_secret_arn
   bulk_upload_bucket_access_policy_arn = module.bulk_upload.read_write_policy_arn
   database_connection_string_arn       = module.database.rds_connection_string_arn
   database_data_access_policy_arn      = module.database.rds_data_access_policy_arn
   export_bucket_access_policy_arn      = module.cds_export.read_write_policy_arn
-  govuk_notify_api_key_secret_arn      = module.application_secrets.govuk_notify_api_key_secret_arn
-  os_data_key_secret_arn               = module.application_secrets.os_data_key_secret_arn
-  rails_master_key_secret_arn          = module.application_secrets.rails_master_key_secret_arn
-  sentry_dsn_secret_arn                = module.application_secrets.sentry_dsn_secret_arn
+
+  secret_arns = [
+    module.application_secrets.api_key_secret_arn,
+    module.application_secrets.govuk_notify_api_key_secret_arn,
+    module.application_secrets.os_data_key_secret_arn,
+    module.application_secrets.rails_master_key_secret_arn,
+    module.application_secrets.sentry_dsn_secret_arn
+  ]
 }
 
 moved {

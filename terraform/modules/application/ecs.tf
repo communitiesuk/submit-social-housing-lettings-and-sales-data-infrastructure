@@ -26,11 +26,11 @@ resource "aws_ecs_task_definition" "app" {
   #checkov:skip=CKV_AWS_336:using readonlyRootFilesystem to true breaks the app, as it needs to write to app/tmp/pids for example
   family                   = "${var.prefix}-app"
   cpu                      = var.app_task_cpu
-  execution_role_arn       = var.app_task_execution_role_arn
+  execution_role_arn       = var.ecs_task_execution_role_arn
   memory                   = var.app_task_memory #MiB
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  task_role_arn            = var.app_task_role_arn
+  task_role_arn            = var.ecs_task_role_arn
 
   container_definitions = jsonencode([
     {
@@ -98,11 +98,11 @@ resource "aws_ecs_task_definition" "sidekiq" {
   #checkov:skip=CKV_AWS_336:using readonlyRootFilesystem to true breaks the app, as it needs to write to app/tmp/pids for example
   family                   = "${var.prefix}-sidekiq"
   cpu                      = var.sidekiq_task_cpu
-  execution_role_arn       = var.app_task_execution_role_arn
+  execution_role_arn       = var.ecs_task_execution_role_arn
   memory                   = var.sidekiq_task_memory #MiB
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  task_role_arn            = var.app_task_role_arn
+  task_role_arn            = var.ecs_task_role_arn
 
   container_definitions = jsonencode([
     {
@@ -156,11 +156,11 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
   #checkov:skip=CKV_AWS_336:using readonlyRootFilesystem to true breaks the app, as it needs to write to app/tmp/pids for example
   family                   = "${var.prefix}-ad-hoc"
   cpu                      = var.app_task_cpu
-  execution_role_arn       = var.app_task_execution_role_arn
+  execution_role_arn       = var.ecs_task_execution_role_arn
   memory                   = var.app_task_memory #MiB
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  task_role_arn            = var.app_task_role_arn
+  task_role_arn            = var.ecs_task_role_arn
 
   container_definitions = jsonencode([
     {

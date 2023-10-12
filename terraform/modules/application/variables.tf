@@ -18,7 +18,7 @@ variable "app_task_desired_count" {
   description = "The number of instances of the ecs app task definition desired"
 }
 
-variable "app_task_execution_role_arn" {
+variable "ecs_task_execution_role_arn" {
   type        = string
   description = "The arn of the app task execution role"
 }
@@ -28,7 +28,7 @@ variable "app_task_memory" {
   description = "The amount of memory used by the ecs app task"
 }
 
-variable "app_task_role_arn" {
+variable "ecs_task_role_arn" {
   type        = string
   description = "The arn of the app task role"
 }
