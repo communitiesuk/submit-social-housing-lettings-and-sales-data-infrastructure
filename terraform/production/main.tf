@@ -158,15 +158,18 @@ module "application_roles" {
   github_actions_role_arn = "arn:aws:iam::815624722760:role/core-application-repo"
 
   prefix                               = local.prefix
-  api_key_secret_arn                   = module.application_secrets.api_key_secret_arn
   bulk_upload_bucket_access_policy_arn = module.bulk_upload.read_write_policy_arn
   database_connection_string_arn       = module.database.rds_connection_string_arn
   database_data_access_policy_arn      = module.database.rds_data_access_policy_arn
   export_bucket_access_policy_arn      = module.cds_export.read_write_policy_arn
-  govuk_notify_api_key_secret_arn      = module.application_secrets.govuk_notify_api_key_secret_arn
-  os_data_key_secret_arn               = module.application_secrets.os_data_key_secret_arn
-  rails_master_key_secret_arn          = module.application_secrets.rails_master_key_secret_arn
-  sentry_dsn_secret_arn                = module.application_secrets.sentry_dsn_secret_arn
+
+  secret_arns = [
+    module.application_secrets.api_key_secret_arn,
+    module.application_secrets.govuk_notify_api_key_secret_arn,
+    module.application_secrets.os_data_key_secret_arn,
+    module.application_secrets.rails_master_key_secret_arn,
+    module.application_secrets.sentry_dsn_secret_arn
+  ]
 }
 
 moved {
