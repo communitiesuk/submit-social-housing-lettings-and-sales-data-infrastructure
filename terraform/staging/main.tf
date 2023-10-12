@@ -66,6 +66,16 @@ moved {
   to   = module.application.aws_lb_listener_rule.forward_cloudfront
 }
 
+moved {
+  from = module.front_door.aws_cloudwatch_metric_alarm.healthy_hosts_count
+  to = module.application.aws_cloudwatch_metric_alarm.healthy_hosts_count
+}
+
+moved {
+  from = module.front_door.aws_cloudwatch_metric_alarm.unhealthy_hosts_count
+  to = module.application.aws_cloudwatch_metric_alarm.unhealthy_hosts_count
+}
+
 module "application" {
   source = "../modules/application"
 
