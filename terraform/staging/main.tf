@@ -84,6 +84,16 @@ moved {
   to   = module.application.aws_iam_role_policy_attachment.run_ecs_task_and_update_service
 }
 
+moved {
+  from = module.front_door.aws_cloudwatch_metric_alarm.healthy_hosts_count
+  to   = module.application.aws_cloudwatch_metric_alarm.healthy_hosts_count
+}
+
+moved {
+  from = module.front_door.aws_cloudwatch_metric_alarm.unhealthy_hosts_count
+  to   = module.application.aws_cloudwatch_metric_alarm.unhealthy_hosts_count
+}
+
 module "application" {
   source = "../modules/application"
 
