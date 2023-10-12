@@ -46,6 +46,16 @@ variable "bulk_upload_bucket_details" {
   description = "Details block for bulk upload bucket"
 }
 
+variable "cloudfront_header_name" {
+  type        = string
+  description = "The name of the custom header used for cloudfront"
+}
+
+variable "cloudfront_header_password" {
+  type        = string
+  description = "The password on the custom header used for cloudfront"
+}
+
 variable "database_connection_string_arn" {
   type        = string
   description = "The arn of the datbase connection string in parameter store"
@@ -79,9 +89,14 @@ variable "govuk_notify_api_key_secret_arn" {
   description = "The arn of the govuk notify api key secret"
 }
 
-variable "load_balancer_target_group_arn" {
+variable "load_balancer_arn_suffix" {
   type        = string
-  description = "The arn of the load balancer target group to be associated with the ecs"
+  description = "The arn suffix of the load balancer"
+}
+
+variable "load_balancer_listener_arn" {
+  type        = string
+  description = "The arn of the load balancer listener"
 }
 
 variable "os_data_key_secret_arn" {
@@ -137,4 +152,9 @@ variable "sidekiq_task_memory" {
 variable "sns_topic_arn" {
   type        = string
   description = "The arn of the sns topic"
+}
+
+variable "vpc_id" {
+  type        = string
+  description = "The ID of the VPC to be associated with."
 }

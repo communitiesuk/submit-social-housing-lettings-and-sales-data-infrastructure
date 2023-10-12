@@ -66,6 +66,26 @@ moved {
   to   = module.application.aws_iam_role_policy_attachment.run_ecs_task_and_update_service
 }
 
+moved {
+  from = module.front_door.aws_lb_target_group.this
+  to   = module.application.aws_lb_target_group.this
+}
+
+moved {
+  from = module.front_door.aws_lb_listener_rule.forward_cloudfront
+  to   = module.application.aws_lb_listener_rule.forward_cloudfront
+}
+
+moved {
+  from = module.front_door.aws_cloudwatch_metric_alarm.healthy_hosts_count
+  to   = module.application.aws_cloudwatch_metric_alarm.healthy_hosts_count
+}
+
+moved {
+  from = module.front_door.aws_cloudwatch_metric_alarm.unhealthy_hosts_count
+  to   = module.application.aws_cloudwatch_metric_alarm.unhealthy_hosts_count
+}
+
 module "application" {
   source = "../modules/application"
 
@@ -84,6 +104,8 @@ module "application" {
   app_task_desired_count          = local.app_task_desired_count
   application_port                = local.application_port
   bulk_upload_bucket_details      = module.bulk_upload.details
+  cloudfront_header_name          = module.front_door.cloudfront_header_name
+  cloudfront_header_password      = module.front_door.cloudfront_header_password
   database_connection_string_arn  = module.database.rds_connection_string_arn
   ecs_deployment_role_name        = module.application_roles.ecs_deployment_role_name
   ecs_security_group_id           = module.application_security_group.ecs_security_group_id
@@ -91,7 +113,8 @@ module "application" {
   ecs_task_role_arn               = module.application_roles.ecs_task_role_arn
   export_bucket_details           = module.cds_export.details
   govuk_notify_api_key_secret_arn = module.application_secrets.govuk_notify_api_key_secret_arn
-  load_balancer_target_group_arn  = module.front_door.load_balancer_target_group_arn
+  load_balancer_arn_suffix        = module.front_door.load_balancer_arn_suffix
+  load_balancer_listener_arn      = module.front_door.load_balancer_listener_arn
   os_data_key_secret_arn          = module.application_secrets.os_data_key_secret_arn
   private_subnet_ids              = module.networking.private_subnet_ids
   rails_env                       = local.rails_env
@@ -99,6 +122,7 @@ module "application" {
   redis_connection_string         = module.redis.redis_connection_string
   sentry_dsn_secret_arn           = module.application_secrets.sentry_dsn_secret_arn
   sns_topic_arn                   = module.monitoring.sns_topic_arn
+  vpc_id                          = module.networking.vpc_id
 }
 
 moved {
@@ -301,7 +325,6 @@ module "front_door" {
   restrict_by_ip = false
 
   prefix                        = local.prefix
-  app_task_desired_count        = local.app_task_desired_count
   application_port              = local.application_port
   cloudfront_certificate_arn    = module.certificates.cloudfront_certificate_arn
   cloudfront_domain_name        = local.app_host
@@ -310,7 +333,6 @@ module "front_door" {
   load_balancer_certificate_arn = module.certificates.load_balancer_certificate_arn
   load_balancer_domain_name     = local.load_balancer_domain_name
   public_subnet_ids             = module.networking.public_subnet_ids
-  sns_topic_arn                 = module.monitoring.sns_topic_arn
   vpc_id                        = module.networking.vpc_id
 
   initial_create = var.initial_create
