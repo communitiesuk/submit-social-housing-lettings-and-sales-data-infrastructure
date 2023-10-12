@@ -77,7 +77,7 @@ module "application" {
   bulk_upload_bucket_access_policy_arn   = module.bulk_upload.read_write_policy_arn
   bulk_upload_bucket_details             = module.bulk_upload.details
   database_data_access_policy_arn        = module.database.rds_data_access_policy_arn
-  database_name                          = "${local.default_database_name}-${terraform.workspace}"
+  database_name                          = "${local.prefix}-${local.default_database_name}"
   database_partial_connection_string_arn = module.database.rds_partial_connection_string_arn
   ecs_security_group_id                  = module.application_security_group.ecs_security_group_id
   export_bucket_access_policy_arn        = module.cds_export.read_write_policy_arn

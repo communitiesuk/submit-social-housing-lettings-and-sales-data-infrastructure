@@ -84,7 +84,6 @@ variable "govuk_notify_api_key_secret_arn" {
   description = "The arn of the govuk notify api key secret"
 }
 
-
 variable "github_actions_role_arn" {
   type        = string
   description = "The arn of the role that github actions assumes in the meta account"
