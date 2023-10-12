@@ -1,5 +1,5 @@
-output "rds_connection_string_arn" {
-  value       = aws_ssm_parameter.database_connection_string.arn
+output "rds_partial_connection_string_arn" {
+  value       = aws_ssm_parameter.database_partial_connection_string.arn
   description = "The arn of the database connection string in the parameter store"
   sensitive   = true
 }

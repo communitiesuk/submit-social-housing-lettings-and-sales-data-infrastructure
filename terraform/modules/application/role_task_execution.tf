@@ -33,7 +33,7 @@ resource "aws_iam_role_policy" "parameter_access" {
           "ssm:GetParameters"
         ]
         Effect   = "Allow"
-        Resource = [var.database_connection_string_arn]
+        Resource = [aws_ssm_parameter.complete_database_connection_string.arn]
       }
     ]
   })

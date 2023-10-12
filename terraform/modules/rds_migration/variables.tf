@@ -8,9 +8,14 @@ variable "cloudfoundry_space" {
   description = "The cloudfoundry space to use for migrating the db from gov paas"
 }
 
-variable "database_connection_string_arn" {
+variable "database_complete_connection_string_arn" {
   type        = string
-  description = "The arn of the datbase connection string in parameter store"
+  description = "The arn of the complete database connection string in the parameter store"
+}
+
+variable "database_name" {
+  type        = string
+  description = "The name of the database to connect to"
 }
 
 variable "database_port" {

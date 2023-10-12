@@ -41,14 +41,19 @@ variable "bulk_upload_bucket_details" {
   description = "Details block for bulk upload bucket"
 }
 
-variable "database_connection_string_arn" {
+variable "database_partial_connection_string_arn" {
   type        = string
-  description = "The arn of the datbase connection string in parameter store"
+  description = "The arn of the partial database connection string in the parameter store"
 }
 
 variable "database_data_access_policy_arn" {
   type        = string
   description = "The arn of the policy allowing database data access"
+}
+
+variable "database_name" {
+  type        = string
+  description = "The name of the database to connect to"
 }
 
 variable "ecr_repository_url" {

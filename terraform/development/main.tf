@@ -40,6 +40,8 @@ locals {
 
   rails_env = "development"
 
+  default_database_name = "data_collector"
+
   app_host                  = ""
   load_balancer_domain_name = ""
 
@@ -69,27 +71,28 @@ module "application" {
   ecr_repository_url      = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core"
   github_actions_role_arn = "arn:aws:iam::815624722760:role/core-application-repo"
 
-  prefix                               = local.prefix
-  api_key_secret_arn                   = module.application_secrets.api_key_secret_arn
-  app_host                             = local.app_host
-  app_task_desired_count               = local.app_task_desired_count
-  application_port                     = local.application_port
-  bulk_upload_bucket_access_policy_arn = module.bulk_upload.read_write_policy_arn
-  bulk_upload_bucket_details           = module.bulk_upload.details
-  database_connection_string_arn       = module.database.rds_connection_string_arn
-  database_data_access_policy_arn      = module.database.rds_data_access_policy_arn
-  ecs_security_group_id                = module.application_security_group.ecs_security_group_id
-  export_bucket_access_policy_arn      = module.cds_export.read_write_policy_arn
-  export_bucket_details                = module.cds_export.details
-  govuk_notify_api_key_secret_arn      = module.application_secrets.govuk_notify_api_key_secret_arn
-  load_balancer_target_group_arn       = module.front_door.load_balancer_target_group_arn
-  os_data_key_secret_arn               = module.application_secrets.os_data_key_secret_arn
-  private_subnet_ids                   = module.networking.private_subnet_ids
-  rails_env                            = local.rails_env
-  rails_master_key_secret_arn          = module.application_secrets.rails_master_key_secret_arn
-  redis_connection_string              = module.redis.redis_connection_string
-  sentry_dsn_secret_arn                = module.application_secrets.sentry_dsn_secret_arn
-  sns_topic_arn                        = module.monitoring.sns_topic_arn
+  prefix                                 = local.prefix
+  api_key_secret_arn                     = module.application_secrets.api_key_secret_arn
+  app_host                               = local.app_host
+  app_task_desired_count                 = local.app_task_desired_count
+  application_port                       = local.application_port
+  bulk_upload_bucket_access_policy_arn   = module.bulk_upload.read_write_policy_arn
+  bulk_upload_bucket_details             = module.bulk_upload.details
+  database_data_access_policy_arn        = module.database.rds_data_access_policy_arn
+  database_name                          = "${local.default_database_name}-${terraform.workspace}"
+  database_partial_connection_string_arn = module.database.rds_partial_connection_string_arn
+  ecs_security_group_id                  = module.application_security_group.ecs_security_group_id
+  export_bucket_access_policy_arn        = module.cds_export.read_write_policy_arn
+  export_bucket_details                  = module.cds_export.details
+  govuk_notify_api_key_secret_arn        = module.application_secrets.govuk_notify_api_key_secret_arn
+  load_balancer_target_group_arn         = module.front_door.load_balancer_target_group_arn
+  os_data_key_secret_arn                 = module.application_secrets.os_data_key_secret_arn
+  private_subnet_ids                     = module.networking.private_subnet_ids
+  rails_env                              = local.rails_env
+  rails_master_key_secret_arn            = module.application_secrets.rails_master_key_secret_arn
+  redis_connection_string                = module.redis.redis_connection_string
+  sentry_dsn_secret_arn                  = module.application_secrets.sentry_dsn_secret_arn
+  sns_topic_arn                          = module.monitoring.sns_topic_arn
 }
 
 module "application_secrets" {
@@ -148,27 +151,6 @@ module "database" {
   ecs_security_group_id = module.application_security_group.ecs_security_group_id
   sns_topic_arn         = module.monitoring.sns_topic_arn
   vpc_id                = module.networking.vpc_id
-}
-
-module "database_migration" {
-  source = "../modules/rds_migration"
-
-  count = local.create_db_migration_infra ? 1 : 0
-
-  prefix                         = local.prefix
-  cloudfoundry_service           = "dluhc-core-review-XXXX-postgres"
-  cloudfoundry_space             = "dev"
-  database_connection_string_arn = module.database.rds_connection_string_arn
-  database_port                  = local.database_port
-  db_migration_task_cpu          = 4096
-  db_migration_task_memory       = 16384
-  db_security_group_id           = module.database.rds_security_group_id
-  ecr_repository_url             = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/db-migration"
-  ecs_task_role_arn              = module.application.ecs_task_role_arn
-  ecs_task_execution_role_arn    = module.application.ecs_task_execution_role_arn
-  ecs_task_execution_role_name   = module.application.ecs_task_execution_role_name
-  ecs_task_ephemeral_storage     = 200 #GiB
-  vpc_id                         = module.networking.vpc_id
 }
 
 module "front_door" {
