@@ -1,8 +1,3 @@
-variable "app_task_desired_count" {
-  type        = number
-  description = "The number of instances of the ecs app task definition desired"
-}
-
 variable "application_port" {
   type        = number
   description = "The network port the application runs on"
@@ -43,11 +38,6 @@ variable "load_balancer_domain_name" {
   description = "Then domain name of the load balancer"
 }
 
-variable "load_balancer_target_group_arn_suffix" {
-  type        = string
-  description = "The arn suffix of the load balancer target group"
-}
-
 variable "prefix" {
   type        = string
   description = "The prefix to be prepended to resource names."
@@ -61,11 +51,6 @@ variable "public_subnet_ids" {
 variable "restrict_by_ip" {
   type        = bool
   description = "True if access to cloudfront should be restricted by ip, e.g. before release or for a test environment"
-}
-
-variable "sns_topic_arn" {
-  type        = string
-  description = "The arn of the sns topic"
 }
 
 variable "vpc_id" {
