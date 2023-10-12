@@ -43,11 +43,6 @@ variable "load_balancer_domain_name" {
   description = "Then domain name of the load balancer"
 }
 
-variable "load_balancer_target_group_arn_suffix" {
-  type        = string
-  description = "The arn suffix of the load balancer target group"
-}
-
 variable "prefix" {
   type        = string
   description = "The prefix to be prepended to resource names."

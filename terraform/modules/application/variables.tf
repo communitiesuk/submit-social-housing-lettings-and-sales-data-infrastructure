@@ -94,9 +94,9 @@ variable "github_actions_role_arn" {
   description = "The arn of the role that github actions assumes in the meta account"
 }
 
-variable "initial_create" {
-  type        = bool
-  description = "Set to true for an initial create on a new environment, which will assume certs are not yet validated and so use default domain names"
+variable "load_balancer_arn_suffix" {
+  type        = string
+  description = "The arn suffix of the load balancer"
 }
 
 variable "load_balancer_listener_arn" {

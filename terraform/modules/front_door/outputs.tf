@@ -3,6 +3,11 @@ output "load_balancer_security_group_id" {
   description = "The id of the load balancer security group"
 }
 
+output "load_balancer_arn_suffix" {
+  value       = aws_lb.this.arn_suffix
+  description = "The arn suffix of the load balancer"
+}
+
 output "load_balancer_listener_arn" {
   value       = aws_lb_listener.https[0].arn
   description = "The arn of the load balancer listener"
