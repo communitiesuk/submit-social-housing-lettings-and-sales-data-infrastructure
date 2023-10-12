@@ -18,19 +18,24 @@ variable "app_task_desired_count" {
   description = "The number of instances of the ecs app task definition desired"
 }
 
+variable "ecs_task_execution_role_arn" {
+  type        = string
+  description = "The arn of the app task execution role"
+}
+
 variable "app_task_memory" {
   type        = number
   description = "The amount of memory used by the ecs app task"
 }
 
+variable "ecs_task_role_arn" {
+  type        = string
+  description = "The arn of the app task role"
+}
+
 variable "application_port" {
   type        = number
   description = "The network port the application runs on"
-}
-
-variable "bulk_upload_bucket_access_policy_arn" {
-  type        = string
-  description = "The arn of the policy allowing access to the bulk upload bucket"
 }
 
 variable "bulk_upload_bucket_details" {
@@ -56,24 +61,19 @@ variable "database_connection_string_arn" {
   description = "The arn of the datbase connection string in parameter store"
 }
 
-variable "database_data_access_policy_arn" {
-  type        = string
-  description = "The arn of the policy allowing database data access"
-}
-
 variable "ecr_repository_url" {
   type        = string
   description = "The URL of the ECR repository in the meta account"
 }
 
+variable "ecs_deployment_role_name" {
+  type        = string
+  description = "The name of the ecs deployment role"
+}
+
 variable "ecs_security_group_id" {
   type        = string
   description = "The id of the ecs security group for ecs ingress"
-}
-
-variable "export_bucket_access_policy_arn" {
-  type        = string
-  description = "The arn of the policy allowing access to the export bucket"
 }
 
 variable "export_bucket_details" {
@@ -87,11 +87,6 @@ variable "export_bucket_details" {
 variable "govuk_notify_api_key_secret_arn" {
   type        = string
   description = "The arn of the govuk notify api key secret"
-}
-
-variable "github_actions_role_arn" {
-  type        = string
-  description = "The arn of the role that github actions assumes in the meta account"
 }
 
 variable "load_balancer_arn_suffix" {
