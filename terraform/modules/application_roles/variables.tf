@@ -30,5 +30,5 @@ variable "prefix" {
 
 variable "secret_arns" {
   type        = list(string)
-  descriptuon = "A list of arns of all secrets whose values will need to be accessed by the ecs task execution role"
+  description = "A list of arns of all secrets whose values will need to be accessed by the ecs task execution role"
 }
