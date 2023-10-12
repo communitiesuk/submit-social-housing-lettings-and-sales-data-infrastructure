@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "ecs_tasks_and_services" {
+data "aws_iam_policy_document" "run_ecs_task_and_update_service" {
   statement {
     actions = [
       "ecs:RunTask"
@@ -23,12 +23,12 @@ data "aws_iam_policy_document" "ecs_tasks_and_services" {
   }
 }
 
-resource "aws_iam_policy" "ecs_tasks_and_services" {
-  name   = "${var.prefix}-ecs-tasks-and-services"
-  policy = data.aws_iam_policy_document.ecs_tasks_and_services.json
+resource "aws_iam_policy" "run_ecs_task_and_update_service" {
+  name   = "${var.prefix}-run-ecs-task-and-update-service"
+  policy = data.aws_iam_policy_document.run_ecs_task_and_update_service.json
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_tasks_and_services" {
   role       = var.ecs_deployment_role_name
-  policy_arn = aws_iam_policy.ecs_tasks_and_services.arn
+  policy_arn = aws_iam_policy.run_ecs_task_and_update_service.arn
 }
