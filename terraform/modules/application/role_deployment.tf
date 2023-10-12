@@ -28,7 +28,7 @@ resource "aws_iam_policy" "run_ecs_task_and_update_service" {
   policy = data.aws_iam_policy_document.run_ecs_task_and_update_service.json
 }
 
-resource "aws_iam_role_policy_attachment" "ecs_tasks_and_services" {
+resource "aws_iam_role_policy_attachment" "run_ecs_tasks_and_update_service" {
   role       = var.ecs_deployment_role_name
   policy_arn = aws_iam_policy.run_ecs_task_and_update_service.arn
 }

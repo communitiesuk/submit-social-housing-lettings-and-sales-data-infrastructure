@@ -56,6 +56,16 @@ locals {
   create_db_migration_infra = false
 }
 
+moved {
+  from = module.application.aws_iam_policy.ecs_tasks_and_services
+  to   = module.application.aws_iam_policy.run_ecs_task_and_update_service
+}
+
+moved {
+  from = module.application.aws_iam_role_policy_attachment.ecs_tasks_and_services
+  to   = module.application.aws_iam_role_policy_attachment.run_ecs_task_and_update_service
+}
+
 module "application" {
   source = "../modules/application"
 
