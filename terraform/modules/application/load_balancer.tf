@@ -17,10 +17,7 @@ resource "aws_lb_target_group" "this" {
 }
 
 resource "aws_lb_listener_rule" "forward_cloudfront" {
-  count = var.initial_create ? 0 : 1
-
   listener_arn = var.load_balancer_listener_arn
-  priority     = 1
 
   action {
     target_group_arn = aws_lb_target_group.this.id
