@@ -203,7 +203,6 @@ module "database_migration" {
 
   prefix                                  = local.prefix
   database_complete_connection_string_arn = module.database.rds_partial_connection_string_arn
-  database_name                           = local.default_database_name
   database_port                           = local.database_port
   db_security_group_id                    = module.database.rds_security_group_id
   ecs_task_role_arn                       = module.application.ecs_task_role_arn

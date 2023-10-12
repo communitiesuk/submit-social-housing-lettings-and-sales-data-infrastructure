@@ -13,11 +13,6 @@ variable "database_complete_connection_string_arn" {
   description = "The arn of the complete database connection string in the parameter store"
 }
 
-variable "database_name" {
-  type        = string
-  description = "The name of the database to connect to"
-}
-
 variable "database_port" {
   type        = number
   description = "The network port the database runs on"
