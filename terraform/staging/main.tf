@@ -68,12 +68,12 @@ moved {
 
 moved {
   from = module.front_door.aws_cloudwatch_metric_alarm.healthy_hosts_count
-  to = module.application.aws_cloudwatch_metric_alarm.healthy_hosts_count
+  to   = module.application.aws_cloudwatch_metric_alarm.healthy_hosts_count
 }
 
 moved {
   from = module.front_door.aws_cloudwatch_metric_alarm.unhealthy_hosts_count
-  to = module.application.aws_cloudwatch_metric_alarm.unhealthy_hosts_count
+  to   = module.application.aws_cloudwatch_metric_alarm.unhealthy_hosts_count
 }
 
 module "application" {
