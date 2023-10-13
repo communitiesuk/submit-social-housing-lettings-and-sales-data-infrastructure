@@ -33,7 +33,7 @@ resource "aws_iam_role_policy" "parameter_access" {
           "ssm:GetParameters"
         ]
         Effect   = "Allow"
-        Resource = [aws_ssm_parameter.complete_database_connection_string.arn]
+        Resource = [var.database_complete_connection_string_arn]
       }
     ]
   })
@@ -50,14 +50,8 @@ resource "aws_iam_role_policy" "secret_access" {
         Action = [
           "secretsmanager:GetSecretValue"
         ]
-        Effect = "Allow"
-        Resource = [
-          var.api_key_secret_arn,
-          var.govuk_notify_api_key_secret_arn,
-          var.os_data_key_secret_arn,
-          var.rails_master_key_secret_arn,
-          var.sentry_dsn_secret_arn
-        ]
+        Effect   = "Allow"
+        Resource = var.secret_arns
       }
     ]
   })

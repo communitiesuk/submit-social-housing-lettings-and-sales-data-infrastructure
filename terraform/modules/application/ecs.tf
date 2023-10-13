@@ -26,11 +26,11 @@ resource "aws_ecs_task_definition" "app" {
   #checkov:skip=CKV_AWS_336:using readonlyRootFilesystem to true breaks the app, as it needs to write to app/tmp/pids for example
   family                   = "${var.prefix}-app"
   cpu                      = var.app_task_cpu
-  execution_role_arn       = aws_iam_role.task_execution.arn
+  execution_role_arn       = var.ecs_task_execution_role_arn
   memory                   = var.app_task_memory #MiB
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  task_role_arn            = aws_iam_role.task.arn
+  task_role_arn            = var.ecs_task_role_arn
 
   container_definitions = jsonencode([
     {
@@ -98,11 +98,11 @@ resource "aws_ecs_task_definition" "sidekiq" {
   #checkov:skip=CKV_AWS_336:using readonlyRootFilesystem to true breaks the app, as it needs to write to app/tmp/pids for example
   family                   = "${var.prefix}-sidekiq"
   cpu                      = var.sidekiq_task_cpu
-  execution_role_arn       = aws_iam_role.task_execution.arn
+  execution_role_arn       = var.ecs_task_execution_role_arn
   memory                   = var.sidekiq_task_memory #MiB
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  task_role_arn            = aws_iam_role.task.arn
+  task_role_arn            = var.ecs_task_role_arn
 
   container_definitions = jsonencode([
     {
@@ -153,11 +153,11 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
   #checkov:skip=CKV_AWS_336:using readonlyRootFilesystem to true breaks the app, as it needs to write to app/tmp/pids for example
   family                   = "${var.prefix}-ad-hoc"
   cpu                      = var.app_task_cpu
-  execution_role_arn       = aws_iam_role.task_execution.arn
+  execution_role_arn       = var.ecs_task_execution_role_arn
   memory                   = var.app_task_memory #MiB
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  task_role_arn            = aws_iam_role.task.arn
+  task_role_arn            = var.ecs_task_role_arn
 
   container_definitions = jsonencode([
     {
@@ -236,7 +236,7 @@ resource "aws_ecs_service" "app" {
   load_balancer {
     container_name   = local.app_container_name
     container_port   = var.application_port
-    target_group_arn = var.load_balancer_target_group_arn
+    target_group_arn = aws_lb_target_group.this.arn
   }
 
   network_configuration {
