@@ -24,6 +24,31 @@ resource "aws_s3_bucket_public_access_block" "bulk_upload" {
   restrict_public_buckets = true
 }
 
+resource "aws_s3_bucket_policy" "force_ssl" {
+  bucket = aws_s3_bucket.bulk_upload.id
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Sid       = "AllowSSLRequestsOnly",
+        Action    = "s3:*",
+        Effect    = "Deny",
+        Principal = "*",
+        Resource = [
+          aws_s3_bucket.bulk_upload.arn,
+          "${aws_s3_bucket.bulk_upload.arn}/*"
+        ],
+        Condition = {
+          Bool = {
+            "aws:SecureTransport" = "false"
+          }
+        },
+      },
+    ],
+  })
+}
+
 resource "aws_s3_bucket_lifecycle_configuration" "bulk_upload" {
   bucket = aws_s3_bucket.bulk_upload.id
 
@@ -42,6 +67,31 @@ resource "aws_s3_bucket_lifecycle_configuration" "bulk_upload" {
 
     status = "Enabled"
   }
+}
+
+resource "aws_s3_bucket_policy" "force_ssl" {
+  bucket = aws_s3_bucket.bulk_upload.id
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Sid       = "AllowSSLRequestsOnly",
+        Action    = "s3:*",
+        Effect    = "Deny",
+        Principal = "*",
+        Resource = [
+          aws_s3_bucket.bulk_upload.arn,
+          "${aws_s3_bucket.bulk_upload.arn}/*"
+        ],
+        Condition = {
+          Bool = {
+            "aws:SecureTransport" = "false"
+          }
+        },
+      },
+    ],
+  })
 }
 
 #tfsec:ignore:aws-iam-no-policy-wildcards: require access to all objects in bucket
