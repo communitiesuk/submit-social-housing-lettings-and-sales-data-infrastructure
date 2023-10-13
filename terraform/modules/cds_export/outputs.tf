@@ -1,5 +1,5 @@
 output "details" {
-  value       = { aws_region : aws_s3_bucket.this.region, bucket_name : aws_s3_bucket.this.id }
+  value       = { aws_region : aws_s3_bucket.export.region, bucket_name : aws_s3_bucket.export.id }
   description = "Details block for this bucket for the application to use to connect"
 }
 
