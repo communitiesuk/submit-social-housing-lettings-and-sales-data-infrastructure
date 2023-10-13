@@ -3,9 +3,9 @@ variable "bulk_upload_bucket_access_policy_arn" {
   description = "The arn of the policy allowing access to the bulk upload bucket"
 }
 
-variable "database_connection_string_arn" {
+variable "database_complete_connection_string_arn" {
   type        = string
-  description = "The arn of the datbase connection string in parameter store"
+  description = "The arn of the complete database connection string in the parameter store"
 }
 
 variable "database_data_access_policy_arn" {
