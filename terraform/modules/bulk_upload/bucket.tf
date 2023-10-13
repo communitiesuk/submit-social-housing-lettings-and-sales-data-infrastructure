@@ -69,31 +69,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "bulk_upload" {
   }
 }
 
-resource "aws_s3_bucket_policy" "force_ssl" {
-  bucket = aws_s3_bucket.bulk_upload.id
-
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Sid       = "AllowSSLRequestsOnly",
-        Action    = "s3:*",
-        Effect    = "Deny",
-        Principal = "*",
-        Resource = [
-          aws_s3_bucket.bulk_upload.arn,
-          "${aws_s3_bucket.bulk_upload.arn}/*"
-        ],
-        Condition = {
-          Bool = {
-            "aws:SecureTransport" = "false"
-          }
-        },
-      },
-    ],
-  })
-}
-
 #tfsec:ignore:aws-iam-no-policy-wildcards: require access to all objects in bucket
 data "aws_iam_policy_document" "read_write" {
   statement {
