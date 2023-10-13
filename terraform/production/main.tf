@@ -272,20 +272,19 @@ module "bulk_upload" {
   prefix = local.prefix
 }
 
-
 moved {
   from = module.cds_export.aws_s3_bucket.this
   to   = module.cds_export.aws_s3_bucket.export
 }
 
 moved {
-  from = module.bulk_upload.aws_s3_bucket_public_access_block.this
-  to   = module.bulk_upload.aws_s3_bucket_public_access_block.bulk_upload
+  from = module.cds_export.aws_s3_bucket_public_access_block.this
+  to   = module.cds_export.aws_s3_bucket_public_access_block.export
 }
 
 moved {
-  from = module.bulk_upload.aws_s3_bucket_lifecycle_configuration.this
-  to   = module.bulk_upload.aws_s3_bucket_lifecycle_configuration.bulk_upload
+  from = module.cds_export.aws_s3_bucket_lifecycle_configuration.this
+  to   = module.cds_export.aws_s3_bucket_lifecycle_configuration.export
 }
 
 module "cds_export" {

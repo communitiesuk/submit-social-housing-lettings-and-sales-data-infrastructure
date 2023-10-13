@@ -279,12 +279,12 @@ moved {
   from = module.bulk_upload.aws_s3_bucket_lifecycle_configuration.this
   to   = module.bulk_upload.aws_s3_bucket_lifecycle_configuration.bulk_upload
 }
+
 module "bulk_upload" {
   source = "../modules/bulk_upload"
 
   prefix = local.prefix
 }
-
 
 moved {
   from = module.cds_export.aws_s3_bucket.this
