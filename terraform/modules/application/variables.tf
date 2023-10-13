@@ -61,9 +61,9 @@ variable "database_name" {
   description = "The name of the database to connect to"
 }
 
-variable "database_partial_connection_string_arn" {
+variable "database_partial_connection_string_parameter_name" {
   type        = string
-  description = "The arn of the partial database connection string in the parameter store"
+  description = "The name of the partial database connection string in the parameter store"
 }
 
 variable "ecr_repository_url" {
