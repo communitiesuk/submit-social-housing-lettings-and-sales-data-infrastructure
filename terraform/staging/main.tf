@@ -58,36 +58,6 @@ locals {
   create_db_migration_infra = false
 }
 
-moved {
-  from = module.application.aws_iam_policy.ecs_tasks_and_services
-  to   = module.application.aws_iam_policy.run_ecs_task_and_update_service
-}
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.ecs_tasks_and_services
-  to   = module.application.aws_iam_role_policy_attachment.run_ecs_task_and_update_service
-}
-
-moved {
-  from = module.front_door.aws_lb_target_group.this
-  to   = module.application.aws_lb_target_group.this
-}
-
-moved {
-  from = module.front_door.aws_lb_listener_rule.forward_cloudfront
-  to   = module.application.aws_lb_listener_rule.forward_cloudfront
-}
-
-moved {
-  from = module.front_door.aws_cloudwatch_metric_alarm.healthy_hosts_count
-  to   = module.application.aws_cloudwatch_metric_alarm.healthy_hosts_count
-}
-
-moved {
-  from = module.front_door.aws_cloudwatch_metric_alarm.unhealthy_hosts_count
-  to   = module.application.aws_cloudwatch_metric_alarm.unhealthy_hosts_count
-}
-
 module "application" {
   source = "../modules/application"
 
@@ -128,81 +98,6 @@ module "application" {
   vpc_id                                            = module.networking.vpc_id
 }
 
-moved {
-  from = module.application.aws_iam_role.task
-  to   = module.application_roles.aws_iam_role.task
-}
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.ecs_task_database_data_access
-  to   = module.application_roles.aws_iam_role_policy_attachment.ecs_task_database_data_access
-}
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.ecs_task_redis_access
-  to   = module.application_roles.aws_iam_role_policy_attachment.ecs_task_redis_access
-}
-
-moved {
-  from = module.application.aws_iam_role_policy.cloudwatch_logs_access
-  to   = module.application_roles.aws_iam_role_policy.cloudwatch_logs_access
-}
-
-moved {
-  from = module.application.aws_iam_policy.allow_ecs_exec
-  to   = module.application_roles.aws_iam_policy.allow_ecs_exec
-}
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.task_allow_ecs_exec
-  to   = module.application_roles.aws_iam_role_policy_attachment.task_allow_ecs_exec
-}
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.task_bulk_upload_bucket_access
-  to   = module.application_roles.aws_iam_role_policy_attachment.task_bulk_upload_bucket_access
-}
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.task_export_bucket_access
-  to   = module.application_roles.aws_iam_role_policy_attachment.task_export_bucket_access
-}
-
-moved {
-  from = module.application.aws_iam_role.task_execution
-  to   = module.application_roles.aws_iam_role.task_execution
-}
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.task_execution_managed_policy
-  to   = module.application_roles.aws_iam_role_policy_attachment.task_execution_managed_policy
-}
-
-moved {
-  from = module.application.aws_iam_role_policy.parameter_access
-  to   = module.application_roles.aws_iam_role_policy.parameter_access
-}
-
-moved {
-  from = module.application.aws_iam_role_policy.secret_access
-  to   = module.application_roles.aws_iam_role_policy.secret_access
-}
-
-moved {
-  from = module.application.aws_iam_role.deployment
-  to   = module.application_roles.aws_iam_role.deployment
-}
-
-moved {
-  from = module.application.aws_iam_policy.allow_deployment
-  to   = module.application_roles.aws_iam_policy.allow_deployment
-}
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.allow_deployment
-  to   = module.application_roles.aws_iam_role_policy_attachment.allow_deployment
-}
-
 module "application_roles" {
   source = "../modules/application_roles"
 
@@ -221,31 +116,6 @@ module "application_roles" {
     module.application_secrets.rails_master_key_secret_arn,
     module.application_secrets.sentry_dsn_secret_arn
   ]
-}
-
-moved {
-  from = module.application.aws_secretsmanager_secret.api_key
-  to   = module.application_secrets.aws_secretsmanager_secret.api_key
-}
-
-moved {
-  from = module.application.aws_secretsmanager_secret.govuk_notify_api_key
-  to   = module.application_secrets.aws_secretsmanager_secret.govuk_notify_api_key
-}
-
-moved {
-  from = module.application.aws_secretsmanager_secret.os_data_key
-  to   = module.application_secrets.aws_secretsmanager_secret.os_data_key
-}
-
-moved {
-  from = module.application.aws_secretsmanager_secret.rails_master_key
-  to   = module.application_secrets.aws_secretsmanager_secret.rails_master_key
-}
-
-moved {
-  from = module.application.aws_secretsmanager_secret.sentry_dsn
-  to   = module.application_secrets.aws_secretsmanager_secret.sentry_dsn
 }
 
 module "application_secrets" {
@@ -290,11 +160,6 @@ module "certificates" {
 
   cloudfront_domain_name    = local.app_host
   load_balancer_domain_name = local.load_balancer_domain_name
-}
-
-moved {
-  from = module.database.aws_ssm_parameter.database_connection_string
-  to   = module.database.aws_ssm_parameter.database_partial_connection_string
 }
 
 module "database" {
