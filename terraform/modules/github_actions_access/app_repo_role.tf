@@ -34,7 +34,8 @@ data "aws_iam_policy_document" "push_images" {
       "ecr:InitiateLayerUpload",
       "ecr:BatchCheckLayerAvailability",
       "ecr:BatchGetImage",
-      "ecr:PutImage"
+      "ecr:PutImage",
+      "ecr:ListImages"
     ]
     resources = [var.ecr_arn]
     effect    = "Allow"
