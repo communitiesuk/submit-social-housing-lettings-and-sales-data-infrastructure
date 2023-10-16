@@ -144,6 +144,7 @@ module "cds_export" {
   source = "../modules/cds_export"
 
   prefix = local.prefix
+  ecs_task_role_arn = module.application_roles.ecs_task_role_arn
 }
 
 module "certificates" {
