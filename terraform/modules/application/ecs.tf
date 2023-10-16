@@ -109,10 +109,14 @@ resource "aws_ecs_task_definition" "sidekiq" {
       name    = local.sidekiq_container_name
       command = ["bundle", "exec", "sidekiq", "-t", "3"]
       environment = [
+        { Name = "API_USER", Value = "dluhc-user" },
         { Name = "APP_HOST", Value = var.app_host },
         { Name = "CSV_DOWNLOAD_PAAS_INSTANCE", Value = local.bulk_upload_bucket_key },
         { Name = "EXPORT_PAAS_INSTANCE", Value = local.export_bucket_key },
+        { Name = "IMPORT_PAAS_INSTANCE", Value = "" },
         { Name = "RAILS_ENV", Value = var.rails_env },
+        { Name = "RAILS_LOG_TO_STDOUT", Value = "true" },
+        { Name = "RAILS_SERVE_STATIC_FILES", Value = "true" },
         { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
         { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) }
       ]
@@ -132,9 +136,12 @@ resource "aws_ecs_task_definition" "sidekiq" {
       }
 
       secrets = [
+        { Name = "API_KEY", valueFrom = var.api_key_secret_arn },
         { Name = "DATABASE_URL", valueFrom = var.database_connection_string_arn },
         { Name = "GOVUK_NOTIFY_API_KEY", valueFrom = var.govuk_notify_api_key_secret_arn },
+        { Name = "OS_DATA_KEY", valueFrom = var.os_data_key_secret_arn },
         { Name = "RAILS_MASTER_KEY", valueFrom = var.rails_master_key_secret_arn },
+        { Name = "SENTRY_DSN", valueFrom = var.sentry_dsn_secret_arn }
       ]
     }
   ])
