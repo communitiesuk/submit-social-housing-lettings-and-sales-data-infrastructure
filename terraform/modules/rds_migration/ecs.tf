@@ -37,7 +37,7 @@ resource "aws_ecs_task_definition" "db_migration" {
       ]
 
       secrets = [
-        { Name = "DATABASE_URL", valueFrom = var.database_connection_string_arn },
+        { Name = "DATABASE_URL", valueFrom = var.database_complete_connection_string_arn },
         { Name = "CF_PASSWORD", valueFrom = aws_secretsmanager_secret.cloudfoundry_password.arn },
         { Name = "CF_USERNAME", valueFrom = aws_secretsmanager_secret.cloudfoundry_username.arn }
       ]
@@ -85,7 +85,7 @@ resource "aws_ecs_task_definition" "exec_placeholder" {
       }
 
       secrets = [
-        { Name = "DATABASE_URL", valueFrom = var.database_connection_string_arn }
+        { Name = "DATABASE_URL", valueFrom = var.database_complete_connection_string_arn }
       ]
     }
   ])
