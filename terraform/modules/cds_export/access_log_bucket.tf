@@ -1,13 +1,11 @@
 #tfsec:ignore:aws-s3-enable-bucket-encryption: default bucket encryption is sufficient
 #tfsec:ignore:aws-s3-enable-bucket-logging: access log bucket doesn't need access logging itself
 #tfsec:ignore:aws-s3-encryption-customer-key: default encryption is sufficient
-#tfsec:ignore:aws-s3-enable-versioning: Not important, each log will be a new file with a different name
 resource "aws_s3_bucket" "export_access_logs" {
   #checkov:skip=CKV2_AWS_62: no need for event notifications
   #checkov:skip=CKV_AWS_18: access log bucket doesn't need access logging itself
   #checkov:skip=CKV_AWS_145: default encryption is fine
   #checkov:skip=CKV_AWS_144: cross region replication not required for access logs
-  #checkov:skip=CKV_AWS_21: versioning not important, each log will be a new file with a different name
   bucket = "${var.prefix}-export${var.bucket_suffix}-logs"
 }
 
