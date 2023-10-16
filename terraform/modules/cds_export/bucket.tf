@@ -44,9 +44,9 @@ resource "aws_s3_bucket_policy" "force_ssl" {
           Bool = {
             "aws:SecureTransport" = "false"
           }
-        },
-      },
-    ],
+        }
+      }
+    ]
   })
 }
 

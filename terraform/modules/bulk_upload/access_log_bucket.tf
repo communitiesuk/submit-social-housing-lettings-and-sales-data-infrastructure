@@ -29,23 +29,25 @@ resource "aws_s3_bucket_policy" "allow_access_logs" {
     Version = "2012-10-17",
     Statement = [
       {
-        Sid       = "S3ServerAccessLogsPolicy",
-        Action    = "s3:PutObject",
-        Effect    = "Allow",
-        Principal = "logging.s3.amazonaws.com",
+        Sid    = "S3ServerAccessLogsPolicy",
+        Action = "s3:PutObject",
+        Effect = "Allow",
+        Principal = {
+          "Service" = "logging.s3.amazonaws.com"
+        },
         Resource = [
           "${aws_s3_bucket.bulk_upload_access_logs.arn}/*"
         ],
         Condition = {
           ArnLike = {
             "aws:SourceArn" = aws_s3_bucket.bulk_upload.arn
-          }
+          },
           StringEquals = {
             "aws:SourceAccount" = data.aws_caller_identity.current.account_id
           }
-        },
-      },
-    ],
+        }
+      }
+    ]
   })
 }
 
