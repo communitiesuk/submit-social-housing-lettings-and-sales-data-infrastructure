@@ -3,6 +3,11 @@ resource "aws_kms_key" "this" {
   enable_key_rotation     = true
 }
 
+resource "aws_kms_alias" "this" {
+  name          = "alias/${var.prefix}-bulk-upload"
+  target_key_id = aws_kms_key.this.key_id
+}
+
 resource aws_kms_key_policy "this" {
   key_id = aws_kms_key.this.id
   policy = data.aws_iam_policy_document.kms.json
