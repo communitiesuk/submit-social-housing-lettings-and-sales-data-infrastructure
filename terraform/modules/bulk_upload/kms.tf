@@ -4,7 +4,7 @@ resource "aws_kms_key" "this" {
 }
 
 resource "aws_kms_alias" "this" {
-  name          = "alias/${var.prefix}-bulk-upload"
+  name          = "alias/${aws_s3_bucket.bulk_upload.id}"
   target_key_id = aws_kms_key.this.key_id
 }
 

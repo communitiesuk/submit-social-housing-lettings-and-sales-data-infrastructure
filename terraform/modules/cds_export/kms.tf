@@ -4,7 +4,7 @@ resource "aws_kms_key" "this" {
 }
 
 resource "aws_kms_alias" "this" {
-  name          = "alias/${var.prefix}-export${var.bucket_suffix}"
+  name          = "alias/${aws_s3_bucket.export.id}"
   target_key_id = aws_kms_key.this.key_id
 }
 
