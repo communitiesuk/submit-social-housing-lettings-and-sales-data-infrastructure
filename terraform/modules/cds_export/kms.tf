@@ -1,10 +1,10 @@
 resource "aws_kms_key" "this" {
-  description             = "KMS key used to encrypt the bulk upload bucket."
+  description             = "KMS key used to encrypt the CDS export bucket."
   enable_key_rotation     = true
 }
 
 resource "aws_kms_alias" "this" {
-  name          = "alias/${aws_s3_bucket.bulk_upload.id}"
+  name          = "alias/${aws_s3_bucket.export.id}"
   target_key_id = aws_kms_key.this.key_id
 }
 

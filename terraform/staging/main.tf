@@ -188,6 +188,7 @@ module "cds_export" {
     "arn:aws:iam::062321884391:role/DSQL1",
     "arn:aws:iam::062321884391:role/DSQSS"
   ]
+  ecs_task_role_arn = module.application_roles.ecs_task_role_arn
 }
 
 module "certificates" {
