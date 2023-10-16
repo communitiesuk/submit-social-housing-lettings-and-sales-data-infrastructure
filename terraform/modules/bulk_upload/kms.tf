@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "kms" {
     ]
 
     resources = [
-      aws_s3_bucket.bulk_upload.arn
+      aws_kms_key.this.arn
     ]
   }
 
