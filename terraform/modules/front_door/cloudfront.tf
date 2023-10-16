@@ -59,6 +59,12 @@ resource "aws_cloudfront_distribution" "this" {
     }
   }
 
+  logging_config {
+    bucket          = aws_s3_bucket.cloudfront_access_logs.bucket_domain_name
+    include_cookies = false
+    prefix          = ""
+  }
+
   tags = {
     Name = "${var.prefix}-cloudfront"
   }
