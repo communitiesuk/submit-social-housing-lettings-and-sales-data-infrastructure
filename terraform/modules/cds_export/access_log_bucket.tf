@@ -18,7 +18,9 @@ resource "aws_s3_bucket_public_access_block" "export_access_logs" {
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket_policy" "force_ssl_access_logs" {
+data "aws_caller_identity" "current" {}
+
+resource "aws_s3_bucket_policy" "force_ssl_and_allow_access_logs" {
   bucket = aws_s3_bucket.export_access_logs.id
 
   policy = jsonencode({
@@ -38,21 +40,9 @@ resource "aws_s3_bucket_policy" "force_ssl_access_logs" {
             "aws:SecureTransport" = "false"
           }
         }
-      }
-    ]
-  })
-}
-
-data "aws_caller_identity" "current" {}
-
-resource "aws_s3_bucket_policy" "allow_access_logs" {
-  bucket = aws_s3_bucket.export_access_logs.id
-
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
+      },
       {
-        Sid    = "S3ServerAccessLogsPolicy",
+        Sid    = "AllowS3AccessLogs",
         Action = "s3:PutObject",
         Effect = "Allow",
         Principal = {
