@@ -270,6 +270,7 @@ module "bulk_upload" {
   source = "../modules/bulk_upload"
 
   prefix = local.prefix
+  ecs_task_role_arn = module.application_roles.ecs_task_role_arn
 }
 
 moved {
