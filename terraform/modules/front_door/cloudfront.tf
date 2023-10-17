@@ -5,6 +5,7 @@ locals {
 
 #tfsec:ignore:aws-cloudfront-enable-logging:TODO we will be implementing logging later
 resource "aws_cloudfront_distribution" "this" {
+  #checkov:skip=CKV2_AWS_46:false flag, the cloudfront distribution is not serving content from an S3 bucket as the origin, the bucket is only for storing access logs. An s3 origin config is not required
   #checkov:skip=CKV2_AWS_47:The checkov Log4j vulnerability guidance (see link below) suggests implementing the AWSManagedRulesAnonymousIpList and AWSManagedRulesKnownBadInputsRuleSet WAF rules,
   #however AWSManagedRulesAnonymousIpList may cause issues for local authorities / housing associations that use VPNs, and we already implement the other rule
   #https://docs.bridgecrew.io/docs/ensure-aws-cloudfront-attached-wafv2-webacl-is-configured-with-amr-for-log4j-vulnerability

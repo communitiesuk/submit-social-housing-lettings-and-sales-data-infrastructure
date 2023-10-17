@@ -26,8 +26,6 @@ resource "aws_s3_bucket_ownership_controls" "cloudfront_access_logs" {
   }
 }
 
-data "aws_caller_identity" "current" {}
-
 resource "aws_s3_bucket_policy" "cloudfront_access_logs" {
   bucket = aws_s3_bucket.cloudfront_access_logs.id
 
