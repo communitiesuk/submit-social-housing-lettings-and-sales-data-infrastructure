@@ -47,7 +47,9 @@ resource "aws_s3_bucket_policy" "force_ssl_and_allow_cloudfront_access_logs" {
           Bool = {
             "aws:SecureTransport" = "false"
           }
-        },
+        }
+      },
+      {
         Sid    = "AllowCloudfrontAccessLogs",
         Action = "s3:PutObject",
         Effect = "Allow",
