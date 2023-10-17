@@ -20,7 +20,7 @@ resource "aws_s3_bucket_public_access_block" "load_balancer_access_logs" {
 
 data "aws_elb_service_account" "current" {}
 
-resource "aws_s3_bucket_policy" "force_ssl_and_allow_access_logs" {
+resource "aws_s3_bucket_policy" "force_ssl_and_allow_load_balancer_access_logs" {
   bucket = aws_s3_bucket.load_balancer_access_logs.id
 
   policy = jsonencode({
