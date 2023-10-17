@@ -118,6 +118,10 @@ module "application_roles" {
 
 module "application_secrets" {
   source = "../modules/application_secrets"
+
+  prefix                      = local.prefix
+  ecs_task_execution_role_arn = module.application_roles.ecs_task_execution_role_arn
+  ecs_task_role_arn           = module.application_roles.ecs_task_role_arn
 }
 
 module "application_security_group" {
