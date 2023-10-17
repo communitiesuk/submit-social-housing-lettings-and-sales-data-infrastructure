@@ -4,7 +4,7 @@ resource "aws_kms_key" "this" {
 }
 
 resource "aws_kms_alias" "this" {
-  name          = "alias/${var.prefix}-secretsmanager"
+  name          = "alias/${var.prefix}-app-secretsmanager-secrets"
   target_key_id = aws_kms_key.this.key_id
 }
 
