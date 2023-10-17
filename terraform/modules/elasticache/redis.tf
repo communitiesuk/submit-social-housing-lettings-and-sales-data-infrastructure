@@ -1,7 +1,4 @@
-#tfsec:ignore:aws-elasticache-enable-in-transit-encryption:TODO CLDC-2848 potentially introduce encryption in transit later
 resource "aws_elasticache_replication_group" "this" {
-  #checkov:skip=CKV_AWS_30:TODO CLDC-2848 potentially introduce encryption in transit later
-  #checkov:skip=CKV_AWS_31:TODO CLDC-2848 potentially introduce encryption in transit later
   #checkov:skip=CKV_AWS_191:default encryption key is sufficient
 
   count = var.highly_available ? 1 : 0
