@@ -1,10 +1,10 @@
 resource "aws_kms_key" "this" {
-  description         = "KMS key used to encrypt SSM parameters."
+  description         = "KMS key used to encrypt the Secrets Manager secrets."
   enable_key_rotation = true
 }
 
 resource "aws_kms_alias" "this" {
-  name          = "alias/${var.prefix}-app-ssm-parameters"
+  name          = "alias/${var.prefix}-db-migration-secretsmanager-secrets"
   target_key_id = aws_kms_key.this.key_id
 }
 
