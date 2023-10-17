@@ -14,6 +14,9 @@ resource aws_kms_key_policy "this" {
 }
 
 data "aws_iam_policy_document" "kms" {
+  #checkov:skip=CKV_AWS_109:Only assigning the kms:GenerateDataKey and kms:Decrypt permissions led to a 'you won't be able to manage the key once created' error
+  #checkov:skip=CKV_AWS_111:Only assigning the kms:GenerateDataKey and kms:Decrypt permissions led to a 'you won't be able to manage the key once created' error
+  #checkov:skip=CKV_AWS_356:Only assigning the kms:GenerateDataKey and kms:Decrypt permissions led to a 'you won't be able to manage the key once created' error
   statement {
     principals {
       type        = "AWS"
