@@ -1,6 +1,6 @@
 resource "aws_kms_key" "this" {
-  description             = "KMS key used to encrypt the CDS export bucket."
-  enable_key_rotation     = true
+  description         = "KMS key used to encrypt the CDS export bucket."
+  enable_key_rotation = true
 }
 
 resource "aws_kms_alias" "this" {
@@ -8,7 +8,7 @@ resource "aws_kms_alias" "this" {
   target_key_id = aws_kms_key.this.key_id
 }
 
-resource aws_kms_key_policy "this" {
+resource "aws_kms_key_policy" "this" {
   key_id = aws_kms_key.this.id
   policy = data.aws_iam_policy_document.kms.json
 }
