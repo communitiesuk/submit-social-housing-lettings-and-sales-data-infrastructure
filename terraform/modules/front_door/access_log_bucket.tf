@@ -18,6 +18,8 @@ resource "aws_s3_bucket_public_access_block" "cloudfront_access_logs" {
   restrict_public_buckets = true
 }
 
+# The cloudfront access logs bucket must not use "Bucket owner enforced" as this disables bucket ACLs. Cloudfront needs to update the bucket ACLs in order to be able to deliver access logs
+# See link for info: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html#access-logs-choosing-s3-bucket
 resource "aws_s3_bucket_ownership_controls" "cloudfront_access_logs" {
   bucket = aws_s3_bucket.cloudfront_access_logs.id
 
@@ -46,7 +48,7 @@ resource "aws_s3_bucket_policy" "cloudfront_access_logs" {
             "aws:SecureTransport" = "false"
           }
         },
-        Sid    = "AllowCloudFrontAccessLogs",
+        Sid    = "AllowCloudfrontAccessLogs",
         Action = "s3:PutObject",
         Effect = "Allow",
         Principal = {
