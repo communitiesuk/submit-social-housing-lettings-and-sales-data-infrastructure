@@ -48,22 +48,6 @@ resource "aws_s3_bucket_policy" "force_ssl_and_allow_cloudfront_access_logs" {
             "aws:SecureTransport" = "false"
           }
         }
-      },
-      {
-        Sid    = "AllowCloudfrontAccessLogs",
-        Action = "s3:PutObject",
-        Effect = "Allow",
-        Principal = {
-          Service = "cloudfront.amazonaws.com"
-        },
-        Resource = [
-          "${aws_s3_bucket.cloudfront_access_logs.arn}/*"
-        ],
-        Condition = {
-          StringEquals = {
-            "aws:SourceArn" = aws_cloudfront_distribution.this.arn
-          }
-        }
       }
     ]
   })
