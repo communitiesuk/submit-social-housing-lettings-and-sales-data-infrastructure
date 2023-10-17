@@ -23,6 +23,7 @@ resource "aws_elasticache_replication_group" "this" {
   replication_group_id        = var.prefix
   security_group_ids          = [aws_security_group.this.id]
   subnet_group_name           = var.redis_subnet_group_name
+  transit_encryption_enabled  = true
 }
 
 #tfsec:ignore:aws-elasticache-enable-backup-retention:TODO CLDC-2679 setup a snapshot retention limit
@@ -43,4 +44,5 @@ resource "aws_elasticache_cluster" "this" {
   port                       = var.redis_port
   security_group_ids         = [aws_security_group.this.id]
   subnet_group_name          = var.redis_subnet_group_name
+  transit_encryption_enabled = true
 }
