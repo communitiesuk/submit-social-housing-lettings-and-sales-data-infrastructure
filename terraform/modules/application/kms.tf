@@ -1,10 +1,10 @@
 resource "aws_kms_key" "this" {
-  description         = "KMS key used to encrypt the bulk upload bucket."
+  description         = "KMS key used to encrypt the SSM parameter."
   enable_key_rotation = true
 }
 
 resource "aws_kms_alias" "this" {
-  name          = "alias/${aws_s3_bucket.bulk_upload.id}"
+  name          = "alias/${aws_ssm_parameter.complete_database_connection_string.name}"
   target_key_id = aws_kms_key.this.key_id
 }
 
@@ -12,6 +12,8 @@ resource "aws_kms_key_policy" "this" {
   key_id = aws_kms_key.this.id
   policy = data.aws_iam_policy_document.kms.json
 }
+
+data "aws_caller_identity" "current" {}
 
 data "aws_iam_policy_document" "kms" {
   #checkov:skip=CKV_AWS_109:Only assigning the kms:GenerateDataKey and kms:Decrypt permissions led to a 'you won't be able to manage the key once created' error
