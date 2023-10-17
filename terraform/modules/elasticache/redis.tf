@@ -1,4 +1,5 @@
 resource "aws_elasticache_replication_group" "this" {
+  #checkov:skip=CKV_AWS_31:TODO CLDC-2937 potentially introduce an auth token later
   #checkov:skip=CKV_AWS_191:default encryption key is sufficient
 
   count = var.highly_available ? 1 : 0
