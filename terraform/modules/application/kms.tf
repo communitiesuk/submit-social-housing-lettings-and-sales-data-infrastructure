@@ -22,7 +22,7 @@ data "aws_iam_policy_document" "kms" {
   statement {
     principals {
       type        = "AWS"
-      identifiers = [var.ecs_task_role_arn]
+      identifiers = [var.ecs_task_role_arn, var.ecs_task_execution_role_arn]
     }
 
     actions = [
