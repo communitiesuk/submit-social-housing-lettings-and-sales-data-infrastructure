@@ -94,7 +94,11 @@ module "ecr_s3_migration" {
 
   count = local.create_s3_migration_infra ? 1 : 0
 
-  allow_access_by_roles = []
+  # This will need manual updating for prod environment
+  allow_access_by_roles = [
+    "arn:aws:iam::107155005276:role/core-staging-csv-s3-migration-task-execution",
+    "arn:aws:iam::107155005276:role/core-staging-export-s3-migration-task-execution"
+  ]
   repository_name       = "s3-migration"
 }
 
