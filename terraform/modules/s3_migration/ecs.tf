@@ -14,11 +14,11 @@ resource "aws_ecs_task_definition" "bucket_migration" {
 
   family                   = "${var.prefix}-${each.key}-s3-migration"
   cpu                      = local.cpu
-  execution_role_arn       = aws_iam_role.task_execution.arn
+  execution_role_arn       = aws_iam_role.task_execution[each.key].arn
   memory                   = local.memory
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  task_role_arn            = aws_iam_role.task
+  task_role_arn            = aws_iam_role.task[each.key].arn
 
   container_definitions = jsonencode([
     {
@@ -50,7 +50,7 @@ resource "aws_ecs_task_definition" "bucket_migration" {
   ])
 
   ephemeral_storage {
-    size_in_gib = 20
+    size_in_gib = 25
   }
 
   runtime_platform {
