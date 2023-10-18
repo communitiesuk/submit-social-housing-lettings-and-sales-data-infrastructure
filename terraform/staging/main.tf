@@ -217,12 +217,12 @@ module "s3_migration" {
   buckets = {
     export = {
       source      = "s3://paas-s3-broker-prod-lon-8646ef9c-d0fe-46f9-aca9-754f3d17ff8e",
-      destination = module.cds_export.details.bucket_name,
+      destination = "s3://${module.cds_export.details.bucket_name}",
       policy_arn  = module.cds_export.read_write_policy_arn
     },
     csv = {
       source      = "s3://paas-s3-broker-prod-lon-645998c2-313d-4bab-954f-cded89c9f465",
-      destination = module.bulk_upload.details.bucket_name,
+      destination = "s3://${module.bulk_upload.details.bucket_name}",
       policy_arn  = module.bulk_upload.read_write_policy_arn
     }
   }
