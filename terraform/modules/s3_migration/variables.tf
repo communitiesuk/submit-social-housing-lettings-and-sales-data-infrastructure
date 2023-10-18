@@ -17,8 +17,3 @@ variable "prefix" {
   type        = string
   description = "The prefix to be prepended to resource names"
 }
-
-variable "vpc_id" {
-  type        = string
-  description = "The ID of the VPC to be associated with"
-}

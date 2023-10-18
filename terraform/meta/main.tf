@@ -86,7 +86,7 @@ module "ecr_rds_migration" {
 
   # This will need updating to include dev and production roles
   allow_access_by_roles = ["arn:aws:iam::107155005276:role/core-staging-task-execution"]
-  repository_name = "db-migration"
+  repository_name       = "db-migration"
 }
 
 module "ecr_s3_migration" {
@@ -95,7 +95,7 @@ module "ecr_s3_migration" {
   count = local.create_s3_migration_infra ? 1 : 0
 
   allow_access_by_roles = []
-  repository_name = "s3-migration"
+  repository_name       = "s3-migration"
 }
 
 module "monitoring" {

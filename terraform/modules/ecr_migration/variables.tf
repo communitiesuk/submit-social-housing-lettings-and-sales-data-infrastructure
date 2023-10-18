@@ -4,6 +4,6 @@ variable "allow_access_by_roles" {
 }
 
 variable "repository_name" {
-  type = string
+  type        = string
   description = "name for the repository"
 }
