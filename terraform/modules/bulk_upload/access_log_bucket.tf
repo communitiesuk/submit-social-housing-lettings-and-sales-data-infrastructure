@@ -1,10 +1,10 @@
-#tfsec:ignore:aws-s3-enable-bucket-encryption: default bucket encryption is sufficient
+#tfsec:ignore:aws-s3-enable-bucket-encryption: access log buckets not compatible with kms encryption, see https://docs.aws.amazon.com/AmazonS3/latest/userguide/troubleshooting-server-access-logging.html
 #tfsec:ignore:aws-s3-enable-bucket-logging: access log bucket doesn't need access logging itself
-#tfsec:ignore:aws-s3-encryption-customer-key: default encryption is sufficient
+#tfsec:ignore:aws-s3-encryption-customer-key: access log buckets are not compatible with kms encryption, see https://docs.aws.amazon.com/AmazonS3/latest/userguide/troubleshooting-server-access-logging.html
 resource "aws_s3_bucket" "bulk_upload_access_logs" {
   #checkov:skip=CKV2_AWS_62: no need for event notifications
   #checkov:skip=CKV_AWS_18: access log bucket doesn't need access logging itself
-  #checkov:skip=CKV_AWS_145: default encryption is fine
+  #checkov:skip=CKV_AWS_145: access log buckets are not compatible with kms encryption, see https://docs.aws.amazon.com/AmazonS3/latest/userguide/troubleshooting-server-access-logging.html
   #checkov:skip=CKV_AWS_144: cross region replication not required for access logs
   bucket = "${var.prefix}-bulk-upload-logs"
 }

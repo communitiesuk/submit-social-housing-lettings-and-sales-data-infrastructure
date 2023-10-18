@@ -138,41 +138,11 @@ module "application_security_group" {
   vpc_id                          = module.networking.vpc_id
 }
 
-moved {
-  from = module.bulk_upload.aws_s3_bucket.this
-  to   = module.bulk_upload.aws_s3_bucket.bulk_upload
-}
-
-moved {
-  from = module.bulk_upload.aws_s3_bucket_public_access_block.this
-  to   = module.bulk_upload.aws_s3_bucket_public_access_block.bulk_upload
-}
-
-moved {
-  from = module.bulk_upload.aws_s3_bucket_lifecycle_configuration.this
-  to   = module.bulk_upload.aws_s3_bucket_lifecycle_configuration.bulk_upload
-}
-
 module "bulk_upload" {
   source = "../modules/bulk_upload"
 
   prefix            = local.prefix
   ecs_task_role_arn = module.application_roles.ecs_task_role_arn
-}
-
-moved {
-  from = module.cds_export.aws_s3_bucket.this
-  to   = module.cds_export.aws_s3_bucket.export
-}
-
-moved {
-  from = module.cds_export.aws_s3_bucket_public_access_block.this
-  to   = module.cds_export.aws_s3_bucket_public_access_block.export
-}
-
-moved {
-  from = module.cds_export.aws_s3_bucket_lifecycle_configuration.this
-  to   = module.cds_export.aws_s3_bucket_lifecycle_configuration.export
 }
 
 module "cds_export" {
