@@ -28,7 +28,7 @@ resource "aws_s3_bucket_ownership_controls" "cloudfront_access_logs" {
   }
 }
 
-resource "aws_s3_bucket_policy" "force_ssl_and_allow_cloudfront_access_logs" {
+resource "aws_s3_bucket_policy" "force_ssl" {
   bucket = aws_s3_bucket.cloudfront_access_logs.id
 
   policy = jsonencode({
