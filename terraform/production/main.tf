@@ -238,6 +238,11 @@ module "application_secrets" {
   source = "../modules/application_secrets"
 }
 
+moved {
+  from = module.redis.aws_security_group.this
+  to   = module.application_roles.aws_security_group.redis
+}
+
 module "application_security_group" {
   source = "../modules/application_security_group"
 
@@ -247,7 +252,6 @@ module "application_security_group" {
   db_security_group_id            = module.database.rds_security_group_id
   load_balancer_security_group_id = module.front_door.load_balancer_security_group_id
   redis_port                      = local.redis_port
-  redis_security_group_id         = module.redis.redis_security_group_id
   vpc_id                          = module.networking.vpc_id
 }
 
@@ -404,6 +408,7 @@ module "redis" {
   prefix                  = local.prefix
   ecs_security_group_id   = module.application_security_group.ecs_security_group_id
   redis_port              = local.redis_port
+  redis_security_group_id = module.application_security_group.redis_security_group_id
   redis_subnet_group_name = module.networking.redis_private_subnet_group_name
   vpc_id                  = module.networking.vpc_id
 }
