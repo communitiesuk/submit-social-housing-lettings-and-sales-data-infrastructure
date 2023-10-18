@@ -12,7 +12,7 @@ resource "aws_iam_policy" "parameter_access" {
   policy = data.aws_iam_policy_document.parameter_access.json
 }
 
-resource "aws_iam_role_policy_attachment" "run_ecs_tasks_and_update_service" {
+resource "aws_iam_role_policy_attachment" "parameter_access" {
   role       = var.ecs_task_execution_role_name
   policy_arn = aws_iam_policy.parameter_access.arn
 }

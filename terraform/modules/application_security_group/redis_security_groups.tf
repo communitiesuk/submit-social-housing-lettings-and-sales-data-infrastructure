@@ -1,4 +1,5 @@
 resource "aws_security_group" "redis" {
+  #checkov:skip=CKV2_AWS_5: security group is attached to a resource outside of this module
   name        = "${var.prefix}-redis"
   description = "Redis security group"
   vpc_id      = var.vpc_id
