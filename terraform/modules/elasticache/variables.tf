@@ -3,11 +3,6 @@ variable "apply_changes_immediately" {
   description = "Whether to apply changes to redis immediately or to wait for the next maintenance window."
 }
 
-variable "ecs_security_group_id" {
-  type        = string
-  description = "The id of the ecs security group for ecs ingress"
-}
-
 variable "redis_security_group_id" {
   type        = string
   description = "The id of the redis security group"
@@ -36,9 +31,4 @@ variable "redis_port" {
 variable "redis_subnet_group_name" {
   type        = string
   description = "The name of the subnet group associated with the VPC that Redis needs to be in."
-}
-
-variable "vpc_id" {
-  type        = string
-  description = "The ID of the VPC to be associated with."
 }

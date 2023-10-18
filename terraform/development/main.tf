@@ -219,9 +219,7 @@ module "redis" {
   node_type                 = "cache.t4g.micro"
 
   prefix                  = local.prefix
-  ecs_security_group_id   = module.application_security_group.ecs_security_group_id
   redis_port              = local.redis_port
   redis_security_group_id = module.application_security_group.redis_security_group_id
   redis_subnet_group_name = module.networking.redis_private_subnet_group_name
-  vpc_id                  = module.networking.vpc_id
 }
