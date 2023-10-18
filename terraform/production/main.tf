@@ -113,6 +113,7 @@ module "application" {
   ecs_deployment_role_name                          = module.application_roles.ecs_deployment_role_name
   ecs_security_group_id                             = module.application_security_group.ecs_security_group_id
   ecs_task_execution_role_arn                       = module.application_roles.ecs_task_execution_role_arn
+  ecs_task_execution_role_name                      = module.application_roles.ecs_task_execution_role_name
   ecs_task_role_arn                                 = module.application_roles.ecs_task_role_arn
   export_bucket_details                             = module.cds_export.details
   govuk_notify_api_key_secret_arn                   = module.application_secrets.govuk_notify_api_key_secret_arn
@@ -194,11 +195,10 @@ module "application_roles" {
 
   github_actions_role_arn = "arn:aws:iam::815624722760:role/core-application-repo"
 
-  prefix                                  = local.prefix
-  bulk_upload_bucket_access_policy_arn    = module.bulk_upload.read_write_policy_arn
-  database_complete_connection_string_arn = module.application.rds_complete_connection_string_arn
-  database_data_access_policy_arn         = module.database.rds_data_access_policy_arn
-  export_bucket_access_policy_arn         = module.cds_export.read_write_policy_arn
+  prefix                               = local.prefix
+  bulk_upload_bucket_access_policy_arn = module.bulk_upload.read_write_policy_arn
+  database_data_access_policy_arn      = module.database.rds_data_access_policy_arn
+  export_bucket_access_policy_arn      = module.cds_export.read_write_policy_arn
 
   secret_arns = [
     module.application_secrets.api_key_secret_arn,

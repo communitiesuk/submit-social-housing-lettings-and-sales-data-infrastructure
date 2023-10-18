@@ -18,19 +18,9 @@ variable "app_task_desired_count" {
   description = "The number of instances of the ecs app task definition desired"
 }
 
-variable "ecs_task_execution_role_arn" {
-  type        = string
-  description = "The arn of the app task execution role"
-}
-
 variable "app_task_memory" {
   type        = number
   description = "The amount of memory used by the ecs app task"
-}
-
-variable "ecs_task_role_arn" {
-  type        = string
-  description = "The arn of the app task role"
 }
 
 variable "application_port" {
@@ -74,6 +64,21 @@ variable "ecr_repository_url" {
 variable "ecs_deployment_role_name" {
   type        = string
   description = "The name of the ecs deployment role"
+}
+
+variable "ecs_task_execution_role_arn" {
+  type        = string
+  description = "The arn of the app task execution role"
+}
+
+variable "ecs_task_execution_role_name" {
+  type        = string
+  description = "The id of the app task execution role"
+}
+
+variable "ecs_task_role_arn" {
+  type        = string
+  description = "The arn of the app task role"
 }
 
 variable "ecs_security_group_id" {
