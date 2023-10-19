@@ -38,16 +38,10 @@ provider "aws" {
 locals {
   prefix = "core-dev"
 
-  rails_env = "development"
-
-  default_database_name = "data_collector"
-
   app_host                  = "review.submit-social-housing-data.levellingup.gov.uk"
   load_balancer_domain_name = "review.lb.submit-social-housing-data.levellingup.gov.uk"
 
   provider_role_arn = "arn:aws:iam::837698168072:role/developer"
-
-  app_task_desired_count = 2
 
   enable_aws_shield = false
 
