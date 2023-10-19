@@ -46,12 +46,20 @@ jobs:
         working-directory: terraform/meta
         run: terraform validate
 
-      - name: Terraform init development folder
-        working-directory: terraform/development
+      - name: Terraform init development shared folder
+        working-directory: terraform/development/shared
         run: terraform init -backend=false
 
-      - name: Terraform validate development folder
-        working-directory: terraform/development
+      - name: Terraform init development per review app folder
+        working-directory: terraform/development/per_review_app
+        run: terraform init -backend=false
+
+      - name: Terraform validate development shared folder
+        working-directory: terraform/development/shared
+        run: terraform validate
+
+      - name: Terraform validate development per review app folder
+        working-directory: terraform/development/per_review_app
         run: terraform validate
 
       - name: Terraform init staging folder
@@ -90,8 +98,12 @@ jobs:
         working-directory: terraform/meta
         run: terraform get
 
-      - name: Get terraform development modules
-        working-directory: terraform/development
+      - name: Get terraform development shared modules
+        working-directory: terraform/development/shared
+        run: terraform get
+
+      - name: Get terraform development per review app modules
+        working-directory: terraform/development/per_review_app
         run: terraform get
 
       - name: Get terraform staging modules
