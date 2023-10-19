@@ -9,6 +9,12 @@ resource "aws_lb" "this" {
   load_balancer_type         = "application"
   security_groups            = [aws_security_group.load_balancer.id]
   subnets                    = var.public_subnet_ids
+
+  access_logs {
+    enabled = true
+    bucket  = aws_s3_bucket.load_balancer_access_logs.id
+    prefix  = ""
+  }
 }
 
 resource "aws_lb_listener" "https" {
