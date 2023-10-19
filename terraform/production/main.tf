@@ -371,7 +371,7 @@ module "database_migration" {
   db_security_group_id                    = module.database.rds_security_group_id
   ecs_task_role_arn                       = module.application_roles.ecs_task_role_arn
   ecs_task_execution_role_arn             = module.application_roles.ecs_task_execution_role_arn
-  ecs_task_execution_role_name            = module.application_roles.ecs_task_execution_role_name
+  ecs_task_execution_role_id              = module.application_roles.ecs_task_execution_role_id
   vpc_id                                  = module.networking.vpc_id
 }
 
