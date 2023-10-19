@@ -8,6 +8,11 @@ output "ecs_task_execution_role_arn" {
   description = "The arn of the ecs task execution role"
 }
 
+output "ecs_task_execution_role_id" {
+  value       = aws_iam_role.task_execution.id
+  description = "The id of the ecs task execution role"
+}
+
 output "ecs_task_execution_role_name" {
   value       = aws_iam_role.task_execution.name
   description = "The name of the ecs task execution role"

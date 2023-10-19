@@ -71,7 +71,7 @@ variable "ecs_task_execution_role_arn" {
   description = "The arn of the app task execution role"
 }
 
-variable "ecs_task_execution_role_name" {
+variable "ecs_task_execution_role_id" {
   type        = string
   description = "The id of the app task execution role"
 }
