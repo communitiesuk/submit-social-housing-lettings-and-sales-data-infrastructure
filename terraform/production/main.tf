@@ -88,6 +88,11 @@ moved {
   to   = module.application.aws_cloudwatch_metric_alarm.unhealthy_hosts_count
 }
 
+moved {
+  from = module.application_roles.aws_iam_role_policy.parameter_access
+  to   = module.application.aws_iam_role_policy.parameter_access
+}
+
 module "application" {
   source = "../modules/application"
 
@@ -113,6 +118,7 @@ module "application" {
   ecs_deployment_role_name                          = module.application_roles.ecs_deployment_role_name
   ecs_security_group_id                             = module.application_security_group.ecs_security_group_id
   ecs_task_execution_role_arn                       = module.application_roles.ecs_task_execution_role_arn
+  ecs_task_execution_role_id                        = module.application_roles.ecs_task_execution_role_id
   ecs_task_role_arn                                 = module.application_roles.ecs_task_role_arn
   export_bucket_details                             = module.cds_export.details
   govuk_notify_api_key_secret_arn                   = module.application_secrets.govuk_notify_api_key_secret_arn
@@ -194,11 +200,10 @@ module "application_roles" {
 
   github_actions_role_arn = "arn:aws:iam::815624722760:role/core-application-repo"
 
-  prefix                                  = local.prefix
-  bulk_upload_bucket_access_policy_arn    = module.bulk_upload.read_write_policy_arn
-  database_complete_connection_string_arn = module.application.rds_complete_connection_string_arn
-  database_data_access_policy_arn         = module.database.rds_data_access_policy_arn
-  export_bucket_access_policy_arn         = module.cds_export.read_write_policy_arn
+  prefix                               = local.prefix
+  bulk_upload_bucket_access_policy_arn = module.bulk_upload.read_write_policy_arn
+  database_data_access_policy_arn      = module.database.rds_data_access_policy_arn
+  export_bucket_access_policy_arn      = module.cds_export.read_write_policy_arn
 
   secret_arns = [
     module.application_secrets.api_key_secret_arn,
@@ -234,11 +239,26 @@ moved {
   to   = module.application_secrets.aws_secretsmanager_secret.sentry_dsn
 }
 
+moved {
+  from = module.redis.aws_security_group.this
+  to   = module.application_security_group.aws_security_group.redis
+}
+
+moved {
+  from = module.redis.aws_vpc_security_group_ingress_rule.redis_ingress
+  to   = module.application_security_group.aws_vpc_security_group_ingress_rule.redis_ingress
+}
+
 module "application_secrets" {
   source = "../modules/application_secrets"
 
   prefix                      = local.prefix
   ecs_task_execution_role_arn = module.application_roles.ecs_task_execution_role_arn
+}
+
+moved {
+  from = module.redis.aws_security_group.this
+  to   = module.application_roles.aws_security_group.redis
 }
 
 module "application_security_group" {
@@ -250,7 +270,6 @@ module "application_security_group" {
   db_security_group_id            = module.database.rds_security_group_id
   load_balancer_security_group_id = module.front_door.load_balancer_security_group_id
   redis_port                      = local.redis_port
-  redis_security_group_id         = module.redis.redis_security_group_id
   vpc_id                          = module.networking.vpc_id
 }
 
@@ -408,8 +427,7 @@ module "redis" {
   node_type                 = "cache.t4g.micro"
 
   prefix                  = local.prefix
-  ecs_security_group_id   = module.application_security_group.ecs_security_group_id
   redis_port              = local.redis_port
+  redis_security_group_id = module.application_security_group.redis_security_group_id
   redis_subnet_group_name = module.networking.redis_private_subnet_group_name
-  vpc_id                  = module.networking.vpc_id
 }
