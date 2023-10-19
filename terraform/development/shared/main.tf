@@ -42,8 +42,8 @@ locals {
 
   default_database_name = "data_collector"
 
-  app_host                  = ""
-  load_balancer_domain_name = ""
+  app_host                  = "review.submit-social-housing-data.levellingup.gov.uk"
+  load_balancer_domain_name = "review.lb.submit-social-housing-data.levellingup.gov.uk"
 
   provider_role_arn = "arn:aws:iam::837698168072:role/developer"
 
@@ -56,49 +56,8 @@ locals {
   redis_port       = 6379
 }
 
-module "application" {
-  source = "../modules/application"
-
-  app_task_cpu    = 512
-  app_task_memory = 1024
-
-  sidekiq_task_cpu           = 512
-  sidekiq_task_desired_count = 1
-  sidekiq_task_memory        = 1024
-
-  ecr_repository_url = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core"
-
-  prefix                                            = local.prefix
-  api_key_secret_arn                                = module.application_secrets.api_key_secret_arn
-  app_host                                          = local.app_host
-  app_task_desired_count                            = local.app_task_desired_count
-  application_port                                  = local.application_port
-  bulk_upload_bucket_details                        = module.bulk_upload.details
-  cloudfront_header_name                            = module.front_door.cloudfront_header_name
-  cloudfront_header_password                        = module.front_door.cloudfront_header_password
-  database_name                                     = "${local.prefix}-${local.default_database_name}"
-  database_partial_connection_string_parameter_name = module.database.rds_partial_connection_string_parameter_name
-  ecs_deployment_role_name                          = module.application_roles.ecs_deployment_role_name
-  ecs_security_group_id                             = module.application_security_group.ecs_security_group_id
-  ecs_task_execution_role_arn                       = module.application_roles.ecs_task_execution_role_arn
-  ecs_task_execution_role_id                        = module.application_roles.ecs_task_execution_role_id
-  ecs_task_role_arn                                 = module.application_roles.ecs_task_role_arn
-  export_bucket_details                             = module.cds_export.details
-  govuk_notify_api_key_secret_arn                   = module.application_secrets.govuk_notify_api_key_secret_arn
-  load_balancer_arn_suffix                          = module.front_door.load_balancer_arn_suffix
-  load_balancer_listener_arn                        = module.front_door.load_balancer_listener_arn
-  os_data_key_secret_arn                            = module.application_secrets.os_data_key_secret_arn
-  private_subnet_ids                                = module.networking.private_subnet_ids
-  rails_env                                         = local.rails_env
-  rails_master_key_secret_arn                       = module.application_secrets.rails_master_key_secret_arn
-  redis_connection_string                           = module.redis.redis_connection_string
-  sentry_dsn_secret_arn                             = module.application_secrets.sentry_dsn_secret_arn
-  sns_topic_arn                                     = module.monitoring.sns_topic_arn
-  vpc_id                                            = module.networking.vpc_id
-}
-
 module "application_roles" {
-  source = "../modules/application_roles"
+  source = "../../modules/application_roles"
 
   github_actions_role_arn = "arn:aws:iam::815624722760:role/core-application-repo"
 
@@ -117,11 +76,11 @@ module "application_roles" {
 }
 
 module "application_secrets" {
-  source = "../modules/application_secrets"
+  source = "../../modules/application_secrets"
 }
 
 module "application_security_group" {
-  source = "../modules/application_security_group"
+  source = "../../modules/application_security_group"
 
   prefix                          = local.prefix
   application_port                = local.application_port
@@ -133,19 +92,19 @@ module "application_security_group" {
 }
 
 module "bulk_upload" {
-  source = "../modules/bulk_upload"
+  source = "../../modules/bulk_upload"
 
   prefix = local.prefix
 }
 
 module "cds_export" {
-  source = "../modules/cds_export"
+  source = "../../modules/cds_export"
 
   prefix = local.prefix
 }
 
 module "certificates" {
-  source = "../modules/certificates"
+  source = "../../modules/certificates"
 
   providers = {
     aws.us-east-1 = aws.us-east-1
@@ -156,7 +115,7 @@ module "certificates" {
 }
 
 module "database" {
-  source = "../modules/rds"
+  source = "../../modules/rds"
 
   allocated_storage         = 5
   apply_changes_immediately = true
@@ -174,7 +133,7 @@ module "database" {
 }
 
 module "front_door" {
-  source = "../modules/front_door"
+  source = "../../modules/front_door"
 
   providers = {
     aws.us-east-1 = aws.us-east-1
@@ -197,7 +156,7 @@ module "front_door" {
 }
 
 module "networking" {
-  source = "../modules/networking"
+  source = "../../modules/networking"
 
   prefix                                  = local.prefix
   vpc_cidr_block                          = "10.0.0.0/16"
@@ -205,21 +164,8 @@ module "networking" {
 }
 
 module "monitoring" {
-  source = "../modules/monitoring"
+  source = "../../modules/monitoring"
 
   prefix                               = local.prefix
   service_identifier_publishing_to_sns = "cloudwatch.amazonaws.com"
-}
-
-module "redis" {
-  source = "../modules/elasticache"
-
-  apply_changes_immediately = true
-  highly_available          = false
-  node_type                 = "cache.t4g.micro"
-
-  prefix                  = local.prefix
-  redis_port              = local.redis_port
-  redis_security_group_id = module.application_security_group.redis_security_group_id
-  redis_subnet_group_name = module.networking.redis_private_subnet_group_name
 }

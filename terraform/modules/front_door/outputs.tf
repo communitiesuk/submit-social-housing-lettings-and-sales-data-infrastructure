@@ -9,7 +9,7 @@ output "load_balancer_arn_suffix" {
 }
 
 output "load_balancer_listener_arn" {
-  value       = aws_lb_listener.https[0].arn
+  value       = var.initial_create ? null : aws_lb_listener.https[0].arn
   description = "The arn of the load balancer listener"
 }
 
