@@ -41,7 +41,7 @@ provider "aws" {
 }
 
 locals {
-  prefix = "core-dev"
+  prefix = "core-${terraform.workspace}" # terraform workspaces are expected to have a name in the format "review-XXXX"
 
   rails_env = "development"
 
