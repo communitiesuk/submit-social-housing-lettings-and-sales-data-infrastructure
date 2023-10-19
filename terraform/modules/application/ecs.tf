@@ -42,7 +42,6 @@ resource "aws_ecs_task_definition" "app" {
         { Name = "EXPORT_PAAS_INSTANCE", Value = local.export_bucket_key },
         { Name = "RAILS_ENV", Value = var.rails_env },
         { Name = "RAILS_LOG_TO_STDOUT", Value = "true" },
-        { Name = "RAILS_RELATIVE_URL_ROOT", Value = "/test" },
         { Name = "RAILS_SERVE_STATIC_FILES", Value = "true" },
         { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
         { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) }
@@ -115,7 +114,6 @@ resource "aws_ecs_task_definition" "sidekiq" {
         { Name = "EXPORT_PAAS_INSTANCE", Value = local.export_bucket_key },
         { Name = "RAILS_ENV", Value = var.rails_env },
         { Name = "RAILS_LOG_TO_STDOUT", Value = "true" },
-        { Name = "RAILS_RELATIVE_URL_ROOT", Value = "/test" },
         { Name = "RAILS_SERVE_STATIC_FILES", Value = "true" },
         { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
         { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) }
@@ -179,7 +177,6 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
         { Name = "EXPORT_PAAS_INSTANCE", Value = local.export_bucket_key },
         { Name = "RAILS_ENV", Value = var.rails_env },
         { Name = "RAILS_LOG_TO_STDOUT", Value = "true" },
-        { Name = "RAILS_RELATIVE_URL_ROOT", Value = "/test" },
         { Name = "RAILS_SERVE_STATIC_FILES", Value = "true" },
         { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
         { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) }
