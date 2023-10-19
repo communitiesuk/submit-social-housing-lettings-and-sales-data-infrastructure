@@ -149,17 +149,17 @@ module "front_door" {
   initial_create = var.initial_create
 }
 
+module "monitoring" {
+  source = "../../modules/monitoring"
+
+  prefix                               = local.prefix
+  service_identifier_publishing_to_sns = "cloudwatch.amazonaws.com"
+}
+
 module "networking" {
   source = "../../modules/networking"
 
   prefix                                  = local.prefix
   vpc_cidr_block                          = "10.0.0.0/16"
   vpc_flow_cloudwatch_log_expiration_days = 60
-}
-
-module "monitoring" {
-  source = "../../modules/monitoring"
-
-  prefix                               = local.prefix
-  service_identifier_publishing_to_sns = "cloudwatch.amazonaws.com"
 }

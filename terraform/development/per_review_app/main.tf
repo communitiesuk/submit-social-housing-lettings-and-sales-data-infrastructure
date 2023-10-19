@@ -40,15 +40,6 @@ provider "aws" {
   }
 }
 
-provider "aws" {
-  alias  = "us-east-1"
-  region = "us-east-1"
-
-  assume_role {
-    role_arn = local.provider_role_arn
-  }
-}
-
 locals {
   prefix = "core-dev"
 
