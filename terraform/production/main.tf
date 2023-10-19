@@ -88,6 +88,11 @@ moved {
   to   = module.application.aws_cloudwatch_metric_alarm.unhealthy_hosts_count
 }
 
+moved {
+  from = module.application_roles.aws_iam_role_policy.parameter_access
+  to   = module.application.aws_iam_role_policy.parameter_access
+}
+
 module "application" {
   source = "../modules/application"
 
@@ -232,6 +237,16 @@ moved {
 moved {
   from = module.application.aws_secretsmanager_secret.sentry_dsn
   to   = module.application_secrets.aws_secretsmanager_secret.sentry_dsn
+}
+
+moved {
+  from = module.redis.aws_security_group.this
+  to   = module.application_security_group.aws_security_group.redis
+}
+
+moved {
+  from = module.redis.aws_vpc_security_group_ingress_rule.redis_ingress
+  to   = module.application_security_group.aws_vpc_security_group_ingress_rule.redis_ingress
 }
 
 module "application_secrets" {
