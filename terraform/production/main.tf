@@ -336,11 +336,14 @@ moved {
 module "database" {
   source = "../modules/rds"
 
-  allocated_storage         = 100
-  apply_changes_immediately = false
-  backup_retention_period   = 7
-  highly_available          = true
-  instance_class            = "db.t3.small"
+  allocated_storage       = 100
+  backup_retention_period = 7
+
+  apply_changes_immediately          = false
+  enable_primary_deletion_protection = true
+  highly_available                   = true
+  skip_final_snapshot                = false
+  instance_class                     = "db.t3.small"
 
   prefix = local.prefix
 
@@ -415,6 +418,8 @@ module "monitoring" {
 
 module "redis" {
   source = "../modules/elasticache"
+
+  snapshot_retention_limit = 5
 
   apply_changes_immediately = false
   highly_available          = true

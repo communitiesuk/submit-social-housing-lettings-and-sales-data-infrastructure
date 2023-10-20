@@ -111,11 +111,14 @@ module "certificates" {
 module "database" {
   source = "../../modules/rds"
 
-  allocated_storage         = 5
-  apply_changes_immediately = true
-  backup_retention_period   = 7
-  highly_available          = false
-  instance_class            = "db.t3.micro"
+  allocated_storage       = 100
+  backup_retention_period = 0 # no backups
+
+  apply_changes_immediately          = true
+  enable_primary_deletion_protection = false
+  highly_available                   = false
+  skip_final_snapshot                = true
+  instance_class                     = "db.m5.xlarge"
 
   prefix = local.prefix
 

@@ -20,7 +20,7 @@ resource "aws_elasticache_replication_group" "this" {
   preferred_cache_cluster_azs = ["eu-west-2a", "eu-west-2b"] # The first AZ in the list is where the primary node will be created. Replicas will be created in the following AZs.
   replication_group_id        = var.prefix
   security_group_ids          = [var.redis_security_group_id]
-  snapshot_retention_limit    = 5
+  snapshot_retention_limit    = var.snapshot_retention_limit
   snapshot_window             = "02:30-03:30"
   subnet_group_name           = var.redis_subnet_group_name
   transit_encryption_enabled  = true
@@ -41,7 +41,7 @@ resource "aws_elasticache_cluster" "this" {
   parameter_group_name       = aws_elasticache_parameter_group.this.id
   port                       = var.redis_port
   security_group_ids         = [var.redis_security_group_id]
-  snapshot_retention_limit   = 5
+  snapshot_retention_limit   = var.snapshot_retention_limit
   snapshot_window            = "02:30-03:30"
   subnet_group_name          = var.redis_subnet_group_name
   transit_encryption_enabled = true

@@ -51,7 +51,7 @@ locals {
 
   provider_role_arn = "arn:aws:iam::837698168072:role/developer"
 
-  app_task_desired_count = 2
+  app_task_desired_count = 1
 
   application_port = 8080
   redis_port       = 6379
@@ -100,6 +100,8 @@ module "application" {
 
 module "redis" {
   source = "../../modules/elasticache"
+
+  snapshot_retention_limit = 5
 
   apply_changes_immediately = true
   highly_available          = false
