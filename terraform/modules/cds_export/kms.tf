@@ -44,7 +44,7 @@ resource "aws_kms_key_policy" "cds" {
   count = local.create_cds_role ? 1 : 0
 
   key_id = aws_kms_key.this.id
-  policy = data.aws_iam_policy_document.cds_role.json
+  policy = data.aws_iam_policy_document.cds_role[0].json
 }
 
 data "aws_iam_policy_document" "cds_role" {
