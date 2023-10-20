@@ -20,10 +20,7 @@ data "aws_iam_policy_document" "kms" {
       identifiers = [var.ecs_task_role_arn]
     }
 
-    actions = [
-      "kms:GenerateDataKey",
-      "kms:Encrypt"
-    ]
+    actions = ["kms:Encrypt"]
 
     resources = [aws_kms_key.this.arn]
   }
@@ -56,10 +53,7 @@ data "aws_iam_policy_document" "cds_role" {
       identifiers = [aws_iam_role.cds[0].arn]
     }
 
-    actions = [
-      "kms:GenerateDataKey",
-      "kms:Decrypt"
-    ]
+    actions = ["kms:Decrypt"]
 
     resources = [aws_kms_key.this.arn]
   }
