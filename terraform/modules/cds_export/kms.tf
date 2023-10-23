@@ -62,7 +62,10 @@ data "aws_iam_policy_document" "cds_role" {
       identifiers = [aws_iam_role.cds[0].arn]
     }
 
-    actions = ["kms:Decrypt"]
+    actions = [
+      "kms:GenerateDataKey",
+      "kms:Decrypt"
+    ]
 
     resources = [aws_kms_key.this.arn]
   }
