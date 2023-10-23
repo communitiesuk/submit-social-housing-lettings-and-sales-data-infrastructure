@@ -349,12 +349,12 @@ module "database" {
 
   prefix = local.prefix
 
-  database_port         = local.database_port
-  db_subnet_group_name  = module.networking.db_private_subnet_group_name
-  ecs_security_group_id = module.application_security_group.ecs_security_group_id
+  database_port               = local.database_port
+  db_subnet_group_name        = module.networking.db_private_subnet_group_name
+  ecs_security_group_id       = module.application_security_group.ecs_security_group_id
   ecs_task_execution_role_arn = module.application_roles.ecs_task_execution_role_arn
-  sns_topic_arn         = module.monitoring.sns_topic_arn
-  vpc_id                = module.networking.vpc_id
+  sns_topic_arn               = module.monitoring.sns_topic_arn
+  vpc_id                      = module.networking.vpc_id
 }
 
 module "database_migration" {

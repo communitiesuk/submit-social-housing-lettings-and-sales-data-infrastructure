@@ -3,8 +3,8 @@ data "aws_ssm_parameter" "partial_database_connection_string" {
 }
 
 resource "aws_ssm_parameter" "complete_database_connection_string" {
+  name   = "${upper(var.prefix)}_COMPLETE_DATABASE_CONNECTION_STRING"
   key_id = aws_kms_key.this.arn
-  name  = "${upper(var.prefix)}_COMPLETE_DATABASE_CONNECTION_STRING"
-  type  = "SecureString"
-  value = "${data.aws_ssm_parameter.partial_database_connection_string.value}/${var.database_name}"
+  type   = "SecureString"
+  value  = "${data.aws_ssm_parameter.partial_database_connection_string.value}/${var.database_name}"
 }
