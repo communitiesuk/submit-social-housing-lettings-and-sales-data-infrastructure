@@ -22,7 +22,10 @@ data "aws_iam_policy_document" "kms" {
       identifiers = [var.ecs_task_execution_role_arn]
     }
 
-    actions = ["kms:Decrypt"]
+    actions = [
+      "kms:GenerateDataKey",
+      "kms:Decrypt"
+    ]
 
     resources = [aws_kms_key.this.arn]
   }
