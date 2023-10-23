@@ -10,11 +10,22 @@ resource "aws_kms_alias" "this" {
 
 resource "aws_kms_key_policy" "this" {
   key_id = aws_kms_key.this.id
-  policy = data.aws_iam_policy_document.kms.json
+  policy = local.create_cds_role ? data.aws_iam_policy_document.ecs_task_and_cds_roles[0].json : data.aws_iam_policy_document.ecs_task_role.json
 }
 
-data "aws_iam_policy_document" "kms" {
+# Terraform / AWS wouldn't intelligently combine policies applied to the key separately, so we use override_policy_documents to do this when necessary
+data "aws_iam_policy_document" "ecs_task_and_cds_roles" {
+  count = local.create_cds_role ? 1 : 0
+
+  override_policy_documents = [
+    data.aws_iam_policy_document.ecs_task_role.json,
+    data.aws_iam_policy_document.cds_role[0].json
+  ]
+}
+
+data "aws_iam_policy_document" "ecs_task_role" {
   statement {
+    sid = "ECSTaskRoleEncrypt"
     principals {
       type        = "AWS"
       identifiers = [var.ecs_task_role_arn]
@@ -26,6 +37,7 @@ data "aws_iam_policy_document" "kms" {
   }
 
   statement {
+    sid = "Root"
     principals {
       type        = "AWS"
       identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
@@ -37,17 +49,11 @@ data "aws_iam_policy_document" "kms" {
   }
 }
 
-resource "aws_kms_key_policy" "cds" {
-  count = local.create_cds_role ? 1 : 0
-
-  key_id = aws_kms_key.this.id
-  policy = data.aws_iam_policy_document.cds_role[0].json
-}
-
 data "aws_iam_policy_document" "cds_role" {
   count = local.create_cds_role ? 1 : 0
 
   statement {
+    sid = "CDSRoleDecrypt"
     principals {
       type        = "AWS"
       identifiers = [aws_iam_role.cds[0].arn]
@@ -59,6 +65,7 @@ data "aws_iam_policy_document" "cds_role" {
   }
 
   statement {
+    sid = "Root"
     principals {
       type        = "AWS"
       identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
