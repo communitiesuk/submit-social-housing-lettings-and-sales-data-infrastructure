@@ -48,9 +48,9 @@ variable "ecs_task_execution_role_arn" {
   description = "The arn of the ecs task execution role"
 }
 
-variable "ecs_task_execution_role_name" {
+variable "ecs_task_execution_role_id" {
   type        = string
-  description = "The name of the ecs task execution role"
+  description = "The id of the ecs task execution role"
 }
 
 variable "ecs_task_role_arn" {
