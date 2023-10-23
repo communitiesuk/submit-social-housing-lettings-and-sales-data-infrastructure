@@ -31,7 +31,9 @@ data "aws_iam_policy_document" "ecs_task_role" {
       identifiers = [var.ecs_task_role_arn]
     }
 
-    actions = ["kms:Encrypt"]
+    actions = [
+      "kms:GenerateDataKey",
+      "kms:Encrypt"]
 
     resources = [aws_kms_key.this.arn]
   }
