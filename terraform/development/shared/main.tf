@@ -111,11 +111,11 @@ module "certificates" {
 module "database" {
   source = "../../modules/rds"
 
-  allocated_storage       = 100
+  allocated_storage       = 50
   backup_retention_period = 0 # no backups
 
   apply_changes_immediately          = true
-  enable_primary_deletion_protection = false
+  enable_primary_deletion_protection = true
   highly_available                   = false
   skip_final_snapshot                = true
   instance_class                     = "db.m5.xlarge"

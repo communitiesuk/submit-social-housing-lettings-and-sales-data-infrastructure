@@ -41,11 +41,9 @@ provider "aws" {
 }
 
 locals {
-  prefix = "core-${terraform.workspace}" # terraform workspaces are expected to have a name in the format "review-XXXX"
+  prefix = "core-review-${terraform.workspace}" # terraform workspaces are expected to have a number"
 
   rails_env = "development"
-
-  default_database_name = "data_collector"
 
   app_host = "review.submit-social-housing-data.levellingup.gov.uk"
 
@@ -77,7 +75,7 @@ module "application" {
   bulk_upload_bucket_details                        = data.terraform_remote_state.development.outputs.bulk_upload_details
   cloudfront_header_name                            = data.terraform_remote_state.development.outputs.front_door_cloudfront_header_name
   cloudfront_header_password                        = data.terraform_remote_state.development.outputs.front_door_cloudfront_header_password
-  database_name                                     = "${local.prefix}-${local.default_database_name}"
+  database_name                                     = local.prefix
   database_partial_connection_string_parameter_name = data.terraform_remote_state.development.outputs.database_rds_partial_connection_string_parameter_name
   ecs_deployment_role_name                          = data.terraform_remote_state.development.outputs.application_roles_ecs_deployment_role_name
   ecs_security_group_id                             = data.terraform_remote_state.development.outputs.application_security_group_ecs_security_group_id
@@ -99,9 +97,10 @@ module "application" {
 }
 
 module "redis" {
+  #checkov:skip=CKV_AWS_134:redis backups not required for dev / review apps
   source = "../../modules/elasticache"
 
-  snapshot_retention_limit = 5
+  snapshot_retention_limit = 0 # no backups
 
   apply_changes_immediately = true
   highly_available          = false
