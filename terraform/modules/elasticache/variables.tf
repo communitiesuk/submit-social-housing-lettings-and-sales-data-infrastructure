@@ -32,3 +32,8 @@ variable "redis_subnet_group_name" {
   type        = string
   description = "The name of the subnet group associated with the VPC that Redis needs to be in."
 }
+
+variable "snapshot_retention_limit" {
+  type        = number
+  description = "The number of days the automatic cache cluster snapshots are retained before being deleted. If 0 then backups are turned off"
+}
