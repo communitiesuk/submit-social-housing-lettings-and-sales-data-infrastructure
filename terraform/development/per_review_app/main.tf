@@ -97,7 +97,6 @@ module "application" {
 }
 
 module "redis" {
-  #checkov:skip=CKV_AWS_134:redis backups not required for dev / review apps
   source = "../../modules/elasticache"
 
   snapshot_retention_limit = 0 # no backups
