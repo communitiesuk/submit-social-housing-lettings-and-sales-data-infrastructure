@@ -27,6 +27,24 @@ provider "aws" {
 }
 
 provider "aws" {
+  alias  = "eu-west-1"
+  region = "eu-west-1"
+
+  assume_role {
+    role_arn = local.provider_role_arn
+  }
+}
+
+provider "aws" {
+  alias  = "eu-west-3"
+  region = "eu-west-3"
+
+  assume_role {
+    role_arn = local.provider_role_arn
+  }
+}
+
+provider "aws" {
   alias  = "us-east-1"
   region = "us-east-1"
 
@@ -243,6 +261,12 @@ module "front_door" {
 
 module "networking" {
   source = "../modules/networking"
+
+  providers = {
+    aws.eu-west-1 = aws.eu-west-1
+    aws.eu-west-3 = aws.eu-west-3
+    aws.us-east-1 = aws.us-east-1
+  }
 
   prefix                                  = local.prefix
   vpc_cidr_block                          = "10.0.0.0/16"

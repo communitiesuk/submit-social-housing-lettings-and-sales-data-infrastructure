@@ -84,3 +84,25 @@ data "aws_iam_policy_document" "vpc_flow_logs_assume_role_permissions" {
     ]
   }
 }
+
+data "aws_vpc" "default-eu-west-2" {
+  default = true
+}
+
+data "aws_vpc" "default-eu-west-1" {
+  provider = aws.eu-west-1
+
+  default = true
+}
+
+data "aws_vpc" "default-eu-west-3" {
+  provider = aws.eu-west-3
+
+  default = true
+}
+
+data "aws_vpc" "default-us-east-1" {
+  provider = aws.us-east-1
+
+  default = true
+}
