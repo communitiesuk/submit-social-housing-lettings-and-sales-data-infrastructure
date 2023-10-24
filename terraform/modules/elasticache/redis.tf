@@ -1,6 +1,8 @@
 resource "aws_elasticache_replication_group" "this" {
   #checkov:skip=CKV_AWS_31:TODO CLDC-2937 potentially introduce an auth token later
+  #checkov:skip=CKV_AWS_134:redis backups not required for dev / review apps
   #checkov:skip=CKV_AWS_191:default encryption key is sufficient
+  #checkov:skip=CKV2_AWS_50:redis multi-az automatic failover cannot be enabled when we want one node / no high availability
   apply_immediately           = var.apply_changes_immediately
   at_rest_encryption_enabled  = true
   auto_minor_version_upgrade  = true
