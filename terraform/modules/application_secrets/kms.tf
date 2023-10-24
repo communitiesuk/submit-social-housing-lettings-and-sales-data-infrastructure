@@ -1,5 +1,5 @@
 resource "aws_kms_key" "this" {
-  description         = "KMS key used to encrypt the Secrets Manager secrets."
+  description         = "KMS key used to decrypt the Secrets Manager secrets."
   enable_key_rotation = true
 }
 

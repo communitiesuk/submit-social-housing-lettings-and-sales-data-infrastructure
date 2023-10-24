@@ -1,5 +1,5 @@
 resource "aws_kms_key" "this" {
-  description         = "KMS key used to encrypt the CDS export bucket."
+  description         = "KMS key used to encrypt/decrypt data in the CDS export bucket."
   enable_key_rotation = true
 }
 
