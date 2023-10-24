@@ -4,12 +4,12 @@ resource "aws_elasticache_replication_group" "this" {
   apply_immediately           = var.apply_changes_immediately
   at_rest_encryption_enabled  = true
   auto_minor_version_upgrade  = true
-  automatic_failover_enabled  = true
-  description                 = "Redis replication group, containing a primary node and a replica."
+  automatic_failover_enabled  = var.highly_available ? true : false
+  description                 = "Redis replication group, consisting of a single node, or a primary node and a replica."
   engine                      = "redis"
   engine_version              = "6.2"
   maintenance_window          = "sun:23:00-mon:01:30"
-  multi_az_enabled            = true
+  multi_az_enabled            = var.highly_available ? true : false
   node_type                   = var.node_type
   num_cache_clusters          = var.highly_available ? 2 : 1
   parameter_group_name        = aws_elasticache_parameter_group.this.id
