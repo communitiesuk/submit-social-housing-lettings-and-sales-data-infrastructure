@@ -10,6 +10,11 @@ variable "cds_access_role_arns" {
   description = "The arn's of the roles the CDS team will use to assume a role we define"
 }
 
+variable "ecs_task_role_arn" {
+  type        = string
+  description = "The arn of the app task role"
+}
+
 variable "prefix" {
   type        = string
   description = "The prefix to be prepended to resource names."

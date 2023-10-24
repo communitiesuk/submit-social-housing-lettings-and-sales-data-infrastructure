@@ -28,11 +28,6 @@ variable "redis_port" {
   description = "The network port redis runs on"
 }
 
-variable "redis_security_group_id" {
-  type        = string
-  description = "The id of the redis security group for ecs egress"
-}
-
 variable "vpc_id" {
   type        = string
   description = "The ID of the VPC to be associated with"
