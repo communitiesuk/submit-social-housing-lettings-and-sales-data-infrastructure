@@ -1,5 +1,5 @@
 resource "aws_kms_key" "this" {
-  description         = "KMS key used to encrypt the bulk upload bucket."
+  description         = "KMS key used to encrypt/decrypt data in the bulk upload bucket."
   enable_key_rotation = true
 }
 
