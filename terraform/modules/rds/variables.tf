@@ -33,6 +33,11 @@ variable "ecs_security_group_id" {
   description = "The id of the ecs security group for ecs ingress"
 }
 
+variable "ecs_task_execution_role_arn" {
+  type        = string
+  description = "The arn of the app task execution role"
+}
+
 variable "highly_available" {
   type        = bool
   description = "Whether or not to make the db highly available (whether to have replicas or not)."
