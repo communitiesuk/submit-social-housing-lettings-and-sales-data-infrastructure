@@ -311,6 +311,11 @@ module "networking" {
   vpc_flow_cloudwatch_log_expiration_days = 60
 }
 
+moved {
+  from = module.networking.aws_vpc.this
+  to   = module.networking.aws_vpc.main
+}
+
 module "monitoring" {
   source = "../modules/monitoring"
 

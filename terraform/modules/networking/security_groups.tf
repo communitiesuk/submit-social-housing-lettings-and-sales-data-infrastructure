@@ -1,3 +1,7 @@
+resource "aws_default_security_group" "main" {
+  vpc_id = aws_vpc.main.id
+}
+
 resource "aws_default_security_group" "default-eu-west-2" {
   vpc_id = data.aws_vpc.default-eu-west-2.id
 }

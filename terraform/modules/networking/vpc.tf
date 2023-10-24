@@ -1,4 +1,4 @@
-resource "aws_vpc" "this" {
+resource "aws_vpc" "main" {
   #checkov:skip=CKV2_AWS_12:we don't think that we should restrict all traffic on the default VPC security group, otherwise our application will be completely isolated
   cidr_block           = var.vpc_cidr_block
   enable_dns_support   = true
@@ -13,14 +13,14 @@ resource "aws_flow_log" "vpc_accepted" {
   iam_role_arn    = aws_iam_role.vpc_flow_logs.arn
   log_destination = aws_cloudwatch_log_group.vpc_flow_logs_accepted.arn
   traffic_type    = "ACCEPT"
-  vpc_id          = aws_vpc.this.id
+  vpc_id          = aws_vpc.main.id
 }
 
 resource "aws_flow_log" "vpc_rejected" {
   iam_role_arn    = aws_iam_role.vpc_flow_logs.arn
   log_destination = aws_cloudwatch_log_group.vpc_flow_logs_rejected.arn
   traffic_type    = "REJECT"
-  vpc_id          = aws_vpc.this.id
+  vpc_id          = aws_vpc.main.id
 }
 
 # tfsec:ignore:aws-cloudwatch-log-group-customer-key:flow logs are non-sensitive
