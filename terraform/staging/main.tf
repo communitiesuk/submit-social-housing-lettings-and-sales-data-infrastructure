@@ -47,7 +47,7 @@ locals {
 
   provider_role_arn = "arn:aws:iam::107155005276:role/developer"
 
-  app_task_desired_count = 2
+  app_task_desired_count = 4
 
   enable_aws_shield = false
 
@@ -70,7 +70,7 @@ module "application" {
   app_task_memory = 1024
 
   sidekiq_task_cpu           = 1024
-  sidekiq_task_desired_count = 1
+  sidekiq_task_desired_count = 2
   sidekiq_task_memory        = 8192
 
   ecr_repository_url = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core"
@@ -184,11 +184,11 @@ module "certificates" {
 module "database" {
   source = "../modules/rds"
 
-  allocated_storage         = 25
+  allocated_storage         = 100
   apply_changes_immediately = true
   backup_retention_period   = 7
   highly_available          = false
-  instance_class            = "db.t3.micro"
+  instance_class            = "db.t3.small"
 
   prefix = local.prefix
 
