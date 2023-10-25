@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "read_write" {
 
   statement {
     actions   = ["kms:GenerateDataKey", "kms:Decrypt"]
-    resources = [aws_kms_key.this]
+    resources = [aws_kms_key.this.arn]
     effect    = "Allow"
   }
 }
