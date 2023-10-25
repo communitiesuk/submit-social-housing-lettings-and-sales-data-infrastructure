@@ -99,7 +99,7 @@ module "ecr_s3_migration" {
     "arn:aws:iam::107155005276:role/core-staging-csv-s3-migration-task-execution",
     "arn:aws:iam::107155005276:role/core-staging-export-s3-migration-task-execution"
   ]
-  repository_name       = "s3-migration"
+  repository_name = "s3-migration"
 }
 
 module "monitoring" {
