@@ -275,6 +275,8 @@ module "s3_migration" {
       policy_arn  = module.bulk_upload.read_write_policy_arn
     }
   }
+
+  vpc_id = module.networking.vpc_id
 }
 
 module "front_door" {

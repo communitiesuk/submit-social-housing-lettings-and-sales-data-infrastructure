@@ -11,6 +11,12 @@ data "aws_iam_policy_document" "read_write" {
     resources = ["${aws_s3_bucket.export.arn}/*"]
     effect    = "Allow"
   }
+
+  statement {
+    actions   = ["kms:GenerateDataKey", "kms:Decrypt"]
+    resources = [aws_kms_key.this]
+    effect    = "Allow"
+  }
 }
 
 resource "aws_iam_policy" "read_write" {
