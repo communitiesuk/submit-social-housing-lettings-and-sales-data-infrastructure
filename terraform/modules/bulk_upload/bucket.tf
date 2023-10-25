@@ -91,6 +91,10 @@ data "aws_iam_policy_document" "read_write" {
     resources = ["${aws_s3_bucket.bulk_upload.arn}/*"]
     effect    = "Allow"
   }
+
+  statement {
+    actions   = ["kms:GenerateDataKey", "kms:Decrypt"]
+  }
 }
 
 resource "aws_iam_policy" "read_write" {

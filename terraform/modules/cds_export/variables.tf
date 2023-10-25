@@ -15,6 +15,12 @@ variable "ecs_task_role_arn" {
   description = "The arn of the app task role"
 }
 
+variable "s3_migration_task_role_arn" {
+  type        = string
+  description = "Arn of the s3 migration task role"
+  default     = null
+}
+
 variable "prefix" {
   type        = string
   description = "The prefix to be prepended to resource names."
