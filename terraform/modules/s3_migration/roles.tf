@@ -37,6 +37,12 @@ data "aws_iam_policy_document" "allow_secrets_access" {
     ]
     effect = "Allow"
   }
+
+  statement {
+    actions = ["kms:Decrypt"]
+    resources = [aws_kms_key.this.arn]
+    effect = "Allow"
+  }
 }
 
 resource "aws_iam_policy" "allow_secrets_access" {
