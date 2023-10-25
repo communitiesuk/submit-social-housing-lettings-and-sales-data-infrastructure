@@ -1,11 +1,13 @@
+#tfsec:ignore:aws-ecs-enable-container-insight: Don't need container insights here
 resource "aws_ecs_cluster" "this" {
+  #checkov:skip=CKV_AWS_65: Don't need container insights here
   name = "${var.prefix}-s3-migration"
 }
 
 locals {
   cpu     = 512
   memory  = 1024
-  storage = 20
+  storage = 25
 }
 
 resource "aws_ecs_task_definition" "bucket_migration" {
@@ -50,7 +52,7 @@ resource "aws_ecs_task_definition" "bucket_migration" {
   ])
 
   ephemeral_storage {
-    size_in_gib = 25
+    size_in_gib = local.storage
   }
 
   runtime_platform {
