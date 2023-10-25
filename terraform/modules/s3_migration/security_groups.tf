@@ -1,7 +1,7 @@
 resource "aws_security_group" "this" {
-    name = "${var.prefix}-s3-migration"
-    description = "Security group for s3 migration tasks"
-    vpc_id = var.vpc_id
+  name        = "${var.prefix}-s3-migration"
+  description = "Security group for s3 migration tasks"
+  vpc_id      = var.vpc_id
 }
 
 resource "aws_vpc_security_group_egress_rule" "this" {
