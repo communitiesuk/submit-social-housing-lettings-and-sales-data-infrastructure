@@ -4,7 +4,7 @@ resource "aws_kms_key" "this" {
 }
 
 resource "aws_kms_alias" "this" {
-  name          = "alias/${var.prefix}-db-migration-secretsmanager-secrets"
+  name          = "alias/${var.prefix}-s3-migration-secretsmanager-secrets"
   target_key_id = aws_kms_key.this.key_id
 }
 

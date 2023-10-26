@@ -40,8 +40,7 @@ locals {
 
   provider_role_arn = "arn:aws:iam::815624722760:role/developer"
 
-  # TODO: combine these (separate for testing purposes)
-  create_db_migration_infra = false
+  create_db_migration_infra = true
   create_s3_migration_infra = true
 }
 
