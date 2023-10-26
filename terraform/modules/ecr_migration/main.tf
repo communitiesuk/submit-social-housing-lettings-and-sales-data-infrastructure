@@ -10,10 +10,11 @@ terraform {
 }
 
 #tfsec:ignore:aws-ecr-repository-customer-key:encryption using KMS CMK not required
-resource "aws_ecr_repository" "db_migration" {
+#tfsec:ignore:aws-ecr-enforce-immutable-repository: For migration purposes, we accept mutable image tags
+resource "aws_ecr_repository" "this" {
   #checkov:skip=CKV_AWS_51:mutable image tags preferred as we always want the latest image and don't need to track previous ones
   #checkov:skip=CKV_AWS_136:encryption using KMS not required
-  name                 = "db-migration"
+  name                 = var.repository_name
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
@@ -38,7 +39,7 @@ data "aws_iam_policy_document" "this" {
   }
 }
 
-resource "aws_ecr_repository_policy" "db_migration" {
-  repository = aws_ecr_repository.db_migration.name
+resource "aws_ecr_repository_policy" "this" {
+  repository = aws_ecr_repository.this.name
   policy     = data.aws_iam_policy_document.this.json
 }
