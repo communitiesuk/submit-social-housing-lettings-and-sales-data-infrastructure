@@ -9,7 +9,6 @@ terraform {
   }
 }
 
-#tfsec:ignore:aws-ecr-enforce-immutable-repository:mutable images preferred
 #tfsec:ignore:aws-ecr-repository-customer-key:encryption using KMS CMK not required
 #tfsec:ignore:aws-ecr-enforce-immutable-repository: For migration purposes, we accept mutable image tags
 resource "aws_ecr_repository" "this" {
