@@ -143,6 +143,9 @@ module "application_roles" {
 
 module "application_secrets" {
   source = "../modules/application_secrets"
+
+  prefix                      = local.prefix
+  ecs_task_execution_role_arn = module.application_roles.ecs_task_execution_role_arn
 }
 
 moved {
@@ -170,7 +173,8 @@ module "application_security_group" {
 module "bulk_upload" {
   source = "../modules/bulk_upload"
 
-  prefix = local.prefix
+  prefix            = local.prefix
+  ecs_task_role_arn = module.application_roles.ecs_task_role_arn
 }
 
 module "cds_export" {
@@ -181,6 +185,7 @@ module "cds_export" {
     "arn:aws:iam::062321884391:role/DSQL1",
     "arn:aws:iam::062321884391:role/DSQSS"
   ]
+  ecs_task_role_arn = module.application_roles.ecs_task_role_arn
 }
 
 module "certificates" {
@@ -205,11 +210,12 @@ module "database" {
 
   prefix = local.prefix
 
-  database_port         = local.database_port
-  db_subnet_group_name  = module.networking.db_private_subnet_group_name
-  ecs_security_group_id = module.application_security_group.ecs_security_group_id
-  sns_topic_arn         = module.monitoring.sns_topic_arn
-  vpc_id                = module.networking.vpc_id
+  database_port               = local.database_port
+  db_subnet_group_name        = module.networking.db_private_subnet_group_name
+  ecs_security_group_id       = module.application_security_group.ecs_security_group_id
+  ecs_task_execution_role_arn = module.application_roles.ecs_task_execution_role_arn
+  sns_topic_arn               = module.monitoring.sns_topic_arn
+  vpc_id                      = module.networking.vpc_id
 }
 
 module "database_migration" {

@@ -1,9 +1,6 @@
-#tfsec:ignore:aws-s3-enable-bucket-encryption: default bucket encryption is sufficient
-#tfsec:ignore:aws-s3-encryption-customer-key: default encryption is sufficient
 #tfsec:ignore:aws-s3-enable-versioning: Not important, each upload creates a new file with a different name (a random UUID)
 resource "aws_s3_bucket" "bulk_upload" {
   #checkov:skip=CKV2_AWS_62: no need for event notifications
-  #checkov:skip=CKV_AWS_145: default encryption is fine
   #checkov:skip=CKV_AWS_144: cross region replication is overkill when this is only for data transfer
   #checkov:skip=CKV_AWS_21: versioning not important, each upload creates a new file with a different name (a random UUID)
   bucket = "${var.prefix}-bulk-upload"
@@ -66,6 +63,18 @@ resource "aws_s3_bucket_lifecycle_configuration" "bulk_upload" {
     }
 
     status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
+  bucket = aws_s3_bucket.bulk_upload.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = aws_kms_key.this.arn
+      sse_algorithm     = "aws:kms"
+    }
+    bucket_key_enabled = true
   }
 }
 
