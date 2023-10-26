@@ -1,5 +1,5 @@
 resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.this.id
+  vpc_id = aws_vpc.main.id
 
   tags = {
     Name = "${var.prefix}-public-route-table"
@@ -20,7 +20,7 @@ resource "aws_route_table_association" "public" {
 
 resource "aws_route_table" "private" {
   count  = length(aws_nat_gateway.this)
-  vpc_id = aws_vpc.this.id
+  vpc_id = aws_vpc.main.id
 
   tags = {
     Name = "${var.prefix}-private-route-table-${count.index}"
