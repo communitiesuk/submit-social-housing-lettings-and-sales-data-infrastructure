@@ -12,7 +12,7 @@ terraform {
     bucket         = "core-non-prod-tf-state"
     dynamodb_table = "core-non-prod-tf-state-lock"
     encrypt        = true
-    key            = "core-development.tfstate"
+    key            = "core-development-shared.tfstate"
     region         = "eu-west-2"
     role_arn       = "arn:aws:iam::815624722760:role/developer"
   }
