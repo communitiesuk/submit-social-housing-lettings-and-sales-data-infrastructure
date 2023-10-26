@@ -56,6 +56,7 @@ locals {
   redis_port       = 6379
 
   create_db_migration_infra = false
+  create_s3_migration_infra = true
 }
 
 moved {
@@ -222,6 +223,30 @@ module "database_migration" {
   ecs_task_execution_role_arn             = module.application_roles.ecs_task_execution_role_arn
   ecs_task_execution_role_id              = module.application_roles.ecs_task_execution_role_id
   vpc_id                                  = module.networking.vpc_id
+}
+
+module "s3_migration" {
+  source = "../modules/s3_migration"
+
+  count = local.create_s3_migration_infra ? 1 : 0
+
+  ecr_repository_url = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/s3-migration"
+
+  prefix = local.prefix
+  buckets = {
+    export = {
+      source      = "s3://paas-s3-broker-prod-lon-791e541d-6996-44c8-9884-322448062d7b",
+      destination = "s3://${module.cds_export.details.bucket_name}",
+      policy_arn  = module.cds_export.read_write_policy_arn
+    },
+    csv = {
+      source      = "s3://paas-s3-broker-prod-lon-0e8e5bf9-3273-4464-9827-a56da3cef514",
+      destination = "s3://${module.bulk_upload.details.bucket_name}",
+      policy_arn  = module.bulk_upload.read_write_policy_arn
+    }
+  }
+
+  vpc_id = module.networking.vpc_id
 }
 
 module "front_door" {
