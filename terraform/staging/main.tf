@@ -236,12 +236,12 @@ module "s3_migration" {
   prefix = local.prefix
   buckets = {
     export = {
-      source      = "s3://paas-s3-broker-prod-lon-8646ef9c-d0fe-46f9-aca9-754f3d17ff8e",
+      source      = "s3://paas-s3-broker-prod-lon-791e541d-6996-44c8-9884-322448062d7b",
       destination = "s3://${module.cds_export.details.bucket_name}",
       policy_arn  = module.cds_export.read_write_policy_arn
     },
     csv = {
-      source      = "s3://paas-s3-broker-prod-lon-645998c2-313d-4bab-954f-cded89c9f465",
+      source      = "s3://paas-s3-broker-prod-lon-0e8e5bf9-3273-4464-9827-a56da3cef514",
       destination = "s3://${module.bulk_upload.details.bucket_name}",
       policy_arn  = module.bulk_upload.read_write_policy_arn
     }
