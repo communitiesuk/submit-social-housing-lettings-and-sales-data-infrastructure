@@ -41,6 +41,7 @@ locals {
   provider_role_arn = "arn:aws:iam::815624722760:role/developer"
 
   create_db_migration_infra = false
+  create_s3_migration_infra = true
 }
 
 # We create two backends for managing the terraform state of different accounts:
@@ -78,12 +79,26 @@ module "ecr" {
 }
 
 module "ecr_rds_migration" {
-  source = "../modules/ecr_rds_migration"
+  source = "../modules/ecr_migration"
 
   count = local.create_db_migration_infra ? 1 : 0
 
   # This will need updating to include dev and production roles
   allow_access_by_roles = ["arn:aws:iam::107155005276:role/core-staging-task-execution"]
+  repository_name       = "db-migration"
+}
+
+module "ecr_s3_migration" {
+  source = "../modules/ecr_migration"
+
+  count = local.create_s3_migration_infra ? 1 : 0
+
+  # This will need manual updating for prod environment
+  allow_access_by_roles = [
+    "arn:aws:iam::107155005276:role/core-staging-csv-s3-migration-task-execution",
+    "arn:aws:iam::107155005276:role/core-staging-export-s3-migration-task-execution"
+  ]
+  repository_name = "s3-migration"
 }
 
 module "monitoring" {
