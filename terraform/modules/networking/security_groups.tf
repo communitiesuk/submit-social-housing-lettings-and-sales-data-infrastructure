@@ -10,6 +10,20 @@ resource "aws_default_security_group" "default_eu_west_1" {
   provider = aws.eu-west-1
 
   vpc_id = data.aws_vpc.default_eu_west_1.id
+
+  ingress {
+    protocol  = -1
+    self      = true
+    from_port = 0
+    to_port   = 0
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 resource "aws_default_security_group" "default_eu_west_3" {
