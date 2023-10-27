@@ -12,7 +12,7 @@ terraform {
     bucket         = "core-non-prod-tf-state"
     dynamodb_table = "core-non-prod-tf-state-lock"
     encrypt        = true
-    key            = "core-development.tfstate"
+    key            = "core-development-shared.tfstate"
     region         = "eu-west-2"
     role_arn       = "arn:aws:iam::815624722760:role/developer"
   }
@@ -20,6 +20,24 @@ terraform {
 
 provider "aws" {
   region = "eu-west-2"
+
+  assume_role {
+    role_arn = local.provider_role_arn
+  }
+}
+
+provider "aws" {
+  alias  = "eu-west-1"
+  region = "eu-west-1"
+
+  assume_role {
+    role_arn = local.provider_role_arn
+  }
+}
+
+provider "aws" {
+  alias  = "eu-west-3"
+  region = "eu-west-3"
 
   assume_role {
     role_arn = local.provider_role_arn
@@ -167,6 +185,12 @@ module "monitoring" {
 
 module "networking" {
   source = "../../modules/networking"
+
+  providers = {
+    aws.eu-west-1 = aws.eu-west-1
+    aws.eu-west-3 = aws.eu-west-3
+    aws.us-east-1 = aws.us-east-1
+  }
 
   prefix                                  = local.prefix
   vpc_cidr_block                          = "10.0.0.0/16"
