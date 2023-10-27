@@ -16,7 +16,7 @@ resource "aws_db_instance" "this" {
   copy_tags_to_snapshot      = true
   db_subnet_group_name       = var.db_subnet_group_name
   delete_automated_backups   = false
-  deletion_protection        = true # needs to be set to false and applied if you need to delete the DB
+  deletion_protection        = var.enable_primary_deletion_protection # needs to be set to false and applied if you need to delete the DB
   engine                     = "postgres"
   engine_version             = "13.11"
   final_snapshot_identifier  = var.prefix
@@ -26,7 +26,7 @@ resource "aws_db_instance" "this" {
   password                   = random_password.this.result
   port                       = var.database_port
   publicly_accessible        = false
-  skip_final_snapshot        = false
+  skip_final_snapshot        = var.skip_final_snapshot
   storage_encrypted          = true
   storage_type               = "gp2"
   username                   = "postgres"

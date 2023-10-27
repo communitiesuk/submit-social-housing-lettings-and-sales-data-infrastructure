@@ -203,11 +203,14 @@ module "certificates" {
 module "database" {
   source = "../modules/rds"
 
-  allocated_storage         = 100
-  apply_changes_immediately = true
-  backup_retention_period   = 7
-  highly_available          = false
-  instance_class            = "db.t3.small"
+  allocated_storage       = 100
+  backup_retention_period = 7
+
+  apply_changes_immediately          = true
+  enable_primary_deletion_protection = true
+  highly_available                   = false
+  skip_final_snapshot                = false
+  instance_class                     = "db.t3.small"
 
   prefix = local.prefix
 
@@ -319,8 +322,10 @@ module "monitoring" {
 module "redis" {
   source = "../modules/elasticache"
 
+  snapshot_retention_limit = 5
+
   apply_changes_immediately = true
-  highly_available          = true
+  highly_available          = false
   node_type                 = "cache.t4g.micro"
 
   prefix                  = local.prefix
