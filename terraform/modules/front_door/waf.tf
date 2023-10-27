@@ -189,72 +189,7 @@ resource "aws_wafv2_web_acl" "this" {
     }
   }
 
-  rule {
-    name     = "login-ip-rate-limit"
-    priority = 8
-
-    action {
-      block {
-        custom_response {
-          response_code = 429
-        }
-      }
-    }
-
-    statement {
-      rate_based_statement {
-        aggregate_key_type = "IP"
-        limit              = 100
-
-        scope_down_statement {
-          regex_pattern_set_reference_statement {
-            arn = aws_wafv2_regex_pattern_set.waf_rate_limit_urls.arn
-
-            field_to_match {
-              uri_path {}
-            }
-
-            text_transformation {
-              priority = 0
-              type     = "URL_DECODE"
-            }
-          }
-        }
-      }
-    }
-
-    visibility_config {
-      cloudwatch_metrics_enabled = true
-      metric_name                = "waf-login-ip-rate-limit"
-      sampled_requests_enabled   = true
-    }
-  }
-
-  rule {
-    name     = "overall-ip-rate-limit"
-    priority = 9
-
-    action {
-      block {
-        custom_response {
-          response_code = 429
-        }
-      }
-    }
-
-    statement {
-      rate_based_statement {
-        aggregate_key_type = "IP"
-        limit              = 2000
-      }
-    }
-
-    visibility_config {
-      cloudwatch_metrics_enabled = true
-      metric_name                = "waf-overall-ip-rate-limit"
-      sampled_requests_enabled   = true
-    }
-  }
+  
 }
 
 resource "aws_wafv2_regex_pattern_set" "waf_rate_limit_urls" {
