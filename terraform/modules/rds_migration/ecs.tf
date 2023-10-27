@@ -32,8 +32,8 @@ resource "aws_ecs_task_definition" "db_migration" {
       }
 
       environment = [
-        { Name = "CF_SERVICE", valueFrom = var.cloudfoundry_service },
-        { Name = "CF_SPACE", valueFrom = var.cloudfoundry_space }
+        { Name = "CF_SERVICE", Value = var.cloudfoundry_service },
+        { Name = "CF_SPACE", Value = var.cloudfoundry_space }
       ]
 
       secrets = [
