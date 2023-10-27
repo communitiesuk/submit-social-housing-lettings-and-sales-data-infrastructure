@@ -27,6 +27,24 @@ provider "aws" {
 }
 
 provider "aws" {
+  alias  = "eu-west-1"
+  region = "eu-west-1"
+
+  assume_role {
+    role_arn = local.provider_role_arn
+  }
+}
+
+provider "aws" {
+  alias  = "eu-west-3"
+  region = "eu-west-3"
+
+  assume_role {
+    role_arn = local.provider_role_arn
+  }
+}
+
+provider "aws" {
   alias  = "us-east-1"
   region = "us-east-1"
 
@@ -56,6 +74,7 @@ locals {
   redis_port       = 6379
 
   create_db_migration_infra = false
+  create_s3_migration_infra = false
 }
 
 moved {
@@ -341,11 +360,14 @@ moved {
 module "database" {
   source = "../modules/rds"
 
-  allocated_storage         = 100
-  apply_changes_immediately = false
-  backup_retention_period   = 7
-  highly_available          = true
-  instance_class            = "db.t3.small"
+  allocated_storage       = 100
+  backup_retention_period = 7
+
+  apply_changes_immediately          = false
+  enable_primary_deletion_protection = true
+  highly_available                   = true
+  skip_final_snapshot                = false
+  instance_class                     = "db.t3.small"
 
   prefix = local.prefix
 
@@ -381,6 +403,30 @@ module "database_migration" {
   vpc_id                                  = module.networking.vpc_id
 }
 
+module "s3_migration" {
+  source = "../modules/s3_migration"
+
+  count = local.create_s3_migration_infra ? 1 : 0
+
+  ecr_repository_url = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/s3-migration"
+
+  prefix = local.prefix
+  buckets = {
+    export = {
+      source      = "",
+      destination = "s3://${module.cds_export.details.bucket_name}",
+      policy_arn  = module.cds_export.read_write_policy_arn
+    },
+    csv = {
+      source      = "",
+      destination = "s3://${module.bulk_upload.details.bucket_name}",
+      policy_arn  = module.bulk_upload.read_write_policy_arn
+    }
+  }
+
+  vpc_id = module.networking.vpc_id
+}
+
 module "front_door" {
   source = "../modules/front_door"
 
@@ -408,9 +454,20 @@ module "front_door" {
 module "networking" {
   source = "../modules/networking"
 
+  providers = {
+    aws.eu-west-1 = aws.eu-west-1
+    aws.eu-west-3 = aws.eu-west-3
+    aws.us-east-1 = aws.us-east-1
+  }
+
   prefix                                  = local.prefix
   vpc_cidr_block                          = "10.0.0.0/16"
   vpc_flow_cloudwatch_log_expiration_days = 60
+}
+
+moved {
+  from = module.networking.aws_vpc.this
+  to   = module.networking.aws_vpc.main
 }
 
 module "monitoring" {
@@ -422,6 +479,8 @@ module "monitoring" {
 
 module "redis" {
   source = "../modules/elasticache"
+
+  snapshot_retention_limit = 5
 
   apply_changes_immediately = false
   highly_available          = true

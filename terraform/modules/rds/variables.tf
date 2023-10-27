@@ -8,6 +8,11 @@ variable "apply_changes_immediately" {
   description = "Whether to apply changes to the db immediately or to wait for the next maintenance window."
 }
 
+variable "backup_retention_period" {
+  type        = number
+  description = "The number of days to retain db backups for. If 0 then the database will not be backed up"
+}
+
 variable "database_port" {
   type        = number
   description = "The network port the database runs on"
@@ -16,6 +21,11 @@ variable "database_port" {
 variable "db_subnet_group_name" {
   type        = string
   description = "The name of the subnet group associated with the VPC the DB needs to be in."
+}
+
+variable "enable_primary_deletion_protection" {
+  type        = bool
+  description = "Whether the primary database should have deletion protection enabled"
 }
 
 variable "ecs_security_group_id" {
@@ -43,9 +53,9 @@ variable "prefix" {
   description = "The prefix to be prepended to resource names."
 }
 
-variable "backup_retention_period" {
-  type        = number
-  description = "The number of days to retain db backups for."
+variable "skip_final_snapshot" {
+  type        = bool
+  description = "Whether to create a final snapshot before the database instance is deleted"
 }
 
 variable "sns_topic_arn" {
