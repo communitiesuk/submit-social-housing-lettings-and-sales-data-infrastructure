@@ -53,7 +53,7 @@ variable "restrict_by_ip" {
   description = "True if access to cloudfront should be restricted by ip, e.g. before release or for a test environment"
 }
 
-variable "include_test_ips" {
+variable "restriction_allows_test_ips" {
   type        = bool
   default     = true
   description = "Whether to include ips listed only for test envs in the restriction list"

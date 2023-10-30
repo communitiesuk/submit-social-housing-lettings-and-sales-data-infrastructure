@@ -435,7 +435,7 @@ module "front_door" {
   }
 
   restrict_by_ip   = true
-  include_test_ips = false
+  restriction_allows_test_ips = false
 
   prefix                        = local.prefix
   application_port              = local.application_port
