@@ -434,7 +434,7 @@ module "front_door" {
     aws.us-east-1 = aws.us-east-1
   }
 
-  restrict_by_ip   = true
+  restrict_by_ip              = true
   restriction_allows_test_ips = false
 
   prefix                        = local.prefix
