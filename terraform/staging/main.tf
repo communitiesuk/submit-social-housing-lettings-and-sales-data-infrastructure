@@ -121,6 +121,8 @@ module "application" {
   sentry_dsn_secret_arn                             = module.application_secrets.sentry_dsn_secret_arn
   sns_topic_arn                                     = module.monitoring.sns_topic_arn
   vpc_id                                            = module.networking.vpc_id
+
+  depends_on = [module.database.rds_partial_connection_string_parameter_name]
 }
 
 module "application_roles" {
