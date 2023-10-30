@@ -224,5 +224,5 @@ resource "aws_wafv2_ip_set" "allowed_ips" {
   name               = "${var.prefix}-waf-allowed-ip-set"
   scope              = "CLOUDFRONT"
   ip_address_version = "IPV4"
-  addresses          = var.include_test_ips ? concat(local.ip_allowlist, local.ip_allowlist_test) : local.ip_allowlist
+  addresses          = var.restriction_allows_test_ips ? concat(local.ip_allowlist, local.ip_allowlist_test) : local.ip_allowlist
 }

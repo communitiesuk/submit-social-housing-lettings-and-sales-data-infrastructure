@@ -204,11 +204,6 @@ moved {
 }
 
 moved {
-  from = module.application.aws_iam_role_policy.parameter_access
-  to   = module.application_roles.aws_iam_role_policy.parameter_access
-}
-
-moved {
   from = module.application.aws_iam_role_policy.secret_access
   to   = module.application_roles.aws_iam_role_policy.secret_access
 }
@@ -273,11 +268,6 @@ module "application_secrets" {
 
   prefix                      = local.prefix
   ecs_task_execution_role_arn = module.application_roles.ecs_task_execution_role_arn
-}
-
-moved {
-  from = module.redis.aws_security_group.this
-  to   = module.application_roles.aws_security_group.redis
 }
 
 module "application_security_group" {
@@ -434,8 +424,8 @@ module "front_door" {
     aws.us-east-1 = aws.us-east-1
   }
 
-  restrict_by_ip   = true
-  include_test_ips = false
+  restrict_by_ip              = true
+  restriction_allows_test_ips = false
 
   prefix                        = local.prefix
   application_port              = local.application_port

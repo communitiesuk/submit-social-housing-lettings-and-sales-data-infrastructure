@@ -85,11 +85,6 @@ locals {
   create_s3_migration_infra = true
 }
 
-moved {
-  from = module.application_roles.aws_iam_role_policy.parameter_access
-  to   = module.application.aws_iam_role_policy.parameter_access
-}
-
 module "application" {
   source = "../modules/application"
 
@@ -155,16 +150,6 @@ module "application_secrets" {
 
   prefix                      = local.prefix
   ecs_task_execution_role_arn = module.application_roles.ecs_task_execution_role_arn
-}
-
-moved {
-  from = module.redis.aws_security_group.this
-  to   = module.application_security_group.aws_security_group.redis
-}
-
-moved {
-  from = module.redis.aws_vpc_security_group_ingress_rule.redis_ingress
-  to   = module.application_security_group.aws_vpc_security_group_ingress_rule.redis_ingress
 }
 
 module "application_security_group" {
@@ -313,11 +298,6 @@ module "networking" {
   prefix                                  = local.prefix
   vpc_cidr_block                          = "10.0.0.0/16"
   vpc_flow_cloudwatch_log_expiration_days = 60
-}
-
-moved {
-  from = module.networking.aws_vpc.this
-  to   = module.networking.aws_vpc.main
 }
 
 module "monitoring" {
