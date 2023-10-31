@@ -24,6 +24,7 @@ resource "aws_ecs_task_definition" "this" {
         options = {
           awslogs-group   = aws_cloudwatch_log_group.this.id
           awslogs-region  = "eu-west-1"
+          awslogs-stream-prefix = "core-perf"
           mode            = "non-blocking"
           max-buffer-size = "4m"
         }
