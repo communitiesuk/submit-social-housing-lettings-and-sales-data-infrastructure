@@ -189,7 +189,7 @@ resource "aws_wafv2_web_acl" "this" {
     }
   }
 
-  
+
 }
 
 resource "aws_wafv2_regex_pattern_set" "waf_rate_limit_urls" {
