@@ -14,17 +14,6 @@ resource "aws_kms_key_policy" "this" {
 }
 
 data "aws_iam_policy_document" "kms" {
-  # statement {
-  #   principals {
-  #     type        = "AWS"
-  #     identifiers = [var.ecs_task_execution_role_arn]
-  #   }
-
-  #   actions = ["kms:Decrypt"]
-
-  #   resources = [aws_kms_key.this.arn]
-  # }
-
   statement {
     principals {
       type        = "AWS"
