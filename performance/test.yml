@@ -5,22 +5,22 @@ config:
   processor: "./flows.js"
   phases:
     - name: one
-      duration: 180
-      arrivalCount: 30
-    - name: two
-      duration: 180
-      arrivalCount: 60
-    - name: three
-      duration: 180
-      arrivalCount: 90
-    - name: four
-      duration: 600
-      arrivalRate: 1
-      rampTo: 10
-    - name: five
-      duration: 600
-      arrivalRate: 12
-      maxVusers: 8000
+      duration: 60
+      arrivalCount: 20
+  #  - name: two
+  #    duration: 180
+  #    arrivalRate: 2
+  #  - name: three
+  #    duration: 180
+  #    arrivalCount: 90
+  #  - name: four
+  #    duration: 600
+  #    arrivalRate: 1
+  #    rampTo: 10
+  #  - name: five
+  #    duration: 600
+  #    arrivalRate: 12
+  #    maxVusers: 8000
   payload:
     path: "users.csv"
     fields:

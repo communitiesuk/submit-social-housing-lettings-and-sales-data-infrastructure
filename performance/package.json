@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "artillery": "^2.0.0-37"
+    "@playwright/browser-chromium": "^1.39.0",
+    "artillery": "^2.0.0-38"
   }
 }

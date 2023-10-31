@@ -48,7 +48,7 @@ async function searchLogs(page, userContext) {
     await page.getByLabel('in progress').uncheck();
     await page.getByRole('button', { name: 'Apply filters' }).click();
     await page.getByLabel('Search by log ID, tenant code, property reference or postcode').click();
-    await page.getByLabel('Search by log ID, tenant code, property reference or postcode').fill(userContext.vars.logReference);
+    await page.getByLabel('Search by log ID, tenant code, property reference or postcode').fill(`${userContext.vars.logReference}`);
     await page.getByLabel('Search by log ID, tenant code, property reference or postcode').press('Enter');
     await page.getByRole('link', { name: 'Log' }).first().click();
     await page.locator('li').filter({ hasText: 'Sign out' }).click();
@@ -238,6 +238,7 @@ async function fillInSupportedHousingLettingsLog(page, userContext) {
     await page.getByLabel('Q9 - What scheme is this log for?').fill(userContext.vars.schemeSearchTerm);
     await page.getByRole('option').click();
     await page.getByRole('button', { name: 'Save and continue' }).click();
+    await page.getByLabel('No').check();
     await page.getByRole('button', { name: 'Save and continue' }).click();
     await page.getByLabel('Day').click();
     await page.getByLabel('Day').fill('27');
@@ -246,7 +247,6 @@ async function fillInSupportedHousingLettingsLog(page, userContext) {
     await page.getByLabel('Year').click();
     await page.getByLabel('Year').fill('2023');
     await page.getByRole('button', { name: 'Save and continue' }).click();
-    await page.locator('summary').click();
     await page.getByLabel('Social Rent').check();
     await page.getByRole('button', { name: 'Save and continue' }).click();
     await page.getByLabel('Set up this lettings logQ7 - What is the tenant code?').click();
@@ -255,7 +255,7 @@ async function fillInSupportedHousingLettingsLog(page, userContext) {
     await page.getByLabel('Set up this lettings logQ8 - What is the property reference?').click();
     await page.getByLabel('Set up this lettings logQ8 - What is the property reference?').fill('Test');
     await page.getByRole('button', { name: 'Save and continue' }).click();
-    await page.getByRole('button', { name: 'Save and return to log' }).click();
+    await page.getByRole('button', { name: 'Save and go to next incomplete section' }).click();
     await page.getByLabel('No').check();
     await page.getByRole('button', { name: 'Save and continue' }).click();
     await page.getByLabel('Social rent basis').check();
