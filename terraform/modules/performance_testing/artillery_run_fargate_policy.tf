@@ -8,7 +8,7 @@ data "aws_iam_policy_document" "artillery_run_fargate" {
       "iam:GetRole"
     ]
     resources = [
-      "arn:aws:iam::${data.aws_caller_id.current.account_id}:role/artilleryio-ecs-worker-role"
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/artilleryio-ecs-worker-role"
     ]
   }
 
@@ -20,7 +20,7 @@ data "aws_iam_policy_document" "artillery_run_fargate" {
       "iam:AttachRolePolicy"
     ]
     resources = [
-      "arn:aws:iam::${data.aws_caller_id.current.account_id}:policy/ecs-worker-policy"
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/ecs-worker-policy"
     ]
   }
 
@@ -34,7 +34,7 @@ data "aws_iam_policy_document" "artillery_run_fargate" {
     ]
     condition {
       test     = "StringLike"
-      values   = [ecs.amazonaws.com]
+      values   = ["ecs.amazonaws.com"]
       variable = "iam:AWSServiceName"
     }
   }
@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "artillery_run_fargate" {
       "iam:PassRole"
     ]
     resources = [
-      "arn:aws:iam::${data.aws_caller_id.current.account_id}:role/artilleryio-ecs-worker-role"
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/artilleryio-ecs-worker-role"
     ]
   }
 
@@ -56,7 +56,7 @@ data "aws_iam_policy_document" "artillery_run_fargate" {
       "sqs:*"
     ]
     resources = [
-      "arn:aws:sqs:*:${data.aws_caller_id.current.account_id}:artilleryio*"
+      "arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:artilleryio*"
     ]
   }
 
@@ -74,7 +74,7 @@ data "aws_iam_policy_document" "artillery_run_fargate" {
       "ecs:ListClusters",
       "ecs:CreateCluster",
       "ecs:RegisterTaskDefinition",
-      "ecs:DeregisterTaskDefinition"
+      "ecs:DeregisterTaskDefinition",
     ]
     resources = ["*"]
   }
@@ -87,7 +87,7 @@ data "aws_iam_policy_document" "artillery_run_fargate" {
       "ecs:ListContainerInstances"
     ]
     resources = [
-      "arn:aws:ecs:*:${data.aws_caller_id.current.account_id}/cluster/*"
+      "arn:aws:ecs:*:${data.aws_caller_identity.current.account_id}/cluster/*"
     ]
   }
 
@@ -106,7 +106,7 @@ data "aws_iam_policy_document" "artillery_run_fargate" {
     ]
     condition {
       test     = "ArnEquals"
-      values   = ["arn:aws:ecs:*:${data.aws_caller_id.current.account_id}:cluster/*"]
+      values   = ["arn:aws:ecs:*:${data.aws_caller_identity.current.account_id}:cluster/*"]
       variable = "ecs:cluster"
     }
     resources = ["*"]
@@ -146,7 +146,7 @@ data "aws_iam_policy_document" "artillery_run_fargate" {
       "secretsmanager:GetSecretValue"
     ]
     resources = [
-      "arn:aws:secretsmanager:*:${data.aws_caller_id.current.account_id}:secret:artilleryio/*"
+      "arn:aws:secretsmanager:*:${data.aws_caller_identity.current.account_id}:secret:artilleryio/*"
     ]
   }
 
@@ -161,7 +161,7 @@ data "aws_iam_policy_document" "artillery_run_fargate" {
       "ssm:GetParametersByPath"
     ]
     resources = [
-      "arn:aws:ssm:eu-west-1:${data.aws_caller_id.current.account_id}:parameter/artilleryio/*"
+      "arn:aws:ssm:eu-west-1:${data.aws_caller_identity.current.account_id}:parameter/artilleryio/*"
     ]
   }
 

@@ -65,7 +65,7 @@ data "aws_iam_policy_document" "results_read_write" {
 }
 
 resource "aws_iam_policy" "results_read_write" {
-  name        = "${aws_s3_bucket.results.name}-read-write"
+  name        = "${aws_s3_bucket.results.bucket}-read-write"
   description = "Policy allowing read/write access to the performance testing results bucket"
   policy      = data.aws_iam_policy_document.results_read_write.json
 }
