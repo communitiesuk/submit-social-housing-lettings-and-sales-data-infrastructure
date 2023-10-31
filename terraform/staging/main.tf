@@ -295,6 +295,8 @@ module "networking" {
 module "monitoring" {
   source = "../modules/monitoring"
 
+  create_email_subscription = false
+
   prefix                               = local.prefix
   service_identifier_publishing_to_sns = "cloudwatch.amazonaws.com"
 }
