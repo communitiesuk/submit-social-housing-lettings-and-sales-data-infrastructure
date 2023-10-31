@@ -1,26 +1,24 @@
 # See https://www.artillery.io/docs/load-testing-at-scale/aws-fargate#iam-permissions
 data "aws_iam_policy_document" "artillery_run_fargate" {
   statement {
-    sid    = "CreateOrGetECSRole"
     effect = "Allow"
     actions = [
       "iam:CreateRole",
       "iam:GetRole"
     ]
     resources = [
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/artilleryio-ecs-worker-role"
+      "arn:aws:iam::815624722760:role/artilleryio-ecs-worker-role"
     ]
   }
 
   statement {
-    sid    = "CreateECSPolicy"
     effect = "Allow"
     actions = [
       "iam:CreatePolicy",
       "iam:AttachRolePolicy"
     ]
     resources = [
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/ecs-worker-policy"
+      "arn:aws:iam::815624722760:policy/ecs-worker-policy"
     ]
   }
 
@@ -45,30 +43,27 @@ data "aws_iam_policy_document" "artillery_run_fargate" {
       "iam:PassRole"
     ]
     resources = [
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/artilleryio-ecs-worker-role"
+      "arn:aws:iam::815624722760:role/artilleryio-ecs-worker-role"
     ]
   }
 
   statement {
-    sid    = "SQSPermissions"
     effect = "Allow"
     actions = [
       "sqs:*"
     ]
     resources = [
-      "arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:artilleryio*"
+      "arn:aws:sqs::815624722760:artilleryio*"
     ]
   }
 
   statement {
-    sid       = "SQSListQueues"
     effect    = "Allow"
     actions   = ["sqs:ListQueues"]
     resources = ["*"]
   }
 
   statement {
-    sid    = "ECSPermissionsGeneral"
     effect = "Allow"
     actions = [
       "ecs:ListClusters",
@@ -80,14 +75,13 @@ data "aws_iam_policy_document" "artillery_run_fargate" {
   }
 
   statement {
-    sid    = "ECSPermissionsScopedToCluster"
     effect = "Allow"
     actions = [
       "ecs:DescribeClusters",
       "ecs:ListContainerInstances"
     ]
     resources = [
-      "arn:aws:ecs:*:${data.aws_caller_identity.current.account_id}/cluster/*"
+      "arn:aws:ecs::815624722760/cluster/*"
     ]
   }
 
@@ -104,16 +98,17 @@ data "aws_iam_policy_document" "artillery_run_fargate" {
       "ecs:StopTask",
       "ecs:RunTask"
     ]
+    resources = ["*"]
+
     condition {
       test     = "ArnEquals"
-      values   = ["arn:aws:ecs:*:${data.aws_caller_identity.current.account_id}:cluster/*"]
+      values   = ["arn:aws:ecs::815624722760:cluster/*"]
       variable = "ecs:cluster"
     }
-    resources = ["*"]
+
   }
 
   statement {
-    sid    = "S3Permissions"
     effect = "Allow"
     actions = [
       "s3:DeleteObject",
@@ -146,7 +141,7 @@ data "aws_iam_policy_document" "artillery_run_fargate" {
       "secretsmanager:GetSecretValue"
     ]
     resources = [
-      "arn:aws:secretsmanager:*:${data.aws_caller_identity.current.account_id}:secret:artilleryio/*"
+      "arn:aws:secretsmanager::815624722760:secret:artilleryio/*"
     ]
   }
 
@@ -161,7 +156,7 @@ data "aws_iam_policy_document" "artillery_run_fargate" {
       "ssm:GetParametersByPath"
     ]
     resources = [
-      "arn:aws:ssm:eu-west-1:${data.aws_caller_identity.current.account_id}:parameter/artilleryio/*"
+      "arn:aws:ssm:eu-west-1:815624722760:parameter/artilleryio/*"
     ]
   }
 

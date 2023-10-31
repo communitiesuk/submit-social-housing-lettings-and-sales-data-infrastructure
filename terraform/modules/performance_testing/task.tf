@@ -29,6 +29,10 @@ resource "aws_ecs_task_definition" "this" {
           max-buffer-size = "4m"
         }
       }
+
+      environment = [
+        { Name = "OUTPUT_BUCKET", value = "s3://${aws_s3_bucket.results.id}" }
+      ]
     }
   ])
 
