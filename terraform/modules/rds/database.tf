@@ -50,7 +50,7 @@ resource "aws_db_instance" "replica" {
   auto_minor_version_upgrade = aws_db_instance.this.auto_minor_version_upgrade
   copy_tags_to_snapshot      = aws_db_instance.this.copy_tags_to_snapshot
   delete_automated_backups   = aws_db_instance.this.delete_automated_backups
-  deletion_protection        = true
+  deletion_protection        = var.enable_replica_deletion_protection
   instance_class             = aws_db_instance.this.instance_class
   maintenance_window         = aws_db_instance.this.maintenance_window
   multi_az                   = aws_db_instance.this.multi_az

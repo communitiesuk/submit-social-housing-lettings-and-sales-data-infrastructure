@@ -28,6 +28,11 @@ variable "enable_primary_deletion_protection" {
   description = "Whether the primary database should have deletion protection enabled"
 }
 
+variable "enable_replica_deletion_protection" {
+  type        = bool
+  description = "Whether the replica database should have deletion protection enabled"
+}
+
 variable "ecs_security_group_id" {
   type        = string
   description = "The id of the ecs security group for ecs ingress"
