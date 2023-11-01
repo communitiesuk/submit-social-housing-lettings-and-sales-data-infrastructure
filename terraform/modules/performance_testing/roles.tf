@@ -4,10 +4,8 @@ data "aws_iam_policy_document" "ecs_tasks_assume_role" {
     actions = ["sts:AssumeRole"]
 
     principals {
-      #type        = "Service"
-      #identifiers = ["ecs-tasks.amazonaws.com"]
-      type = "AWS"
-      identifiers = "arn:aws:iam::815624722760:role/developer"
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com"]
     }
   }
 }
