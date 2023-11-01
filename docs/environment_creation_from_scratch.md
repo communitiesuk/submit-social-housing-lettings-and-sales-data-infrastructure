@@ -10,7 +10,7 @@ When setting up a new environment:
 
 ### Run an initial apply
 
-```terraform apply -target="module.networking" -target="module.front_door" -target="module.certificates" --target="module.application_roles" --target="module.application_secrets" var="initial_create=true"```
+```terraform apply -target="module.networking" -target="module.front_door" -target="module.application_secrets" -var="initial_create=true"```
 
 (Need the networking explicitly otherwise we get an error creating the load balancer, there's some kind of dependency that terraform doesn't quite get)
 
