@@ -1,8 +1,3 @@
-output "api_key_secret_arn" {
-  value       = aws_secretsmanager_secret.api_key.arn
-  description = "The arn of the api key secret"
-}
-
 output "govuk_notify_api_key_secret_arn" {
   value       = aws_secretsmanager_secret.govuk_notify_api_key.arn
   description = "The arn of the govuk notify api key secret"
