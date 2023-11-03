@@ -50,15 +50,13 @@ resource "aws_db_instance" "replica" {
   auto_minor_version_upgrade = aws_db_instance.this.auto_minor_version_upgrade
   copy_tags_to_snapshot      = aws_db_instance.this.copy_tags_to_snapshot
   delete_automated_backups   = aws_db_instance.this.delete_automated_backups
-  deletion_protection        = true
-  final_snapshot_identifier  = aws_db_instance.this.final_snapshot_identifier
+  deletion_protection        = var.enable_replica_deletion_protection # needs to be set to false and applied if you need to delete the replica DB
   instance_class             = aws_db_instance.this.instance_class
   maintenance_window         = aws_db_instance.this.maintenance_window
   multi_az                   = aws_db_instance.this.multi_az
   port                       = aws_db_instance.this.port
   publicly_accessible        = aws_db_instance.this.publicly_accessible
   replicate_source_db        = aws_db_instance.this.identifier
-  skip_final_snapshot        = aws_db_instance.this.skip_final_snapshot
   storage_encrypted          = aws_db_instance.this.storage_encrypted
   storage_type               = aws_db_instance.this.storage_type
   vpc_security_group_ids     = aws_db_instance.this.vpc_security_group_ids
