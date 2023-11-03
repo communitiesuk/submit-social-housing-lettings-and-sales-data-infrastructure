@@ -5,11 +5,11 @@ module.exports = { browse, searchLogs, fillInGeneralNeedsLettingsLog, login, fil
 async function login(page, userContext) {
     await page.goto(userContext.vars.target);
     await page.getByRole('button', { name: 'Start now' }).click();
-  await page.getByLabel('Email address').click();
-  await page.getByLabel('Email address').fill('perf2@example.com');
-  await page.getByLabel('Password').click();
-  await page.getByLabel('Password').fill('password');
-  await page.getByRole('button', { name: 'Sign in' }).click();
+    await page.getByLabel('Email address').click();
+    await page.getByLabel('Email address').fill(userContext.vars.username);
+    await page.getByLabel('Password').click();
+    await page.getByLabel('Password').fill(userContext.vars.password);
+    await page.getByRole('button', { name: 'Sign in' }).click();
 }
 
 async function browse(page, userContext) {
@@ -338,8 +338,6 @@ async function fillInSupportedHousingLettingsLog(page, userContext) {
     await page.getByLabel('Don’t know').check();
     await page.getByRole('button', { name: 'Save and continue' }).click();
     await page.getByLabel('None of these allocation systems').check();
-    await page.getByRole('button', { name: 'Save and continue' }).click();
-    await page.getByLabel('Referred by local authority housing department').check();
     await page.getByRole('button', { name: 'Save and continue' }).click();
     await page.getByLabel('Police, probation or prison').check();
     await page.getByLabel('Voluntary agency').check();
