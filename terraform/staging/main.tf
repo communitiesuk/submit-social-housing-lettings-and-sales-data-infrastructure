@@ -193,6 +193,7 @@ module "database" {
 
   apply_changes_immediately          = true
   enable_primary_deletion_protection = true
+  enable_replica_deletion_protection = true
   highly_available                   = false
   skip_final_snapshot                = false
   instance_class                     = "db.t3.small"

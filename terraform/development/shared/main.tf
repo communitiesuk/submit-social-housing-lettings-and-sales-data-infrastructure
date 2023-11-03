@@ -138,6 +138,7 @@ module "database" {
 
   apply_changes_immediately          = true
   enable_primary_deletion_protection = true
+  enable_replica_deletion_protection = true
   highly_available                   = false
   skip_final_snapshot                = true
   instance_class                     = "db.m5.xlarge"
