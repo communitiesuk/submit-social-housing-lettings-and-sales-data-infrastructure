@@ -18,11 +18,6 @@ output "application_roles_ecs_task_role_arn" {
   description = "The arn of the ecs task role"
 }
 
-output "application_secrets_api_key_secret_arn" {
-  value       = module.application_secrets.api_key_secret_arn
-  description = "The arn of the api key secret"
-}
-
 output "application_secrets_govuk_notify_api_key_secret_arn" {
   value       = module.application_secrets.govuk_notify_api_key_secret_arn
   description = "The arn of the govuk notify api key secret"
