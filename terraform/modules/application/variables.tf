@@ -1,8 +1,3 @@
-variable "api_key_secret_arn" {
-  type        = string
-  description = "The arn of the api key secret"
-}
-
 variable "app_host" {
   type        = string
   description = "The value of the app host environment variable"
