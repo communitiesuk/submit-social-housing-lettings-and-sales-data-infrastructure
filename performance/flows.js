@@ -76,10 +76,10 @@ async function fillInGeneralNeedsLettingsLog(page, userContext) {
     await page.getByLabel('Affordable Rent', { exact: true }).check();
     await page.getByRole('button', { name: 'Save and continue' }).click();
     await page.getByLabel('Set up this lettings logQ7 - What is the tenant code?').click();
-    await page.getByLabel('Set up this lettings logQ7 - What is the tenant code?').fill(`Test-${Math.floor(Math.random() * 50000)}`);
+    await page.getByLabel('Set up this lettings logQ7 - What is the tenant code?').fill(`Test-${Math.floor(Math.random() * 10000000)}`);
     await page.getByRole('button', { name: 'Save and continue' }).click();
     await page.getByLabel('Set up this lettings logQ8 - What is the property reference?').click();
-    await page.getByLabel('Set up this lettings logQ8 - What is the property reference?').fill('Test');
+    await page.getByLabel('Set up this lettings logQ8 - What is the property reference?').fill(`Test-${Math.floor(Math.random() * 10000000)}`);
     await page.getByRole('button', { name: 'Save and continue' }).click();
     await page.getByRole('button', { name: 'Save and go to next incomplete section' }).click();
     await page.getByLabel('No').check();
@@ -250,10 +250,10 @@ async function fillInSupportedHousingLettingsLog(page, userContext) {
     await page.getByLabel('Social Rent').check();
     await page.getByRole('button', { name: 'Save and continue' }).click();
     await page.getByLabel('Set up this lettings logQ7 - What is the tenant code?').click();
-    await page.getByLabel('Set up this lettings logQ7 - What is the tenant code?').fill(`Test-${Math.floor(Math.random() * 50000)}`);
+    await page.getByLabel('Set up this lettings logQ7 - What is the tenant code?').fill(`Test-${Math.floor(Math.random() * 10000000)}`);
     await page.getByRole('button', { name: 'Save and continue' }).click();
     await page.getByLabel('Set up this lettings logQ8 - What is the property reference?').click();
-    await page.getByLabel('Set up this lettings logQ8 - What is the property reference?').fill('Test');
+    await page.getByLabel('Set up this lettings logQ8 - What is the property reference?').fill(`Test-${Math.floor(Math.random() * 10000000)}`);
     await page.getByRole('button', { name: 'Save and continue' }).click();
     await page.getByRole('button', { name: 'Save and go to next incomplete section' }).click();
     await page.getByLabel('No').check();

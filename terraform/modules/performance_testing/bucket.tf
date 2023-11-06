@@ -1,4 +1,10 @@
+#tfsec:ignore:aws-s3-enable-versioning: fine without for this purpose
+#tfsec:ignore:aws-s3-enable-bucket-logging: fine without for now (see CLDC-3006)
 resource "aws_s3_bucket" "results" {
+  #checkov:skip=CKV_AWS_144: Don't need cross region replication
+  #checkov:skip=CKV_AWS_18: Access logging (see above)
+  #checkov:skip=CKV_AWS_21: Versioning (see above)
+  #checkov:skip=CKV_AWS_62: Event notifications, fine without for this purpose
   bucket = "core-performance-testing-results"
 }
 
@@ -13,17 +19,17 @@ resource "aws_s3_bucket_public_access_block" "results" {
 
 data "aws_iam_policy_document" "force_ssl" {
   statement {
-    sid = "AllowSSLRequestsOnly"
-    actions = ["s3:*"]
+    sid       = "AllowSSLRequestsOnly"
+    actions   = ["s3:*"]
     resources = [aws_s3_bucket.results.arn, "${aws_s3_bucket.results.arn}/*"]
-    effect = "Deny"
+    effect    = "Deny"
     principals {
-      type = "*"
+      type        = "*"
       identifiers = ["*"]
     }
     condition {
-      test = "Bool"
-      values = ["false"]
+      test     = "Bool"
+      values   = ["false"]
       variable = "aws:SecureTransport"
     }
   }
@@ -31,27 +37,7 @@ data "aws_iam_policy_document" "force_ssl" {
 
 resource "aws_s3_bucket_policy" "force_ssl" {
   bucket = aws_s3_bucket.results.id
-
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Sid       = "AllowSSLRequestsOnly",
-        Action    = "s3:*",
-        Effect    = "Deny",
-        Principal = "*",
-        Resource = [
-          aws_s3_bucket.results.arn,
-          "${aws_s3_bucket.results.arn}/*"
-        ],
-        Condition = {
-          Bool = {
-            "aws:SecureTransport" = "false"
-          }
-        }
-      }
-    ]
-  })
+  policy = data.aws_iam_policy_document.force_ssl.json
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "results" {
@@ -63,7 +49,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "results" {
     filter {}
 
     expiration {
-      days = 30
+      days = 365
     }
 
     abort_incomplete_multipart_upload {
