@@ -110,6 +110,8 @@ module "monitoring" {
 
   prefix                               = local.prefix
   service_identifier_publishing_to_sns = "events.amazonaws.com"
+
+  create_secrets_first = var.create_secrets_first
 }
 
 data "aws_caller_identity" "current" {}
