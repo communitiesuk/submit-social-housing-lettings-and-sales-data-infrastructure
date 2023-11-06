@@ -1,54 +1,101 @@
 # Creating a new environment from scratch
 
 When setting up a new environment:
-1. DNS records will need to be created by DLUHC for certificate validation and to point at the cloudfront distribution and app load balancer
-1. Secret values will need to be filled in manually
-1. The meta account will need updating with additional roles access to the ecr, since this is currently manual
-1. A new deployment pipeline will need to be setup
+1. DNS records will need to be added by DLUHC for certificate validation and to point at the cloudfront distribution and 
+app load balancer
+2. Secret values will need to be filled in manually
+3. The meta account will need updating with additional roles access to the ecr, since this is currently manual
+4. A new deployment pipeline will need to be setup
+
+See the process below for detailed steps.
 
 ## The process
 
+### Create a new terraform folder
+
+If the environment hasn't been created / defined before:
+
+In the terraform folder, add a new sub-folder with the name of the environment.
+
+Add a `main.tf` file to the folder, and define any infrastructure here (e.g. modules to use). You may also add 
+`variables.tf` and `outputs.tf` if necessary.
+
+Ensure for the backend block in `main.tf` (see the equivalent in other environment folders for examples), ensure you 
+define a unique key to store the infrastructure state in (i.e. the full name and extension of the terraform state file). 
+
+Once complete, while `cd`'d into the environment folder, run the following command to prepare terraform:
+```terraform init```
+
 ### Run an initial apply
+
+Run the command below to create some partial infrastructure. 
+
+N.B. we need to ensure we explicitly target the `networking` module, otherwise we get an error when creating the load 
+balancer, as there's some kind of dependency that Terraform doesn't quite get.
 
 ```terraform apply -target="module.networking" -target="module.front_door" -target="module.application_secrets" -var="initial_create=true"```
 
-(Need the networking explicitly otherwise we get an error creating the load balancer, there's some kind of dependency that terraform doesn't quite get)
-
-This will create the certificates, load balancer, cloudfront distribution, and some networking and other things needed for defining DNS records.
-It will also create some app roles and secrets which are necessary before creating the full app.
+(This will create the certificates, load balancer, cloudfront distribution, networking and other components which are 
+the minimum required for defining the DNS records that DLUHC will need to add. It will also create some app roles and 
+secrets; which are necessary before creating the full app).
 
 ### Get DNS Records set up
 
-Ask DLUHC to set up DNS records required.
+Ask DLUHC to add the DNS records for the new environment.
 
-This will be;
+There will be four records, which will be;
 * Validation for the cloudfront certificate
 * Validation for the load balancer certificate
 * CNAME for the cloudfront domain pointing at the cloudfront distribution
 * CNAME for the load balancer domain pointing at the load balancer
 
-Once DLUHC has set up the records, check the certificates have been validated in AWS console.
+Once DLUHC has set up the records, check the certificates have been validated in AWS console (they should have "issued" 
+and "success" statuses). N.B. the cloudfront certificate lives in the `us-east-1` region, whereas the load balancer 
+certificate lives in `eu-west-2`.
 
 ### Fill the application secrets
 
-When doing a full apply the complete application will be created, and will need to be able to read secrets. 
-Fill out the values for the secrets in AWS console before the full apply.
+When doing a full apply the complete application will be created, and will need to read values from the secrets. 
+The values for the secrets should therefore be populated before creating a full apply.
+
+You can do this using AWS console - Secrets Manager. Values should be saved as plaintext and without any curly braces 
+that the console initially has as a placeholder.
+
+You can find / create values for the following secrets from the given locations:
+* `OS_DATA_KEY` = Check / use Ordnance Survey
+* `RAILS_MASTER_KEY` = Check application codebase config
+* `GOVUK_NOTIFY_API_KEY` = Check / use Gov UK Notify
+* `SENTRY_DSN` = Check / use Sentry
 
 ### Update meta environment
 
-In the [meta/main.tf](../terraform/meta/main.tf) file, add the ARN of the task-execution role from the newly created environment to the ECR module's `allow_access_by_roles` parameter
+In the [meta/main.tf](../terraform/meta/main.tf) file, add the ARN of the `task-execution` role from the newly created 
+environment to the ECR module's `allow_access_by_roles` parameter.
 
 ### Run a full apply
 
-Once these have been done, run a complete apply
+Run a full apply using the command below (without targeting any modules or setting the `initial_create` var).
+
+```terraform apply```
+
+If there are any issues creating the infra, it may be worth retrying the command a short while later in case AWS / Terraform
+was unable to configure a component or resource quickly enough. Otherwise, you will need to investigate the cause of the
+error.
 
 ### Set up the database
 
-If not restoring the database from a backup, or migrating it from elsewhere, run the db:setup rake task (use the ad_hoc task definition to spin it up from the app image with a command override).
+If you're not restoring the database from a backup, or migrating it from elsewhere, run the `db:setup` rake task (use 
+the `ad_hoc` task definition to spin it up from the app image with a command override).
 
-Alternatively you probably need to run an app deployment to sort out using the right image, which will include a db migration - you can then just run db:seed as a separate task.
+Alternatively you probably need to run an app deployment to sort out using the right image, which will include a db 
+migration - you can then just run `db:seed` as a separate task. See the next step for app deployment.
 
 ### Set up the deployment
 
-In the Core App codebase [here](https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data), you will need create a new pipeline for the environment (you can re-use jobs and configuration in existing pipelines where appropriate)
-For the `aws_deploy` workflow, ensure you pass in the new account id, resource prefix and environment name
+In the Core App codebase [here](https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data), you 
+will need create a new pipeline for the environment (you can re-use the jobs and configuration in existing pipelines where 
+appropriate).
+
+For the `aws_deploy` workflow, ensure you pass in the new account id, resource prefix and environment name.
+
+Once setup, run the deployment to bring the infra to a fully usable state.
