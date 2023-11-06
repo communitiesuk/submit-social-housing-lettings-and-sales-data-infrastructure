@@ -4,7 +4,7 @@ This is a set of very rough and ready performance tests, intended to check that 
 
 They are intended more as a probably-single-use smoke test than a complete cover-everything solution.
 
-If developing on these, strongly recommend updating `test.yml` to have a single phase with much smaller numbers.
+If developing on these, strongly recommend updating `test.yml` to have a single phase with much smaller numbers. You can run them locally with (after an npm install) `npx artillery run test.yml --quiet --output report.json`, and `npx artillery report report.json` to get a pretty report.
 
 N.B. These numbers are probably much larger than actual usage. 
 
