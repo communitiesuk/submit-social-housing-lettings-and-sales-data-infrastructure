@@ -308,7 +308,7 @@ module "monitoring" {
   #   awscc = awscc
   # }
 
-  create_email_subscription = false
+  create_secrets_first = var.create_secrets_first
 
   prefix                               = local.prefix
   service_identifier_publishing_to_sns = "cloudwatch.amazonaws.com"

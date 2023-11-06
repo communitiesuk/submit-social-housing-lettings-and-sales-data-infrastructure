@@ -1,6 +1,6 @@
-variable "create_email_subscription" {
+variable "create_secrets_first" {
   type        = bool
-  description = "Setting to true will create an email subscription for infrastructure monitoring alerts."
+  description = "Setting to true will avoid creating the email subscription (and any other infra) for which a terraform apply would fail if the value of certain secrets were not set."
 }
 
 variable "prefix" {
