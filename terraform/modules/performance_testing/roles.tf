@@ -43,9 +43,8 @@ resource "aws_iam_role" "task" {
   assume_role_policy = data.aws_iam_policy_document.ecs_tasks_assume_role.json
 }
 
-
+#tfsec:ignore:aws-iam-no-policy-wildcards - do want actions to apply to all items in bucket
 data "aws_iam_policy_document" "results_read_write" {
-  #tfsec:ignore:aws-iam-no-policy-wildcards - do want actions to apply to all items in bucket
   statement {
     actions   = ["s3:ListBucket"]
     resources = [aws_s3_bucket.results.arn]
