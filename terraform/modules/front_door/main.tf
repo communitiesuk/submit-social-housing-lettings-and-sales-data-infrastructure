@@ -13,3 +13,12 @@ terraform {
     }
   }
 }
+
+data "aws_caller_identity" "current" {}
+
+locals {
+  bucket_names = {
+    cloudfront_logs = contains(var.append_suffix_to_bucket_names, "cloudfront-logs") ? "${var.prefix}-cloudfront-logs-${data.aws_caller_identity.current.account_id}" : "${var.prefix}-cloudfront-logs"
+    load_balancer_logs = contains(var.append_suffix_to_bucket_names, "load-balancer-logs") ? "${var.prefix}-load-balancer-logs-${data.aws_caller_identity.current.account_id}" : "${var.prefix}-load-balancer-logs"
+  }
+}
