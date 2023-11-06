@@ -77,41 +77,6 @@ locals {
   create_s3_migration_infra = false
 }
 
-moved {
-  from = module.application.aws_iam_policy.ecs_tasks_and_services
-  to   = module.application.aws_iam_policy.run_ecs_task_and_update_service
-}
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.ecs_tasks_and_services
-  to   = module.application.aws_iam_role_policy_attachment.run_ecs_task_and_update_service
-}
-
-moved {
-  from = module.front_door.aws_lb_target_group.this
-  to   = module.application.aws_lb_target_group.this
-}
-
-moved {
-  from = module.front_door.aws_lb_listener_rule.forward_cloudfront
-  to   = module.application.aws_lb_listener_rule.forward_cloudfront
-}
-
-moved {
-  from = module.front_door.aws_cloudwatch_metric_alarm.healthy_hosts_count
-  to   = module.application.aws_cloudwatch_metric_alarm.healthy_hosts_count
-}
-
-moved {
-  from = module.front_door.aws_cloudwatch_metric_alarm.unhealthy_hosts_count
-  to   = module.application.aws_cloudwatch_metric_alarm.unhealthy_hosts_count
-}
-
-moved {
-  from = module.application_roles.aws_iam_role_policy.parameter_access
-  to   = module.application.aws_iam_role_policy.parameter_access
-}
-
 module "application" {
   source = "../modules/application"
 
@@ -125,7 +90,6 @@ module "application" {
   ecr_repository_url = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core"
 
   prefix                                            = local.prefix
-  api_key_secret_arn                                = module.application_secrets.api_key_secret_arn
   app_host                                          = local.app_host
   app_task_desired_count                            = local.app_task_desired_count
   application_port                                  = local.application_port
@@ -151,63 +115,9 @@ module "application" {
   sentry_dsn_secret_arn                             = module.application_secrets.sentry_dsn_secret_arn
   sns_topic_arn                                     = module.monitoring.sns_topic_arn
   vpc_id                                            = module.networking.vpc_id
-}
 
-moved {
-  from = module.application.aws_iam_role.task
-  to   = module.application_roles.aws_iam_role.task
+  depends_on = [module.database.rds_partial_connection_string_parameter_name]
 }
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.ecs_task_database_data_access
-  to   = module.application_roles.aws_iam_role_policy_attachment.ecs_task_database_data_access
-}
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.ecs_task_redis_access
-  to   = module.application_roles.aws_iam_role_policy_attachment.ecs_task_redis_access
-}
-
-moved {
-  from = module.application.aws_iam_role_policy.cloudwatch_logs_access
-  to   = module.application_roles.aws_iam_role_policy.cloudwatch_logs_access
-}
-
-moved {
-  from = module.application.aws_iam_policy.allow_ecs_exec
-  to   = module.application_roles.aws_iam_policy.allow_ecs_exec
-}
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.task_allow_ecs_exec
-  to   = module.application_roles.aws_iam_role_policy_attachment.task_allow_ecs_exec
-}
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.task_bulk_upload_bucket_access
-  to   = module.application_roles.aws_iam_role_policy_attachment.task_bulk_upload_bucket_access
-}
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.task_export_bucket_access
-  to   = module.application_roles.aws_iam_role_policy_attachment.task_export_bucket_access
-}
-
-moved {
-  from = module.application.aws_iam_role.task_execution
-  to   = module.application_roles.aws_iam_role.task_execution
-}
-
-moved {
-  from = module.application.aws_iam_role_policy_attachment.task_execution_managed_policy
-  to   = module.application_roles.aws_iam_role_policy_attachment.task_execution_managed_policy
-}
-
-moved {
-  from = module.application.aws_iam_role_policy.secret_access
-  to   = module.application_roles.aws_iam_role_policy.secret_access
-}
-
 
 module "application_roles" {
   source = "../modules/application_roles"
@@ -220,47 +130,11 @@ module "application_roles" {
   export_bucket_access_policy_arn      = module.cds_export.read_write_policy_arn
 
   secret_arns = [
-    module.application_secrets.api_key_secret_arn,
     module.application_secrets.govuk_notify_api_key_secret_arn,
     module.application_secrets.os_data_key_secret_arn,
     module.application_secrets.rails_master_key_secret_arn,
     module.application_secrets.sentry_dsn_secret_arn
   ]
-}
-
-moved {
-  from = module.application.aws_secretsmanager_secret.api_key
-  to   = module.application_secrets.aws_secretsmanager_secret.api_key
-}
-
-moved {
-  from = module.application.aws_secretsmanager_secret.govuk_notify_api_key
-  to   = module.application_secrets.aws_secretsmanager_secret.govuk_notify_api_key
-}
-
-moved {
-  from = module.application.aws_secretsmanager_secret.os_data_key
-  to   = module.application_secrets.aws_secretsmanager_secret.os_data_key
-}
-
-moved {
-  from = module.application.aws_secretsmanager_secret.rails_master_key
-  to   = module.application_secrets.aws_secretsmanager_secret.rails_master_key
-}
-
-moved {
-  from = module.application.aws_secretsmanager_secret.sentry_dsn
-  to   = module.application_secrets.aws_secretsmanager_secret.sentry_dsn
-}
-
-moved {
-  from = module.redis.aws_security_group.this
-  to   = module.application_security_group.aws_security_group.redis
-}
-
-moved {
-  from = module.redis.aws_vpc_security_group_ingress_rule.redis_ingress
-  to   = module.application_security_group.aws_vpc_security_group_ingress_rule.redis_ingress
 }
 
 module "application_secrets" {
@@ -282,41 +156,11 @@ module "application_security_group" {
   vpc_id                          = module.networking.vpc_id
 }
 
-moved {
-  from = module.bulk_upload.aws_s3_bucket.this
-  to   = module.bulk_upload.aws_s3_bucket.bulk_upload
-}
-
-moved {
-  from = module.bulk_upload.aws_s3_bucket_public_access_block.this
-  to   = module.bulk_upload.aws_s3_bucket_public_access_block.bulk_upload
-}
-
-moved {
-  from = module.bulk_upload.aws_s3_bucket_lifecycle_configuration.this
-  to   = module.bulk_upload.aws_s3_bucket_lifecycle_configuration.bulk_upload
-}
-
 module "bulk_upload" {
   source = "../modules/bulk_upload"
 
   prefix            = local.prefix
   ecs_task_role_arn = module.application_roles.ecs_task_role_arn
-}
-
-moved {
-  from = module.cds_export.aws_s3_bucket.this
-  to   = module.cds_export.aws_s3_bucket.export
-}
-
-moved {
-  from = module.cds_export.aws_s3_bucket_public_access_block.this
-  to   = module.cds_export.aws_s3_bucket_public_access_block.export
-}
-
-moved {
-  from = module.cds_export.aws_s3_bucket_lifecycle_configuration.this
-  to   = module.cds_export.aws_s3_bucket_lifecycle_configuration.export
 }
 
 module "cds_export" {
@@ -342,11 +186,6 @@ module "certificates" {
   load_balancer_domain_name = local.load_balancer_domain_name
 }
 
-moved {
-  from = module.database.aws_ssm_parameter.database_connection_string
-  to   = module.database.aws_ssm_parameter.database_partial_connection_string
-}
-
 module "database" {
   source = "../modules/rds"
 
@@ -355,6 +194,7 @@ module "database" {
 
   apply_changes_immediately          = false
   enable_primary_deletion_protection = true
+  enable_replica_deletion_protection = true
   highly_available                   = true
   skip_final_snapshot                = false
   instance_class                     = "db.t3.small"
@@ -453,11 +293,6 @@ module "networking" {
   prefix                                  = local.prefix
   vpc_cidr_block                          = "10.0.0.0/16"
   vpc_flow_cloudwatch_log_expiration_days = 60
-}
-
-moved {
-  from = module.networking.aws_vpc.this
-  to   = module.networking.aws_vpc.main
 }
 
 module "monitoring" {

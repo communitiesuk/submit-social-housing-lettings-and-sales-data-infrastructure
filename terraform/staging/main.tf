@@ -90,7 +90,6 @@ module "application" {
   ecr_repository_url = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core"
 
   prefix                                            = local.prefix
-  api_key_secret_arn                                = module.application_secrets.api_key_secret_arn
   app_host                                          = local.app_host
   app_task_desired_count                            = local.app_task_desired_count
   application_port                                  = local.application_port
@@ -116,6 +115,8 @@ module "application" {
   sentry_dsn_secret_arn                             = module.application_secrets.sentry_dsn_secret_arn
   sns_topic_arn                                     = module.monitoring.sns_topic_arn
   vpc_id                                            = module.networking.vpc_id
+
+  depends_on = [module.database.rds_partial_connection_string_parameter_name]
 }
 
 module "application_roles" {
@@ -129,7 +130,6 @@ module "application_roles" {
   export_bucket_access_policy_arn      = module.cds_export.read_write_policy_arn
 
   secret_arns = [
-    module.application_secrets.api_key_secret_arn,
     module.application_secrets.govuk_notify_api_key_secret_arn,
     module.application_secrets.os_data_key_secret_arn,
     module.application_secrets.rails_master_key_secret_arn,
@@ -193,6 +193,7 @@ module "database" {
 
   apply_changes_immediately          = true
   enable_primary_deletion_protection = true
+  enable_replica_deletion_protection = true
   highly_available                   = false
   skip_final_snapshot                = false
   instance_class                     = "db.t3.small"
