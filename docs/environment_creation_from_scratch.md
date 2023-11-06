@@ -24,6 +24,7 @@ Ensure for the backend block in `main.tf` (see the equivalent in other environme
 unique key to store the infrastructure state in (i.e. the full name and extension of the terraform state file). 
 
 Once complete, while `cd`'d into the environment folder, run the following command to prepare terraform:
+
 ```terraform init```
 
 ### Run an initial apply
