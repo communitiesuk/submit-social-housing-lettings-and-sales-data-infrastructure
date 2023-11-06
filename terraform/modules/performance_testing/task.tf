@@ -5,6 +5,7 @@ resource "aws_ecs_cluster" "this" {
 }
 
 resource "aws_ecs_task_definition" "this" {
+  #chekov:skip=CKV_AWS_336: require write access to file system
   family                   = "core-performance-testing"
   cpu                      = 512
   execution_role_arn       = aws_iam_role.task_execution.arn
@@ -22,11 +23,11 @@ resource "aws_ecs_task_definition" "this" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group   = aws_cloudwatch_log_group.this.id
-          awslogs-region  = "eu-west-1"
+          awslogs-group         = aws_cloudwatch_log_group.this.id
+          awslogs-region        = "eu-west-1"
           awslogs-stream-prefix = "core-perf"
-          mode            = "non-blocking"
-          max-buffer-size = "4m"
+          mode                  = "non-blocking"
+          max-buffer-size       = "4m"
         }
       }
 
@@ -42,7 +43,9 @@ resource "aws_ecs_task_definition" "this" {
   }
 }
 
+#tfsec:ignore:aws-cloudwatch-log-group-customer-key - these aren't sensitive, consider later (CLDC-3006)
 resource "aws_cloudwatch_log_group" "this" {
+  #chekov:skip=CKV_AWS_158 (encryption with KMS, see above)
   name              = "core-performance-testing"
   retention_in_days = 90
 } 
