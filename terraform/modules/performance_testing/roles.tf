@@ -43,9 +43,8 @@ resource "aws_iam_role" "task" {
   assume_role_policy = data.aws_iam_policy_document.ecs_tasks_assume_role.json
 }
 
-
+#tfsec:ignore:aws-iam-no-policy-wildcards - do want actions to apply to all items in bucket
 data "aws_iam_policy_document" "results_read_write" {
-  #tfsec:ignore:aws-iam-no-policy-wildcards - do want actions to apply to all items in bucket
   statement {
     actions   = ["s3:ListBucket"]
     resources = [aws_s3_bucket.results.arn]
@@ -78,8 +77,9 @@ resource "aws_iam_role_policy_attachment" "results_read_write" {
 
 # See https://www.artillery.io/docs/load-testing-at-scale/aws-fargate#iam-permissions
 # I couldn't get a data resource to work for unknown reasons, so this is copied from there with the account id updated (and non eu-west-1 regions removed)
+#tfsec:ignore:aws-iam-no-policy-wildcards
 resource "aws_iam_policy" "artillery_run_fargate" {
-  #checkov:skip=CKV-AWS-290
+  #checkov:skip=CKV_AWS_290
   name        = "artillery-run-fargate"
   description = "Policy allowing permissions necessary for artillery to run tests on a fargate cluster"
   policy = jsonencode({
@@ -103,8 +103,8 @@ resource "aws_iam_policy" "artillery_run_fargate" {
         ],
         "Resource" : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/ecs-worker-policy"
       },
-      // Allow Artillery CLI to create AWS service role for ECS when creating a Fargate cluster
-      // https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html#create-service-linked-role
+      # Allow Artillery CLI to create AWS service role for ECS when creating a Fargate cluster
+      # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html#create-service-linked-role
       {
         "Effect" : "Allow",
         "Action" : ["iam:CreateServiceLinkedRole"],
@@ -131,8 +131,8 @@ resource "aws_iam_policy" "artillery_run_fargate" {
         "Resource" : "arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:artilleryio*"
       },
       {
-        // ListQueues cannot be scoped to individual resources
-        // https://docs.aws.amazon.com/service-authorization/latest/reference/list_amazonsqs.html#amazonsqs-queue
+        # ListQueues cannot be scoped to individual resources
+        # https://docs.aws.amazon.com/service-authorization/latest/reference/list_amazonsqs.html#amazonsqs-queue
         "Sid" : "SQSListQueues",
         "Effect" : "Allow",
         "Action" : [

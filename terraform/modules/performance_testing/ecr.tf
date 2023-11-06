@@ -1,5 +1,4 @@
-#tfsec:ignore:aws-ecr-enforce-immutable-repository
-#For ease we allow mutable tags here, given we're expecting to manually push and immediately run
+#tfsec:ignore:aws-ecr-enforce-immutable-repository: For ease we allow mutable tags here, given we're expecting to manually push and immediately run
 resource "aws_ecr_repository" "this" {
   #checkov:skip=CKV_AWS_51 (mutable tags, see above)
   name                 = "core-performance-testing"
