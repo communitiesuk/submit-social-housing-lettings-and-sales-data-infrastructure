@@ -2,7 +2,7 @@
 
 echo 'Logging into Gov PaaS'
 
-if cf login -a api.london.cloud.service.gov.uk -u ${CF_USERNAME} -p ${CF_PASSWORD} -s ${CF_SPACE}; then
+if cf login -a api.london.cloud.service.gov.uk -o "dluhc-core" -u ${CF_USERNAME} -p ${CF_PASSWORD} -s ${CF_SPACE}; then
   echo 'Logged into Gov PaaS successfully'
 else
   echo 'ERROR could not log into Gov Paas'
@@ -11,7 +11,7 @@ fi
 
 echo "Setting up conduit into Gov PaaS DB and making dump file"
 
-if cf conduit ${CF_SERVICE} -- pg_dump -v -j 2 --file dumpfile --no-acl --encoding utf8 --clean --no-owner --if-exists -Fc; then
+if cf conduit ${CF_SERVICE} -- pg_dump -v --file dumpfile --no-acl --encoding utf8 --clean --no-owner --if-exists -Fc; then
   echo 'Dump file of PaaS DB created successfully'
 else
   echo 'ERROR trying to conduit into the PaaS DB or creating the dump file'

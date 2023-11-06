@@ -10,6 +10,7 @@ resource "aws_elasticache_replication_group" "this" {
   description                 = "Redis replication group, consisting of a single node, or a primary node and a replica."
   engine                      = "redis"
   engine_version              = "6.2"
+  final_snapshot_identifier   = var.prefix
   maintenance_window          = "sun:23:00-mon:01:30"
   multi_az_enabled            = var.highly_available ? true : false
   node_type                   = var.node_type
