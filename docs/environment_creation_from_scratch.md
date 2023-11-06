@@ -20,15 +20,15 @@ In the terraform folder, add a new sub-folder with the name of the environment.
 Add a `main.tf` file to the folder, and define any infrastructure here (e.g. modules to use). You may also add 
 `variables.tf` and `outputs.tf` if necessary.
 
-Ensure for the backend block in `main.tf` (see the equivalent in other environment folders for examples), ensure you 
-define a unique key to store the infrastructure state in (i.e. the full name and extension of the terraform state file). 
+Ensure for the backend block in `main.tf` (see the equivalent in other environment folders for examples), you define a 
+unique key to store the infrastructure state in (i.e. the full name and extension of the terraform state file). 
 
 Once complete, while `cd`'d into the environment folder, run the following command to prepare terraform:
 ```terraform init```
 
 ### Run an initial apply
 
-Run the command below to create some partial infrastructure. 
+Run the command below to create partial infrastructure. 
 
 N.B. we need to ensure we explicitly target the `networking` module, otherwise we get an error when creating the load 
 balancer, as there's some kind of dependency that Terraform doesn't quite get.
@@ -56,7 +56,7 @@ certificate lives in `eu-west-2`.
 ### Fill the application secrets
 
 When doing a full apply the complete application will be created, and will need to read values from the secrets. 
-The values for the secrets should therefore be populated before creating a full apply.
+The values for the secrets should therefore be populated beforehand.
 
 You can do this using AWS console - Secrets Manager. Values should be saved as plaintext and without any curly braces 
 that the console initially has as a placeholder.
@@ -70,32 +70,42 @@ You can find / create values for the following secrets from the given locations:
 ### Update meta environment
 
 In the [meta/main.tf](../terraform/meta/main.tf) file, add the ARN of the `task-execution` role from the newly created 
-environment to the ECR module's `allow_access_by_roles` parameter.
+environment to the ECR module's `allow_access_by_roles` parameter. 
+
+`cd` into the meta folder and run `terraform apply` to update the meta environment with this change.
 
 ### Run a full apply
 
-Run a full apply using the command below (without targeting any modules or setting the `initial_create` var).
+Now run a full apply using the command below (without targeting any modules or setting the `initial_create` var, and while
+`cd`d into the environment to be created folder).
 
 ```terraform apply```
 
 If there are any issues creating the infra, it may be worth retrying the command a short while later in case AWS / Terraform
-was unable to configure a component or resource quickly enough. Otherwise, you will need to investigate the cause of the
-error.
-
-### Set up the database
-
-If you're not restoring the database from a backup, or migrating it from elsewhere, run the `db:setup` rake task (use 
-the `ad_hoc` task definition to spin it up from the app image with a command override).
-
-Alternatively you probably need to run an app deployment to sort out using the right image, which will include a db 
-migration - you can then just run `db:seed` as a separate task. See the next step for app deployment.
+was unable to configure a component or resource quickly enough before moving onto the next. Otherwise, you will need to 
+investigate the cause of the error.
 
 ### Set up the deployment
 
-In the Core App codebase [here](https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data), you 
-will need create a new pipeline for the environment (you can re-use the jobs and configuration in existing pipelines where 
+In the Core App codebase [here](https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data), you
+will need create a new pipeline for the environment (you can re-use the jobs and configuration in existing pipelines where
 appropriate).
 
 For the `aws_deploy` workflow, ensure you pass in the new account id, resource prefix and environment name.
 
-Once setup, run the deployment to bring the infra to a fully usable state.
+Once setup, run the deployment pipeline in order to update the ECS task definitions to run the right image from the ECR 
+(the pipeline may fail on the db migration stage depending on the state of your DB, see the next step for info).
+
+### Set up the database
+
+If you're not restoring the database from a backup / migrating it from elsewhere, and the db migration stage failed
+above, run a `db:setup` rake task (using the `ad_hoc` task definition to spin it up from the app image, with a command 
+override).
+
+Alternatively, if the db migration stage ran successfully, you can run a `db:seed` rake task separately (also using the 
+`ad_hoc` task definition), to populate the DB with some initial data.
+
+### Run a complete deployment
+
+Finally, run the deployment pipeline completely to bring the infrastructure and application to a complete and ready-to-use
+state.
