@@ -75,6 +75,8 @@ resource "aws_iam_role_policy_attachment" "results_read_write" {
   policy_arn = aws_iam_policy.results_read_write.arn
 }
 
+# See https://www.artillery.io/docs/load-testing-at-scale/aws-fargate#iam-permissions
+# I couldn't get a data resource to work for unknown reasons, so this is copied from there with the account id updated (and non eu-west-1 regions removed)
 resource "aws_iam_policy" "artillery_run_fargate" {
   name        = "artillery-run-fargate"
   description = "Policy allowing permissions necessary for artillery to run tests on a fargate cluster"
@@ -88,7 +90,7 @@ resource "aws_iam_policy" "artillery_run_fargate" {
                 "iam:CreateRole",
                 "iam:GetRole"
             ],
-            "Resource": "arn:aws:iam::815624722760:role/artilleryio-ecs-worker-role"
+            "Resource": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/artilleryio-ecs-worker-role"
         },
         {
             "Sid": "CreateECSPolicy",
@@ -97,7 +99,7 @@ resource "aws_iam_policy" "artillery_run_fargate" {
                 "iam:CreatePolicy",
                 "iam:AttachRolePolicy"
             ],
-            "Resource": "arn:aws:iam::815624722760:policy/ecs-worker-policy"
+            "Resource": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/ecs-worker-policy"
         },
         // Allow Artillery CLI to create AWS service role for ECS when creating a Fargate cluster
         // https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html#create-service-linked-role
@@ -116,7 +118,7 @@ resource "aws_iam_policy" "artillery_run_fargate" {
         {
           "Effect": "Allow",
           "Action": ["iam:PassRole"],
-          "Resource": ["arn:aws:iam::815624722760:role/artilleryio-ecs-worker-role"]
+          "Resource": ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/artilleryio-ecs-worker-role"]
         },
         {
             "Sid": "SQSPermissions",
@@ -124,7 +126,7 @@ resource "aws_iam_policy" "artillery_run_fargate" {
             "Action": [
                 "sqs:*"
             ],
-            "Resource": "arn:aws:sqs:*:815624722760:artilleryio*"
+            "Resource": "arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:artilleryio*"
         },
         {
             // ListQueues cannot be scoped to individual resources
@@ -154,7 +156,7 @@ resource "aws_iam_policy" "artillery_run_fargate" {
                 "ecs:DescribeClusters",
                 "ecs:ListContainerInstances"
             ],
-            "Resource": "arn:aws:ecs:*:815624722760:cluster/*"
+            "Resource": "arn:aws:ecs:*:${data.aws_caller_identity.current.account_id}:cluster/*"
         },
         {
             "Sid": "ECSPermissionsScopedWithCondition",
@@ -171,7 +173,7 @@ resource "aws_iam_policy" "artillery_run_fargate" {
             ],
             "Condition": {
                 "ArnEquals": {
-                    "ecs:cluster": "arn:aws:ecs:*:815624722760:cluster/*"
+                    "ecs:cluster": "arn:aws:ecs:*:${data.aws_caller_identity.current.account_id}:cluster/*"
                 }
             },
             "Resource": "*"
@@ -206,7 +208,7 @@ resource "aws_iam_policy" "artillery_run_fargate" {
         {
           "Effect": "Allow",
           "Action": ["secretsmanager:GetSecretValue"],
-          "Resource": ["arn:aws:secretsmanager:*:815624722760:secret:artilleryio/*"]
+          "Resource": ["arn:aws:secretsmanager:*:${data.aws_caller_identity.current.account_id}:secret:artilleryio/*"]
         },
         {
           "Effect": "Allow",
@@ -219,12 +221,7 @@ resource "aws_iam_policy" "artillery_run_fargate" {
             "ssm:GetParametersByPath"
           ],
           "Resource": [
-            "arn:aws:ssm:us-east-1:815624722760:parameter/artilleryio/*",
-            "arn:aws:ssm:us-west-1:815624722760:parameter/artilleryio/*",
-            "arn:aws:ssm:eu-west-1:815624722760:parameter/artilleryio/*",
-            "arn:aws:ssm:eu-central-1:815624722760:parameter/artilleryio/*",
-            "arn:aws:ssm:ap-south-1:815624722760:parameter/artilleryio/*",
-            "arn:aws:ssm:ap-northeast-1:815624722760:parameter/artilleryio/*"
+            "arn:aws:ssm:eu-west-1:${data.aws_caller_identity.current.account_id}:parameter/artilleryio/*",
           ]
         },
         {

@@ -11,6 +11,24 @@ resource "aws_s3_bucket_public_access_block" "results" {
   restrict_public_buckets = true
 }
 
+data "aws_iam_policy_document" "force_ssl" {
+  statement {
+    sid = "AllowSSLRequestsOnly"
+    actions = ["s3:*"]
+    resources = [aws_s3_bucket.results.arn, "${aws_s3_bucket.results.arn}/*"]
+    effect = "Deny"
+    principals {
+      type = "*"
+      identifiers = ["*"]
+    }
+    condition {
+      test = "Bool"
+      values = ["false"]
+      variable = "aws:SecureTransport"
+    }
+  }
+}
+
 resource "aws_s3_bucket_policy" "force_ssl" {
   bucket = aws_s3_bucket.results.id
 
