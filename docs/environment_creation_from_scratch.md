@@ -38,6 +38,15 @@ Fill out the values for the secrets in AWS console before the full apply.
 
 In the [meta/main.tf](../terraform/meta/main.tf) file, add the ARN of the task-execution role from the newly created environment to the ECR module's `allow_access_by_roles` parameter
 
+### Create and set certain secrets which other infrastructure depends on
+
+At this point, running terraform apply will fail because there are some resources which depend on the value of a secret which hasn't been set yet (because the secret would also be created as part of this apply if the steps below aren't followed).
+
+At the moment the only resource in this situation is the SNS email subscription. If you don't need that subscription for this environment then make sure `create_email_subscription` is set to false in the monitoring module in the environment entrypoint module. You can ignore the rest of this section and move on to running a full apply. However if you do need that subscription then:
+- Make sure `create_email_subscription` is set to true in the monitoring module in the environment entrypoint module
+- Run ```terraform apply -target="module.monitoring" -var="create_secrets_first=true"``` (this will create the `MONITORING_EMAIL` secret)
+- Set the value of the secret (i.e. the email address you want monitoring alerts to go to) in the AWS console (do so as plaintext, and don't keep the curly braces or add quotation marks or any other punctuation)
+
 ### Run a full apply
 
 Once these have been done, run a complete apply
