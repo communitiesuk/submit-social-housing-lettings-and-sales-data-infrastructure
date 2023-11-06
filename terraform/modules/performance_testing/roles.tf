@@ -78,6 +78,7 @@ resource "aws_iam_role_policy_attachment" "results_read_write" {
 
 # See https://www.artillery.io/docs/load-testing-at-scale/aws-fargate#iam-permissions
 # I couldn't get a data resource to work for unknown reasons, so this is copied from there with the account id updated (and non eu-west-1 regions removed)
+#tfsec:ignore:aws-iam-no-policy-wildcards
 resource "aws_iam_policy" "artillery_run_fargate" {
   #checkov:skip=CKV_AWS_290
   name        = "artillery-run-fargate"
