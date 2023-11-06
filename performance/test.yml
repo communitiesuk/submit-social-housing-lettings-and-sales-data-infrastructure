@@ -4,23 +4,23 @@ config:
     playwright: { aggregateByName: true, extendedMetrics: true, defaultTimeout: 90 }
   processor: "./flows.js"
   phases:
-    - name: one
-      duration: 60
-      arrivalCount: 10
-    - name: two
-      duration: 60
-      arrivalRate: 20
-    - name: three
-      duration: 60
-      arrivalCount: 30
+  #  - name: one
+  #    duration: 60
+  #    arrivalCount: 10
+  #  - name: two
+  #    duration: 60
+  #    arrivalRate: 20
+  #  - name: three
+  #    duration: 60
+  #    arrivalCount: 30
     - name: four
       duration: 600
       arrivalRate: 1
-      rampTo: 10
-    - name: five
-      duration: 600
-      arrivalRate: 10
-      maxVusers: 8000
+      rampTo: 12
+  #  - name: five
+  #    duration: 600
+  #    arrivalRate: 10
+  #    maxVusers: 8000
   payload:
     path: "users.csv"
     fields:
