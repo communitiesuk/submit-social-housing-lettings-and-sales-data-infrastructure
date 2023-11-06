@@ -308,10 +308,12 @@ module "monitoring" {
   #   awscc = awscc
   # }
 
-  create_secrets_first = var.create_secrets_first
+  create_email_subscription = false
 
   prefix                               = local.prefix
   service_identifier_publishing_to_sns = "cloudwatch.amazonaws.com"
+
+  create_secrets_first = var.create_secrets_first
 }
 
 module "redis" {

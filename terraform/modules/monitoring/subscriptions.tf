@@ -1,5 +1,5 @@
 resource "aws_sns_topic_subscription" "email" {
-  count = var.create_secrets_first ? 0 : 1
+  count = var.create_email_subscription && !var.create_secrets_first ? 1 : 0
 
   topic_arn = aws_sns_topic.this.arn
   protocol  = "email"
