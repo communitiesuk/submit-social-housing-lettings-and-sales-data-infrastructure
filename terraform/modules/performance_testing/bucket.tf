@@ -4,7 +4,7 @@ resource "aws_s3_bucket" "results" {
   #checkov:skip=CKV_AWS_144: Don't need cross region replication
   #checkov:skip=CKV_AWS_18: Access logging (see above)
   #checkov:skip=CKV_AWS_21: Versioning (see above)
-  #checkov:skip=CKV_AWS_62: Event notifications, fine without for this purpose
+  #checkov:skip=CKV2_AWS_62: Event notifications, fine without for this purpose
   bucket = "core-performance-testing-results"
 }
 

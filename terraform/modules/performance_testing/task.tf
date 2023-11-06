@@ -5,7 +5,7 @@ resource "aws_ecs_cluster" "this" {
 }
 
 resource "aws_ecs_task_definition" "this" {
-  #chekov:skip=CKV_AWS_336: require write access to file system
+  #checkov:skip=CKV_AWS_336: require write access to file system
   family                   = "core-performance-testing"
   cpu                      = 512
   execution_role_arn       = aws_iam_role.task_execution.arn
@@ -45,7 +45,8 @@ resource "aws_ecs_task_definition" "this" {
 
 #tfsec:ignore:aws-cloudwatch-log-group-customer-key - these aren't sensitive, consider later (CLDC-3006)
 resource "aws_cloudwatch_log_group" "this" {
-  #chekov:skip=CKV_AWS_158 (encryption with KMS, see above)
+  #checkov:skip=CKV_AWS_158 (encryption with KMS, see above)
+  #checkov:skip=CKV_AWS_338: Long retention isn't necessary for throwaway tasks
   name              = "core-performance-testing"
   retention_in_days = 90
 } 
