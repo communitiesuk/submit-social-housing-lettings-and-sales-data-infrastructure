@@ -300,6 +300,8 @@ module "monitoring" {
 
   prefix                               = local.prefix
   service_identifier_publishing_to_sns = "cloudwatch.amazonaws.com"
+
+  create_secrets_first = var.create_secrets_first
 }
 
 module "redis" {

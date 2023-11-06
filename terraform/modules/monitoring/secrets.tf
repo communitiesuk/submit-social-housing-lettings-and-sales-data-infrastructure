@@ -7,7 +7,7 @@ resource "aws_secretsmanager_secret" "email" {
 }
 
 data "aws_secretsmanager_secret_version" "email" {
-  count = var.create_email_subscription ? 1 : 0
+  count = var.create_email_subscription && !var.create_secrets_first ? 1 : 0
 
   secret_id = aws_secretsmanager_secret.email[0].arn
 }
