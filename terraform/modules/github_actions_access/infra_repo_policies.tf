@@ -20,13 +20,13 @@ data "aws_iam_policy_document" "state_access" {
 
   statement {
     actions = [
-"dynamodb:DescribeTable",
-        "dynamodb:GetItem",
-        "dynamodb:PutItem",
-        "dynamodb:DeleteItem"
+      "dynamodb:DescribeTable",
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
+      "dynamodb:DeleteItem"
     ]
     resources = var.state_details[*].lock_table_arn
-    effect = "Allow"
+    effect    = "Allow"
   }
 }
 
