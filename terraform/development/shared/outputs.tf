@@ -73,6 +73,11 @@ output "database_rds_partial_connection_string_parameter_name" {
   description = "The name of the partial database connection string in the parameter store"
 }
 
+output "deployment_role_arn" {
+  value       = module.deployment_role.deployment_role_arn
+  description = "Arn of the terraform deployment role"
+}
+
 output "front_door_cloudfront_header_name" {
   value       = module.front_door.cloudfront_header_name
   description = "The name of the custom header used for cloudfront"
