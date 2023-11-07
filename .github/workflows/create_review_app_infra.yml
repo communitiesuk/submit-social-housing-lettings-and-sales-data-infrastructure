@@ -1,11 +1,6 @@
 name: "Create Review App infra"
 
 on:
-  workflow_call:
-    inputs:
-      key:
-        required: true
-        type: string
   workflow_dispatch:
     inputs:
       key:
