@@ -18,7 +18,12 @@ variable "meta_account_id" {
   description = "Account id for the meta account"
 }
 
-variable "state_bucket_arns" {
-  type        = list(string)
-  description = "Bucket arns of terraform state buckets to allow the infra repo to access"
+variable "state_details" {
+  type        = list(object(
+    {
+      bucket_arn = string,
+      lock_table_arn = string,
+    }
+  ))
+  description = "Details for terraform state buckets and lock tables to allow the infra repo to access"
 }
