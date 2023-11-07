@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "state_bucket_access" {
 
 resource "aws_iam_policy" "state_bucket_access" {
   name   = "state-bucket-access"
-  policy = data.aws_iam_policy_document.state_access.json
+  policy = data.aws_iam_policy_document.state_bucket_access.json
 }
 
 resource "aws_iam_role_policy_attachment" "infra_repo_state_bucket_access" {
