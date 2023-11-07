@@ -123,7 +123,7 @@ module "github_actions_access" {
   ecr_arn             = module.ecr.repository_arn
   infrastructure_repo = "communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure"
   meta_account_id     = data.aws_caller_identity.current.account_id
-  state_details   = [module.non_prod_backend.state_details]
+  state_details       = [module.non_prod_backend.state_details]
 }
 
 module "performance_testing" {

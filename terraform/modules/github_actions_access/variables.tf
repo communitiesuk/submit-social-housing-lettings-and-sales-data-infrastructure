@@ -19,9 +19,9 @@ variable "meta_account_id" {
 }
 
 variable "state_details" {
-  type        = list(object(
+  type = list(object(
     {
-      bucket_arn = string,
+      bucket_arn     = string,
       lock_table_arn = string,
     }
   ))
