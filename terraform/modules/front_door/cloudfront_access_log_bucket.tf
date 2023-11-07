@@ -6,7 +6,7 @@ resource "aws_s3_bucket" "cloudfront_access_logs" {
   #checkov:skip=CKV_AWS_18: access log bucket doesn't need access logging itself
   #checkov:skip=CKV_AWS_145: access log buckets not compatible with kms encryption, see https://docs.aws.amazon.com/AmazonS3/latest/userguide/troubleshooting-server-access-logging.html
   #checkov:skip=CKV_AWS_144: cross region replication not required for access logs
-  bucket = "${var.prefix}-cloudfront-logs"
+  bucket = local.bucket_names.cloudfront_logs
 }
 
 resource "aws_s3_bucket_public_access_block" "cloudfront_access_logs" {
