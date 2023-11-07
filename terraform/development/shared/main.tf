@@ -157,7 +157,7 @@ module "deployment_role" {
   source = "../../modules/terraform_deployment"
 
   prefix = local.prefix
-  deployment_role_arns = [
+  assume_from_role_arns = [
     "arn:aws:iam::815624722760:role/developer",
     "arn:aws:iam::815624722760:role/core-infrastructure-repo"
   ]
