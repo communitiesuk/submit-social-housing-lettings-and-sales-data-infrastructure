@@ -1,3 +1,7 @@
+locals {
+  preferred_cache_cluster_azs = var.highly_available ? ["eu-west-2a", "eu-west-2b"] : ["eu-west-2a"]
+}
+
 resource "aws_elasticache_replication_group" "this" {
   #checkov:skip=CKV_AWS_31:TODO CLDC-2937 potentially introduce an auth token later
   #checkov:skip=CKV_AWS_134:redis backups not required for dev / review apps
@@ -17,7 +21,7 @@ resource "aws_elasticache_replication_group" "this" {
   num_cache_clusters          = var.highly_available ? 2 : 1
   parameter_group_name        = aws_elasticache_parameter_group.this.id
   port                        = var.redis_port
-  preferred_cache_cluster_azs = ["eu-west-2a", "eu-west-2b"] # The first AZ in the list is where the primary node will be created. Replicas will be created in the following AZs.
+  preferred_cache_cluster_azs = local.preferred_cache_cluster_azs
   replication_group_id        = var.prefix
   security_group_ids          = [var.redis_security_group_id]
   snapshot_retention_limit    = var.snapshot_retention_limit
