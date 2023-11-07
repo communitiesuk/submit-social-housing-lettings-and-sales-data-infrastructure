@@ -24,6 +24,9 @@ jobs:
   deploy:
     name: Create infra
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+
     steps:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2

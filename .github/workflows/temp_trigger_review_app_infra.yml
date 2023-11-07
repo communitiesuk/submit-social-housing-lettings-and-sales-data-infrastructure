@@ -10,3 +10,5 @@ jobs:
     uses: ./.github/workflows/create_review_app_infra.yml
     with:
       key: 0
+    permissions:
+      id-token: write
