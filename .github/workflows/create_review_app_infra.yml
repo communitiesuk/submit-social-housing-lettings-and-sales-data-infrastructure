@@ -40,7 +40,7 @@ jobs:
           role-to-assume: ${{ env.app_repo_role }}
 
       - name: Terraform apply
-        working-directory: terraform/development/per_review_app
+        working-directory: ./terraform/development/per_review_app
         env:
           workspace: ${{ inputs.key }}
         run: |
