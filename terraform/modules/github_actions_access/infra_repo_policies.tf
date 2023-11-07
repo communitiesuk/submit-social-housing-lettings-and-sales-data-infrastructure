@@ -31,7 +31,7 @@ data "aws_iam_policy_document" "state_access" {
 }
 
 resource "aws_iam_policy" "state_access" {
-  name   = "state-bucket-access"
+  name   = "state-access"
   policy = data.aws_iam_policy_document.state_access.json
 }
 
