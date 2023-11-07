@@ -173,6 +173,7 @@ module "front_door" {
   restrict_by_ip = true
 
   prefix                        = local.prefix
+  append_suffix_to_bucket_names = ["load-balancer-logs"]
   application_port              = local.application_port
   cloudfront_certificate_arn    = module.certificates.cloudfront_certificate_arn
   cloudfront_domain_name        = local.app_host
@@ -205,4 +206,9 @@ module "networking" {
   prefix                                  = local.prefix
   vpc_cidr_block                          = "10.0.0.0/16"
   vpc_flow_cloudwatch_log_expiration_days = 60
+}
+
+moved {
+  from = module.networking.aws_vpc.this
+  to   = module.networking.aws_vpc.main
 }
