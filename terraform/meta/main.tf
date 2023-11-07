@@ -119,9 +119,11 @@ data "aws_caller_identity" "current" {}
 module "github_actions_access" {
   source = "../modules/github_actions_access"
 
-  application_repo = "communitiesuk/submit-social-housing-lettings-and-sales-data"
-  ecr_arn          = module.ecr.repository_arn
-  meta_account_id  = data.aws_caller_identity.current.account_id
+  application_repo    = "communitiesuk/submit-social-housing-lettings-and-sales-data"
+  ecr_arn             = module.ecr.repository_arn
+  infrastructure_repo = "communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure"
+  meta_account_id     = data.aws_caller_identity.current.account_id
+  state_bucket_arns   = [module.non_prod_backend.state_bucket_arn]
 }
 
 module "performance_testing" {
