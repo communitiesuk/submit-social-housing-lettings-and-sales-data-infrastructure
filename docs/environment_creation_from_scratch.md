@@ -18,7 +18,8 @@ If the environment hasn't been created / defined before:
 In the terraform folder, add a new sub-folder with the name of the environment.
 
 Add a `main.tf` file to the folder, and define any infrastructure here (e.g. modules to use). You may also add 
-`variables.tf` and `outputs.tf` if necessary.
+`variables.tf` and/or `outputs.tf` files if necessary. In the `main.tf` file, you may also want to correctly set any local
+terraform variables, such as the `prefix`, `rails_env` etc.
 
 Ensure for the backend block in `main.tf` (see the equivalent in other environment folders for examples), you define a 
 unique key to store the infrastructure state in (i.e. the full name and extension of the terraform state file). 
@@ -42,17 +43,23 @@ secrets; which are necessary before creating the full app).
 
 ### Get DNS Records set up
 
-Ask DLUHC to add the DNS records for the new environment.
+Request DLUHC to add the DNS records for the new environment.
 
 There will be four records, which will be;
-* Validation for the cloudfront certificate
-* Validation for the load balancer certificate
 * CNAME for the cloudfront domain pointing at the cloudfront distribution
 * CNAME for the load balancer domain pointing at the load balancer
+* Validation for the cloudfront certificate
+* Validation for the load balancer certificate
+
+See the screenshot below for an example of the form DLUHC asked us to complete for the request above (values aren't actual):
+
+![add_dns_records_dluhc_request_example.png](add_dns_records_dluhc_request_example.png)
 
 Once DLUHC has set up the records, check the certificates have been validated in AWS console (they should have "issued" 
 and "success" statuses). N.B. the cloudfront certificate lives in the `us-east-1` region, whereas the load balancer 
 certificate lives in `eu-west-2`.
+
+
 
 ### Fill the application secrets
 
