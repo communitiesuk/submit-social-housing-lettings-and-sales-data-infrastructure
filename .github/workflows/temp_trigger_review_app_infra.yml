@@ -1,0 +1,14 @@
+name: "Temp workflow to trigger create_review_app_infra for testing"
+
+on:
+  push:
+    branches:
+      - ReviewTesting
+
+jobs:
+  run:
+    uses: ./.github/workflows/create_review_app_infra.yml
+    with:
+      key: 0
+    permissions:
+      id-token: write
