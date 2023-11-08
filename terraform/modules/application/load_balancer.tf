@@ -11,12 +11,12 @@ resource "aws_lb_target_group" "this" {
     protocol            = "HTTP"
     matcher             = "204"
     timeout             = "3"
-    path                = "/health"
+    path                = "${var.relative_root}/health"
     unhealthy_threshold = "2"
   }
 }
 
-resource "aws_lb_listener_rule" "forward_cloudfront" {
+resource "aws_lb_listener_rule" "forward" {
   listener_arn = var.load_balancer_listener_arn
 
   action {
@@ -28,6 +28,12 @@ resource "aws_lb_listener_rule" "forward_cloudfront" {
     http_header {
       http_header_name = var.cloudfront_header_name
       values           = [var.cloudfront_header_password]
+    }
+  }
+
+  condition {
+    path_pattern {
+      values = [var.relative_root, "${var.relative_root}/*"]
     }
   }
 }

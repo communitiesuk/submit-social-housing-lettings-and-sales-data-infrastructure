@@ -21,6 +21,24 @@ locals {
   ]
 }
 
+locals {
+  app_container_environment_base = [
+    { Name = "APP_HOST", Value = var.app_host },
+    { Name = "CSV_DOWNLOAD_PAAS_INSTANCE", Value = local.bulk_upload_bucket_key },
+    { Name = "EXPORT_PAAS_INSTANCE", Value = local.export_bucket_key },
+    { Name = "RAILS_ENV", Value = var.rails_env },
+    { Name = "RAILS_LOG_TO_STDOUT", Value = "true" },
+    { Name = "RAILS_SERVE_STATIC_FILES", Value = "true" },
+    { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
+    { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) }
+  ]
+  app_container_environment = (
+    var.relative_root == "" ?
+    local.app_container_environment_base :
+    concat(local.app_container_environment_base, [{ Name = "RAILS_RELATIVE_URL_ROOT", Value = var.relative_root }])
+  )
+}
+
 # N.B. We expect this, sidekiq and the ad_hoc_tasks definition to be very similar - if updating you should change all of them unless there's a reason for them to be different
 resource "aws_ecs_task_definition" "app" {
   #checkov:skip=CKV_AWS_336:using readonlyRootFilesystem to true breaks the app, as it needs to write to app/tmp/pids for example
@@ -34,20 +52,11 @@ resource "aws_ecs_task_definition" "app" {
 
   container_definitions = jsonencode([
     {
-      name = local.app_container_name
-      environment = [
-        { Name = "APP_HOST", Value = var.app_host },
-        { Name = "CSV_DOWNLOAD_PAAS_INSTANCE", Value = local.bulk_upload_bucket_key },
-        { Name = "EXPORT_PAAS_INSTANCE", Value = local.export_bucket_key },
-        { Name = "RAILS_ENV", Value = var.rails_env },
-        { Name = "RAILS_LOG_TO_STDOUT", Value = "true" },
-        { Name = "RAILS_SERVE_STATIC_FILES", Value = "true" },
-        { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
-        { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) }
-      ]
-      essential = true
-      image     = var.ecr_repository_url
-      user      = "nonroot"
+      name        = local.app_container_name
+      environment = local.app_container_environment
+      essential   = true
+      image       = var.ecr_repository_url
+      user        = "nonroot"
 
       logConfiguration = {
         logDriver = "awslogs"
@@ -103,21 +112,12 @@ resource "aws_ecs_task_definition" "sidekiq" {
 
   container_definitions = jsonencode([
     {
-      name    = local.sidekiq_container_name
-      command = ["bundle", "exec", "sidekiq", "-t", "3"]
-      environment = [
-        { Name = "APP_HOST", Value = var.app_host },
-        { Name = "CSV_DOWNLOAD_PAAS_INSTANCE", Value = local.bulk_upload_bucket_key },
-        { Name = "EXPORT_PAAS_INSTANCE", Value = local.export_bucket_key },
-        { Name = "RAILS_ENV", Value = var.rails_env },
-        { Name = "RAILS_LOG_TO_STDOUT", Value = "true" },
-        { Name = "RAILS_SERVE_STATIC_FILES", Value = "true" },
-        { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
-        { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) }
-      ]
-      essential = true
-      image     = var.ecr_repository_url
-      user      = "nonroot"
+      name        = local.sidekiq_container_name
+      command     = ["bundle", "exec", "sidekiq", "-t", "3"]
+      environment = local.app_container_environment
+      essential   = true
+      image       = var.ecr_repository_url
+      user        = "nonroot"
 
       logConfiguration = {
         logDriver = "awslogs"
@@ -165,20 +165,11 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
 
   container_definitions = jsonencode([
     {
-      name = local.app_container_name
-      environment = [
-        { Name = "APP_HOST", Value = var.app_host },
-        { Name = "CSV_DOWNLOAD_PAAS_INSTANCE", Value = local.bulk_upload_bucket_key },
-        { Name = "EXPORT_PAAS_INSTANCE", Value = local.export_bucket_key },
-        { Name = "RAILS_ENV", Value = var.rails_env },
-        { Name = "RAILS_LOG_TO_STDOUT", Value = "true" },
-        { Name = "RAILS_SERVE_STATIC_FILES", Value = "true" },
-        { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
-        { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) }
-      ]
-      essential = true
-      image     = var.ecr_repository_url
-      user      = "nonroot"
+      name        = local.app_container_name
+      environment = local.app_container_environment
+      essential   = true
+      image       = var.ecr_repository_url
+      user        = "nonroot"
 
       logConfiguration = {
         logDriver = "awslogs"
