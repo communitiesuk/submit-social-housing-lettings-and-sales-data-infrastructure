@@ -153,6 +153,16 @@ module "database" {
   vpc_id                      = module.networking.vpc_id
 }
 
+module "deployment_role" {
+  source = "../../modules/terraform_deployment"
+
+  prefix = local.prefix
+  assume_from_role_arns = [
+    "arn:aws:iam::815624722760:role/developer",
+    "arn:aws:iam::815624722760:role/core-infrastructure-repo"
+  ]
+}
+
 module "front_door" {
   source = "../../modules/front_door"
 

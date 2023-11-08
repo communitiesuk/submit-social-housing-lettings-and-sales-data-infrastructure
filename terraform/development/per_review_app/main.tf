@@ -14,7 +14,6 @@ terraform {
     encrypt        = true
     key            = "core-development-per-review-app.tfstate"
     region         = "eu-west-2"
-    role_arn       = "arn:aws:iam::815624722760:role/developer"
   }
 }
 
@@ -28,7 +27,6 @@ data "terraform_remote_state" "development_shared" {
     encrypt        = true
     key            = "core-development-shared.tfstate"
     region         = "eu-west-2"
-    role_arn       = "arn:aws:iam::815624722760:role/developer"
   }
 }
 
@@ -47,7 +45,7 @@ locals {
 
   app_host = "review.submit-social-housing-data.levellingup.gov.uk"
 
-  provider_role_arn = "arn:aws:iam::837698168072:role/developer"
+  provider_role_arn = data.terraform_remote_state.development_shared.outputs.deployment_role_arn
 
   app_task_desired_count = 1
 
@@ -107,6 +105,6 @@ module "redis" {
 
   prefix                  = local.prefix
   redis_port              = local.redis_port
-  redis_security_group_id = data.terraform_remote_state.development_shared.outputs.redis_security_group_id
-  redis_subnet_group_name = data.terraform_remote_state.development_shared.outputs.redis_private_subnet_group_name
+  redis_security_group_id = data.terraform_remote_state.development_shared.outputs.application_security_group_redis_security_group_id
+  redis_subnet_group_name = data.terraform_remote_state.development_shared.outputs.networking_redis_private_subnet_group_name
 }
