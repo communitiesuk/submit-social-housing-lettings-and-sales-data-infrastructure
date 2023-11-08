@@ -72,6 +72,7 @@ module "ecr" {
 
   # This will need updating to include dev and production roles
   allow_access_by_roles = [
+    "arn:aws:iam::837698168072:role/core-dev-task-execution",
     "arn:aws:iam::107155005276:role/core-staging-task-execution",
     "arn:aws:iam::977287343304:role/core-prod-task-execution"
   ]
