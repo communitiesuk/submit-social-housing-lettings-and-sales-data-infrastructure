@@ -93,7 +93,7 @@ If there are any issues creating the infra, it may be worth retrying the command
 was unable to configure a component or resource quickly enough before moving onto the next. Otherwise, you will need to 
 investigate the cause of the error.
 
-### Set up the deployment
+### Set up and try running the deployment
 
 In the Core App codebase [here](https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data), you
 will need create a new pipeline for the environment (you can re-use the jobs and configuration in existing pipelines where
@@ -107,13 +107,13 @@ Once setup, run the deployment pipeline in order to update the ECS task definiti
 ### Set up the database
 
 If you're not restoring the database from a backup / migrating it from elsewhere, and the db migration stage failed
-above, run a `db:setup` rake task (using the `ad_hoc` task definition to spin it up from the app image, with a command 
-override).
+in the deployment above, run a `db:setup` rake task (using the `ad_hoc` task definition to spin it up from the app image, 
+with a command override).
 
 Alternatively, if the db migration stage ran successfully, you can run a `db:seed` rake task separately (also using the 
 `ad_hoc` task definition), to populate the DB with some initial data.
 
 ### Run a complete deployment
 
-Finally, run the deployment pipeline completely to bring the infrastructure and application to a complete and ready-to-use
-state.
+Finally, if the deployment pipeline didn't run completely the first time due to the db migration stage, re-run it in order 
+to bring the infrastructure and application to a complete and ready-to-use state.
