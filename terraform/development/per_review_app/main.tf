@@ -108,4 +108,5 @@ module "redis" {
   redis_port              = local.redis_port
   redis_security_group_id = data.terraform_remote_state.development_shared.outputs.redis_security_group_id
   redis_subnet_group_name = data.terraform_remote_state.development_shared.outputs.redis_private_subnet_group_name
+  skip_final_snapshot     = true
 }
