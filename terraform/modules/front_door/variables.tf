@@ -1,3 +1,9 @@
+variable "append_suffix_to_bucket_names" {
+  type        = list(string)
+  description = "List of buckets to append the account id as a suffix to the name of (in order to ensure uniqueness)"
+  default     = []
+}
+
 variable "application_port" {
   type        = number
   description = "The network port the application runs on"
