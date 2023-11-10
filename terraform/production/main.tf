@@ -67,7 +67,7 @@ locals {
 
   app_task_desired_count = 4
 
-  enable_aws_shield = false
+  enable_aws_shield = true
 
   application_port = 8080
   database_port    = 5432
