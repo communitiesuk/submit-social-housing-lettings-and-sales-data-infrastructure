@@ -73,8 +73,8 @@ locals {
   database_port    = 5432
   redis_port       = 6379
 
-  create_db_migration_infra = false
-  create_s3_migration_infra = false
+  create_db_migration_infra = true
+  create_s3_migration_infra = true
 }
 
 module "application" {
