@@ -298,8 +298,12 @@ module "networking" {
 module "monitoring" {
   source = "../modules/monitoring"
 
+  create_email_subscription = true
+
   prefix                               = local.prefix
   service_identifier_publishing_to_sns = "cloudwatch.amazonaws.com"
+
+  create_secrets_first = var.create_secrets_first
 }
 
 module "redis" {
