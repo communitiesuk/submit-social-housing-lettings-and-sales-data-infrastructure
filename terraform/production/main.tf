@@ -83,9 +83,9 @@ module "application" {
   app_task_cpu    = 1024
   app_task_memory = 2048
 
-  sidekiq_task_cpu           = 1024
+  sidekiq_task_cpu           = 8192
   sidekiq_task_desired_count = 2
-  sidekiq_task_memory        = 8192
+  sidekiq_task_memory        = 16384
 
   ecr_repository_url = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core"
 
