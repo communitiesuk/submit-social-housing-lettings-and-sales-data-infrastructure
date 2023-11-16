@@ -73,8 +73,8 @@ locals {
   database_port    = 5432
   redis_port       = 6379
 
-  create_db_migration_infra = false
-  create_s3_migration_infra = false
+  create_db_migration_infra = true
+  create_s3_migration_infra = true
 }
 
 module "application" {
@@ -264,7 +264,7 @@ module "front_door" {
     aws.us-east-1 = aws.us-east-1
   }
 
-  restrict_by_ip              = true
+  restrict_by_ip              = false
   restriction_allows_test_ips = false
 
   prefix                        = local.prefix
