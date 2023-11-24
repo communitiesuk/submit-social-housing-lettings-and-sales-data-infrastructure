@@ -1,7 +1,7 @@
 name: "Destroy Review App infra"
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       key:
         required: true
