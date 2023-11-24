@@ -159,7 +159,9 @@ module "deployment_role" {
   prefix = local.prefix
   assume_from_role_arns = [
     "arn:aws:iam::815624722760:role/developer",
-    "arn:aws:iam::815624722760:role/core-infrastructure-repo"
+    "arn:aws:iam::815624722760:role/core-infrastructure-repo",
+    "arn:aws:iam::815624722760:role/core-application-repo"
+
   ]
 }
 
