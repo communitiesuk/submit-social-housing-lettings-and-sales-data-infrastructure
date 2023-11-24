@@ -1,12 +1,9 @@
-name: "Create Review App infra"
+name: "Destroy Review App infra"
 
 on:
   workflow_call:
     inputs:
       key:
-        required: true
-        type: string
-      app_repo_role:
         required: true
         type: string
 
@@ -15,11 +12,12 @@ concurrency:
   cancel-in-progress: false
 
 env:
+  app_repo_role: arn:aws:iam::815624722760:role/core-infrastructure-repo
   aws_region: eu-west-2
 
 jobs:
-  deploy:
-    name: Create infra
+  teardown:
+    name: Destroy infra
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -27,9 +25,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          repository: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure
-          ref: ReviewAppsDeploy
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
@@ -40,13 +35,15 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v3
         with:
           aws-region: ${{ env.aws_region }}
-          role-to-assume: ${{ inputs.app_repo_role }}
+          role-to-assume: ${{ env.app_repo_role }}
 
-      - name: Terraform apply
+      - name: Terraform destroy
         working-directory: terraform/development/per_review_app
         env:
           workspace: ${{ inputs.key }}
         run: |
           terraform init
           terraform workspace select -or-create $workspace
-          terraform apply -auto-approve
+          terraform destroy -auto-approve
+          terraform workspace select default
+          terraform workspace delete $workspace
