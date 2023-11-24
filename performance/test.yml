@@ -1,0 +1,35 @@
+config:
+  target: https://staging.submit-social-housing-data.levellingup.gov.uk
+  engines:
+    playwright: { aggregateByName: true, extendedMetrics: true, defaultTimeout: 90 }
+  processor: "./flows.js"
+  phases:
+    - name: long
+      duration: 3600
+      arrivalCount: 800
+  payload:
+    path: "users.csv"
+    fields:
+      - "username"
+      - "password"
+      - "logReference"
+      - "hasOrgRelationships"
+      - "schemeSearchTerm"
+    name: user
+scenarios:
+  - name: lettings-log-gn
+    weight: 3
+    engine: playwright
+    testFunction: "fillInGeneralNeedsLettingsLog"
+  - name: lettings-log-sh
+    weight: 3
+    engine: playwright
+    testFunction: "fillInSupportedHousingLettingsLog"
+  - name: browse
+    weight: 1
+    engine: playwright
+    testFunction: "browse"
+  - name: search-logs
+    weight: 4
+    engine: playwright
+    testFunction: "searchLogs"

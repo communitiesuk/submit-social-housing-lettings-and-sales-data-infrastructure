@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.438.0",
+    "@playwright/browser-chromium": "^1.39.0",
+    "artillery": "^2.0.0-38"
+  },
+  "scripts": {
+    "upload": "node upload.js"
+  }
+}

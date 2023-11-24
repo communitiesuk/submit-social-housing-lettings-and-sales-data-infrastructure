@@ -42,6 +42,8 @@ locals {
 
   create_db_migration_infra = true
   create_s3_migration_infra = true
+
+  create_performance_testing_infra = true
 }
 
 # We create two backends for managing the terraform state of different accounts:
@@ -125,4 +127,14 @@ module "github_actions_access" {
   application_repo = "communitiesuk/submit-social-housing-lettings-and-sales-data"
   ecr_arn          = module.ecr.repository_arn
   meta_account_id  = data.aws_caller_identity.current.account_id
+}
+
+module "performance_testing" {
+  source = "../modules/performance_testing"
+
+  count = local.create_performance_testing_infra ? 1 : 0
+
+  providers = {
+    aws = aws.eu-west-1
+  }
 }
