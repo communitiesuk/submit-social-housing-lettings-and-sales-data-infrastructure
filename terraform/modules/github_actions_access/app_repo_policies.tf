@@ -31,6 +31,6 @@ resource "aws_iam_role_policy_attachment" "app_repo_push_images" {
 }
 
 resource "aws_iam_role_policy_attachment" "app_repo_state_access" {
-  role = aws_iam_role.repo["application"].name
+  role       = aws_iam_role.repo["application"].name
   policy_arn = aws_iam_policy.state_access.arn
 }
