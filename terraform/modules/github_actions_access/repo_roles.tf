@@ -1,12 +1,5 @@
-locals {
-  repositories = {
-    "application"    = var.application_repo
-    "infrastructure" = var.infrastructure_repo
-  }
-}
-
 data "aws_iam_policy_document" "repo_assume_role" {
-  for_each = local.repositories
+  for_each = var.repositories
 
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
@@ -24,7 +17,7 @@ data "aws_iam_policy_document" "repo_assume_role" {
 
     condition {
       test     = "StringLike"
-      values   = ["repo:${each.value}:*"]
+      values   = ["repo:${each.value.name}:*"]
       variable = "token.actions.githubusercontent.com:sub"
     }
   }
@@ -36,7 +29,7 @@ moved {
 }
 
 resource "aws_iam_role" "repo" {
-  for_each = local.repositories
+  for_each = var.repositories
 
   name               = "core-${each.key}-repo"
   assume_role_policy = data.aws_iam_policy_document.repo_assume_role[each.key].json
@@ -68,7 +61,7 @@ resource "aws_iam_policy" "allow_assuming_roles" {
 }
 
 resource "aws_iam_role_policy_attachment" "allow_assuming_roles" {
-  for_each = local.repositories
+  for_each = var.repositories
 
   role       = aws_iam_role.repo[each.key].name
   policy_arn = aws_iam_policy.allow_assuming_roles.arn
@@ -77,4 +70,25 @@ resource "aws_iam_role_policy_attachment" "allow_assuming_roles" {
 moved {
   from = aws_iam_role_policy_attachment.allow_assuming_roles
   to   = aws_iam_role_policy_attachment.allow_assuming_roles["application"]
+}
+
+locals {
+  role_policy_pairs = {
+    for pair in flatten([
+      for key, repository in var.repositories : [
+        for policy in repository.policies : {
+          role_key   = key,
+          policy_arn = policy.arn
+          policy_key = policy.key
+        }
+      ]
+    ]) : "${pair.role_key}_${pair.policy_key}" => pair
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "attach_policies" {
+  for_each = local.role_policy_pairs
+
+  role       = aws_iam_role.repo[each.value.role_key].name
+  policy_arn = each.value.policy_arn
 }

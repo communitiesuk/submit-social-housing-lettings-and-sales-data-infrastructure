@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "push_images" {
       "ecr:PutImage",
       "ecr:ListImages"
     ]
-    resources = [var.ecr_arn]
+    resources = [aws_ecr_repository.core.arn]
     effect    = "Allow"
   }
 
@@ -23,14 +23,4 @@ data "aws_iam_policy_document" "push_images" {
 resource "aws_iam_policy" "push_images" {
   name   = "core-ecr-push-images"
   policy = data.aws_iam_policy_document.push_images.json
-}
-
-resource "aws_iam_role_policy_attachment" "app_repo_push_images" {
-  role       = aws_iam_role.repo["application"].name
-  policy_arn = aws_iam_policy.push_images.arn
-}
-
-resource "aws_iam_role_policy_attachment" "app_repo_state_access" {
-  role       = aws_iam_role.repo["application"].name
-  policy_arn = aws_iam_policy.state_access.arn
 }
