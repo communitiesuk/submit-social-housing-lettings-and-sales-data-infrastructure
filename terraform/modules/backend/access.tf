@@ -13,7 +13,7 @@ data "aws_iam_policy_document" "state_access" {
       "s3:PutObject",
       "s3:DeleteObject"
     ]
-    resources = [module.tf_state_backend.s3_bucket_arn]
+    resources = ["${module.tf_state_backend.s3_bucket_arn}/*"]
     effect    = "Allow"
   }
 
@@ -30,6 +30,6 @@ data "aws_iam_policy_document" "state_access" {
 }
 
 resource "aws_iam_policy" "state_access" {
-  name   = "state-access"
+  name   = "${local.prefix}-state-access"
   policy = data.aws_iam_policy_document.state_access.json
 }

@@ -1,7 +1,3 @@
-locals {
-  prefix = "${var.prefix}-tf-state"
-}
-
 data "aws_caller_identity" "current" {}
 
 data "aws_iam_policy_document" "allow_state_bucket_log_writes" {

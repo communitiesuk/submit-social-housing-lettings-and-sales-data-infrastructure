@@ -9,3 +9,7 @@ terraform {
     }
   }
 }
+
+locals {
+  prefix = "${var.prefix}-tf-state"
+}

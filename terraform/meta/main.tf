@@ -137,3 +137,23 @@ module "github_actions_access" {
     }
   }
 }
+
+moved {
+  from = module.github_actions_access.aws_iam_policy.state_access
+  to   = module.non_prod_backend.aws_iam_policy.state_access
+}
+
+moved {
+  from = module.github_actions_access.aws_iam_policy.push_images
+  to   = module.ecr.aws_iam_policy.push_images
+}
+
+moved {
+  from = module.github_actions_access.aws_iam_role_policy_attachment.app_repo_push_images
+  to   = module.github_actions_access.aws_iam_role_policy_attachment.attach_policies["application_push_ecr_images"]
+}
+
+moved {
+  from = module.github_actions_access.aws_iam_role_policy_attachment.app_repo_state_access
+  to   = module.github_actions_access.aws_iam_role_policy_attachment.attach_policies["application_access_non_prod_state"]
+}
