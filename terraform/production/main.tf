@@ -67,21 +67,21 @@ locals {
 
   app_task_desired_count = 4
 
-  enable_aws_shield = false
+  enable_aws_shield = true
 
   application_port = 8080
   database_port    = 5432
   redis_port       = 6379
 
-  create_db_migration_infra = false
-  create_s3_migration_infra = false
+  create_db_migration_infra = true
+  create_s3_migration_infra = true
 }
 
 module "application" {
   source = "../modules/application"
 
-  app_task_cpu    = 512
-  app_task_memory = 1024
+  app_task_cpu    = 1024
+  app_task_memory = 2048
 
   sidekiq_task_cpu           = 1024
   sidekiq_task_desired_count = 2
@@ -243,12 +243,12 @@ module "s3_migration" {
   prefix = local.prefix
   buckets = {
     export = {
-      source      = "",
+      source      = "s3://paas-s3-broker-prod-lon-b4f97132-daa8-4e37-b675-4a05dad7a9f4",
       destination = "s3://${module.cds_export.details.bucket_name}",
       policy_arn  = module.cds_export.read_write_policy_arn
     },
     csv = {
-      source      = "",
+      source      = "s3://paas-s3-broker-prod-lon-1b5cddc8-08d8-45fa-8246-9a6ad5acdfb9",
       destination = "s3://${module.bulk_upload.details.bucket_name}",
       policy_arn  = module.bulk_upload.read_write_policy_arn
     }
@@ -264,7 +264,7 @@ module "front_door" {
     aws.us-east-1 = aws.us-east-1
   }
 
-  restrict_by_ip              = true
+  restrict_by_ip              = false
   restriction_allows_test_ips = false
 
   prefix                        = local.prefix
@@ -298,8 +298,12 @@ module "networking" {
 module "monitoring" {
   source = "../modules/monitoring"
 
+  create_email_subscription = true
+
   prefix                               = local.prefix
   service_identifier_publishing_to_sns = "cloudwatch.amazonaws.com"
+
+  create_secrets_first = var.create_secrets_first
 }
 
 module "redis" {
