@@ -122,7 +122,38 @@ data "aws_caller_identity" "current" {}
 module "github_actions_access" {
   source = "../modules/github_actions_access"
 
-  application_repo = "communitiesuk/submit-social-housing-lettings-and-sales-data"
-  ecr_arn          = module.ecr.repository_arn
-  meta_account_id  = data.aws_caller_identity.current.account_id
+  meta_account_id = data.aws_caller_identity.current.account_id
+  repositories = {
+    application = {
+      name = "communitiesuk/submit-social-housing-lettings-and-sales-data",
+      policies = [
+        { key = "push_ecr_images", arn = module.ecr.push_images_policy_arn },
+        { key = "access_non_prod_state", arn = module.non_prod_backend.state_access_policy_arn }
+      ]
+    },
+    infrastructure = {
+      name     = "communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure"
+      policies = []
+    }
+  }
+}
+
+moved {
+  from = module.github_actions_access.aws_iam_policy.state_access
+  to   = module.non_prod_backend.aws_iam_policy.state_access
+}
+
+moved {
+  from = module.github_actions_access.aws_iam_policy.push_images
+  to   = module.ecr.aws_iam_policy.push_images
+}
+
+moved {
+  from = module.github_actions_access.aws_iam_role_policy_attachment.app_repo_push_images
+  to   = module.github_actions_access.aws_iam_role_policy_attachment.attach_policies["application_push_ecr_images"]
+}
+
+moved {
+  from = module.github_actions_access.aws_iam_role_policy_attachment.app_repo_state_access
+  to   = module.github_actions_access.aws_iam_role_policy_attachment.attach_policies["application_access_non_prod_state"]
 }

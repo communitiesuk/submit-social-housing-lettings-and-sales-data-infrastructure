@@ -1,4 +1,6 @@
-data "aws_iam_policy_document" "app_repo_assume_role" {
+data "aws_iam_policy_document" "repo_assume_role" {
+  for_each = var.repositories
+
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
 
@@ -15,47 +17,27 @@ data "aws_iam_policy_document" "app_repo_assume_role" {
 
     condition {
       test     = "StringLike"
-      values   = ["repo:${var.application_repo}:*"]
+      values   = ["repo:${each.value.name}:*"]
       variable = "token.actions.githubusercontent.com:sub"
     }
   }
 }
 
-resource "aws_iam_role" "app_repo" {
-  name               = "core-application-repo"
-  assume_role_policy = data.aws_iam_policy_document.app_repo_assume_role.json
+moved {
+  from = data.aws_iam_policy_document.app_repo_assume_role
+  to   = data.aws_iam_policy_document.repo_assume_role["application"]
 }
 
-data "aws_iam_policy_document" "push_images" {
-  statement {
-    actions = [
-      "ecr:CompleteLayerUpload",
-      "ecr:UploadLayerPart",
-      "ecr:InitiateLayerUpload",
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:BatchGetImage",
-      "ecr:PutImage",
-      "ecr:ListImages"
-    ]
-    resources = [var.ecr_arn]
-    effect    = "Allow"
-  }
+resource "aws_iam_role" "repo" {
+  for_each = var.repositories
 
-  statement {
-    actions   = ["ecr:GetAuthorizationToken"]
-    resources = ["*"]
-    effect    = "Allow"
-  }
+  name               = "core-${each.key}-repo"
+  assume_role_policy = data.aws_iam_policy_document.repo_assume_role[each.key].json
 }
 
-resource "aws_iam_policy" "push_images" {
-  name   = "core-ecr-push-images"
-  policy = data.aws_iam_policy_document.push_images.json
-}
-
-resource "aws_iam_role_policy_attachment" "app_repo_push_images" {
-  role       = aws_iam_role.app_repo.name
-  policy_arn = aws_iam_policy.push_images.arn
+moved {
+  from = aws_iam_role.app_repo
+  to   = aws_iam_role.repo["application"]
 }
 
 #tfsec:ignore:aws-iam-no-policy-wildcards: This is used permissively in what this role can do, not who is allowed to assume this role
@@ -79,6 +61,34 @@ resource "aws_iam_policy" "allow_assuming_roles" {
 }
 
 resource "aws_iam_role_policy_attachment" "allow_assuming_roles" {
-  role       = aws_iam_role.app_repo.name
+  for_each = var.repositories
+
+  role       = aws_iam_role.repo[each.key].name
   policy_arn = aws_iam_policy.allow_assuming_roles.arn
+}
+
+moved {
+  from = aws_iam_role_policy_attachment.allow_assuming_roles
+  to   = aws_iam_role_policy_attachment.allow_assuming_roles["application"]
+}
+
+locals {
+  role_policy_pairs = {
+    for pair in flatten([
+      for key, repository in var.repositories : [
+        for policy in repository.policies : {
+          role_key   = key,
+          policy_arn = policy.arn
+          policy_key = policy.key
+        }
+      ]
+    ]) : "${pair.role_key}_${pair.policy_key}" => pair
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "attach_policies" {
+  for_each = local.role_policy_pairs
+
+  role       = aws_iam_role.repo[each.value.role_key].name
+  policy_arn = each.value.policy_arn
 }
