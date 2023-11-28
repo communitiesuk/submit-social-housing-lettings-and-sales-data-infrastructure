@@ -33,6 +33,12 @@ variable "redis_subnet_group_name" {
   description = "The name of the subnet group associated with the VPC that Redis needs to be in."
 }
 
+variable "skip_final_snapshot" {
+  type        = bool
+  description = "Set to true to skip final snapshot on deletion"
+  default     = false
+}
+
 variable "snapshot_retention_limit" {
   type        = number
   description = "The number of days the automatic cache cluster snapshots are retained before being deleted. If 0 then backups are turned off"

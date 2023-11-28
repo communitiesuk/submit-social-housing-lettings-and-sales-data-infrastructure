@@ -134,6 +134,12 @@ variable "redis_connection_string" {
   description = "The value of the redis connection string"
 }
 
+variable "relative_root" {
+  type        = string
+  description = "The path for the root of the application, relative to the app_host variable"
+  default     = ""
+}
+
 variable "sentry_dsn_secret_arn" {
   type        = string
   description = "The arn of the sentry dsn secret"

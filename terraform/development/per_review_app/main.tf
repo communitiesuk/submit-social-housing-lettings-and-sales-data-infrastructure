@@ -41,7 +41,7 @@ provider "aws" {
 locals {
   prefix = "core-review-${terraform.workspace}" # terraform workspaces are expected to have a number"
 
-  rails_env = "development"
+  rails_env = "review"
 
   app_host = "review.submit-social-housing-data.levellingup.gov.uk"
 
@@ -88,6 +88,7 @@ module "application" {
   rails_env                                         = local.rails_env
   rails_master_key_secret_arn                       = data.terraform_remote_state.development_shared.outputs.application_secrets_rails_master_key_secret_arn
   redis_connection_string                           = module.redis.redis_connection_string
+  relative_root                                     = "/${terraform.workspace}"
   sentry_dsn_secret_arn                             = data.terraform_remote_state.development_shared.outputs.application_secrets_sentry_dsn_secret_arn
   sns_topic_arn                                     = data.terraform_remote_state.development_shared.outputs.monitoring_sns_topic_arn
   vpc_id                                            = data.terraform_remote_state.development_shared.outputs.networking_vpc_id
@@ -106,4 +107,5 @@ module "redis" {
   redis_port              = local.redis_port
   redis_security_group_id = data.terraform_remote_state.development_shared.outputs.application_security_group_redis_security_group_id
   redis_subnet_group_name = data.terraform_remote_state.development_shared.outputs.networking_redis_private_subnet_group_name
+  skip_final_snapshot     = true
 }
