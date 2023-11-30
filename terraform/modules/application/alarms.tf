@@ -1,6 +1,6 @@
-resource "aws_cloudwatch_metric_alarm" "app_cpu" {
+resource "aws_cloudwatch_metric_alarm" "app_average_cpu" {
   alarm_actions             = [var.sns_topic_arn]
-  alarm_name                = "${var.prefix}-app-cpu"
+  alarm_name                = "${var.prefix}-app-average-cpu"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   datapoints_to_alarm       = 3
   evaluation_periods        = 5
@@ -18,12 +18,52 @@ resource "aws_cloudwatch_metric_alarm" "app_cpu" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "app_memory" {
+resource "aws_cloudwatch_metric_alarm" "app_max_task_cpu" {
   alarm_actions             = [var.sns_topic_arn]
-  alarm_name                = "${var.prefix}-app-memory"
+  alarm_name                = "${var.prefix}-app-max-task-cpu"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  datapoints_to_alarm       = 30
+  evaluation_periods        = 30
+  metric_name               = "CPUUtilization"
+  namespace                 = "AWS/ECS"
+  ok_actions                = [var.sns_topic_arn]
+  period                    = 60
+  statistic                 = "Maximum"
+  threshold                 = 80
+  insufficient_data_actions = []
+
+  dimensions = {
+    ClusterName = aws_ecs_cluster.this.name
+    ServiceName = aws_ecs_service.app.name
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "app_average_memory" {
+  alarm_actions             = [var.sns_topic_arn]
+  alarm_name                = "${var.prefix}-app-average-memory"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   datapoints_to_alarm       = 3
   evaluation_periods        = 5
+  metric_name               = "MemoryUtilization"
+  namespace                 = "AWS/ECS"
+  ok_actions                = [var.sns_topic_arn]
+  period                    = 60
+  statistic                 = "Average"
+  threshold                 = 80
+  insufficient_data_actions = []
+
+  dimensions = {
+    ClusterName = aws_ecs_cluster.this.name
+    ServiceName = aws_ecs_service.app.name
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "app_max_task_memory" {
+  alarm_actions             = [var.sns_topic_arn]
+  alarm_name                = "${var.prefix}-app-max-task-memory"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  datapoints_to_alarm       = 30
+  evaluation_periods        = 30
   metric_name               = "MemoryUtilization"
   namespace                 = "AWS/ECS"
   ok_actions                = [var.sns_topic_arn]
@@ -76,9 +116,9 @@ resource "aws_cloudwatch_metric_alarm" "app_service_action_problem" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "sidekiq_cpu" {
+resource "aws_cloudwatch_metric_alarm" "sidekiq_average_cpu" {
   alarm_actions             = [var.sns_topic_arn]
-  alarm_name                = "${var.prefix}-sidekiq-cpu"
+  alarm_name                = "${var.prefix}-sidekiq-average-cpu"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   datapoints_to_alarm       = 3
   evaluation_periods        = 5
@@ -96,9 +136,29 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_cpu" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "sidekiq_memory" {
+resource "aws_cloudwatch_metric_alarm" "sidekiq_max_task_cpu" {
   alarm_actions             = [var.sns_topic_arn]
-  alarm_name                = "${var.prefix}-sidekiq-memory"
+  alarm_name                = "${var.prefix}-sidekiq-max-task-cpu"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  datapoints_to_alarm       = 30
+  evaluation_periods        = 30
+  metric_name               = "CPUUtilization"
+  namespace                 = "AWS/ECS"
+  ok_actions                = [var.sns_topic_arn]
+  period                    = 60
+  statistic                 = "Maximum"
+  threshold                 = 90
+  insufficient_data_actions = []
+
+  dimensions = {
+    ClusterName = aws_ecs_cluster.this.name
+    ServiceName = aws_ecs_service.sidekiq.name
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sidekiq_average_memory" {
+  alarm_actions             = [var.sns_topic_arn]
+  alarm_name                = "${var.prefix}-sidekiq-average-memory"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   datapoints_to_alarm       = 3
   evaluation_periods        = 5
@@ -108,6 +168,26 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_memory" {
   period                    = 60
   statistic                 = "Average"
   threshold                 = 90
+  insufficient_data_actions = []
+
+  dimensions = {
+    ClusterName = aws_ecs_cluster.this.name
+    ServiceName = aws_ecs_service.sidekiq.name
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sidekiq_max_task_memory" {
+  alarm_actions             = [var.sns_topic_arn]
+  alarm_name                = "${var.prefix}-sidekiq-max-task-memory"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  datapoints_to_alarm       = 30
+  evaluation_periods        = 30
+  metric_name               = "MemoryUtilization"
+  namespace                 = "AWS/ECS"
+  ok_actions                = [var.sns_topic_arn]
+  period                    = 60
+  statistic                 = "Maximum"
+  threshold                 = 50
   insufficient_data_actions = []
 
   dimensions = {
