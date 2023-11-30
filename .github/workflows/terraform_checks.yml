@@ -6,9 +6,6 @@ on:
       - opened
       - synchronize
       - reopened
-  push:
-    branches-ignore:
-      - 'dev'
 
 jobs:
   tf_fmt:
