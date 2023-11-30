@@ -31,9 +31,13 @@ resource "aws_lb_listener_rule" "forward" {
     }
   }
 
-  condition {
-    path_pattern {
-      values = [var.relative_root, "${var.relative_root}/*"]
+  dynamic "condition" {
+    for_each = var.relative_root != "" ? [1] : []
+
+    content {
+      path_pattern {
+        values = [var.relative_root, "${var.relative_root}/*"]
+      }
     }
   }
 }
