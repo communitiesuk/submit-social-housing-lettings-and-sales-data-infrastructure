@@ -23,21 +23,11 @@ data "aws_iam_policy_document" "repo_assume_role" {
   }
 }
 
-moved {
-  from = data.aws_iam_policy_document.app_repo_assume_role
-  to   = data.aws_iam_policy_document.repo_assume_role["application"]
-}
-
 resource "aws_iam_role" "repo" {
   for_each = var.repositories
 
   name               = "core-${each.key}-repo"
   assume_role_policy = data.aws_iam_policy_document.repo_assume_role[each.key].json
-}
-
-moved {
-  from = aws_iam_role.app_repo
-  to   = aws_iam_role.repo["application"]
 }
 
 #tfsec:ignore:aws-iam-no-policy-wildcards: This is used permissively in what this role can do, not who is allowed to assume this role
@@ -65,11 +55,6 @@ resource "aws_iam_role_policy_attachment" "allow_assuming_roles" {
 
   role       = aws_iam_role.repo[each.key].name
   policy_arn = aws_iam_policy.allow_assuming_roles.arn
-}
-
-moved {
-  from = aws_iam_role_policy_attachment.allow_assuming_roles
-  to   = aws_iam_role_policy_attachment.allow_assuming_roles["application"]
 }
 
 locals {
