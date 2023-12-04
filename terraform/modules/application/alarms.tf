@@ -68,7 +68,7 @@ resource "aws_cloudwatch_metric_alarm" "app_max_task_memory" {
   namespace                 = "AWS/ECS"
   ok_actions                = [var.sns_topic_arn]
   period                    = 60
-  statistic                 = "Average"
+  statistic                 = "Maximum"
   threshold                 = 80
   insufficient_data_actions = []
 
