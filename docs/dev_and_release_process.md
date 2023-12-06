@@ -6,7 +6,7 @@
 
 * Create a branch off main for your changes
 * Make your changes
-* Merge to the dev branch and push
+* Merge to the dev branch and push - dev is a long running branch, but there's no need to create PR for this
 * Apply your changes to **staging** by running `terraform apply` from `terraform/staging` locally (in a console with your dluhc profile) - make sure the plan only includes changes you expect
 * Try out your changes on staging
 * When happy, raise a PR from your branch to main and get a technical review
@@ -15,6 +15,16 @@
 * Apply the changes in main to development/shared
 * Apply the changes in main to production
 * If there is no parallel work going on, reset dev to match main. Otherwise, merge main into dev.
+
+#### Why the dev branch?
+
+If there are people working in parallel on infrastructure changes, we need a way for you both to be able to apply changes during the development process without overwriting each others work - hence pushing to dev and applying from there.
+
+This is kept separate from your working branches to keep the changes separated, so that e.g. you can do PRs into main for review that have only your changes.
+
+Similarly if there's one person and multiple branches for any reason.
+
+Things don't need review to go here because you probably need to apply your work as part of development before having things finished or ready for code review. For small changes and the staging environment we're happy for terraform to be applied this way, but if there's something you're unsure about then do ask for a review / some pairing before applying or to look at the terraform plan. And do think about cost before applying, i.e. make sure you're not creating larger infra than necessary.
 
 ### For large changes
 
