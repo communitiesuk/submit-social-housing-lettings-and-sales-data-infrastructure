@@ -264,8 +264,7 @@ module "front_door" {
     aws.us-east-1 = aws.us-east-1
   }
 
-  restrict_by_ip              = false
-  restriction_allows_test_ips = false
+  restrict_by_ip = false
 
   prefix                        = local.prefix
   application_port              = local.application_port
