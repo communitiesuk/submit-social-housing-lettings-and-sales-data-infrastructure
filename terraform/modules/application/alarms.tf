@@ -11,6 +11,7 @@ resource "aws_cloudwatch_metric_alarm" "app_average_cpu" {
   statistic                 = "Average"
   threshold                 = 80
   insufficient_data_actions = []
+  treat_missing_data        = var.suppress_missing_data_in_alarms ? "notBreaching" : "breaching"
 
   dimensions = {
     ClusterName = aws_ecs_cluster.this.name
@@ -31,6 +32,7 @@ resource "aws_cloudwatch_metric_alarm" "app_max_task_cpu" {
   statistic                 = "Maximum"
   threshold                 = 80
   insufficient_data_actions = []
+  treat_missing_data        = var.suppress_missing_data_in_alarms ? "notBreaching" : "breaching"
 
   dimensions = {
     ClusterName = aws_ecs_cluster.this.name
@@ -51,6 +53,7 @@ resource "aws_cloudwatch_metric_alarm" "app_average_memory" {
   statistic                 = "Average"
   threshold                 = 80
   insufficient_data_actions = []
+  treat_missing_data        = var.suppress_missing_data_in_alarms ? "notBreaching" : "breaching"
 
   dimensions = {
     ClusterName = aws_ecs_cluster.this.name
@@ -71,6 +74,7 @@ resource "aws_cloudwatch_metric_alarm" "app_max_task_memory" {
   statistic                 = "Maximum"
   threshold                 = 80
   insufficient_data_actions = []
+  treat_missing_data        = var.suppress_missing_data_in_alarms ? "notBreaching" : "breaching"
 
   dimensions = {
     ClusterName = aws_ecs_cluster.this.name
@@ -129,6 +133,7 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_average_cpu" {
   statistic                 = "Average"
   threshold                 = 90
   insufficient_data_actions = []
+  treat_missing_data        = var.suppress_missing_data_in_alarms ? "notBreaching" : "breaching"
 
   dimensions = {
     ClusterName = aws_ecs_cluster.this.name
@@ -149,6 +154,7 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_max_task_cpu" {
   statistic                 = "Maximum"
   threshold                 = 90
   insufficient_data_actions = []
+  treat_missing_data        = var.suppress_missing_data_in_alarms ? "notBreaching" : "breaching"
 
   dimensions = {
     ClusterName = aws_ecs_cluster.this.name
@@ -169,6 +175,7 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_average_memory" {
   statistic                 = "Average"
   threshold                 = 90
   insufficient_data_actions = []
+  treat_missing_data        = var.suppress_missing_data_in_alarms ? "notBreaching" : "breaching"
 
   dimensions = {
     ClusterName = aws_ecs_cluster.this.name
@@ -189,6 +196,7 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_max_task_memory" {
   statistic                 = "Maximum"
   threshold                 = 50
   insufficient_data_actions = []
+  treat_missing_data        = var.suppress_missing_data_in_alarms ? "notBreaching" : "breaching"
 
   dimensions = {
     ClusterName = aws_ecs_cluster.this.name
@@ -247,6 +255,7 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_running_tasks" {
   statistic                 = "SampleCount"
   threshold                 = var.sidekiq_task_desired_count
   insufficient_data_actions = []
+  treat_missing_data        = var.suppress_missing_data_in_alarms ? "notBreaching" : "breaching"
 
   dimensions = {
     ClusterName = aws_ecs_cluster.this.name
@@ -267,6 +276,7 @@ resource "aws_cloudwatch_metric_alarm" "healthy_hosts_count" {
   statistic                 = "Minimum"
   threshold                 = var.app_task_desired_count
   insufficient_data_actions = []
+  treat_missing_data        = var.suppress_missing_data_in_alarms ? "notBreaching" : "breaching"
 
   dimensions = {
     LoadBalancer = var.load_balancer_arn_suffix
@@ -287,6 +297,7 @@ resource "aws_cloudwatch_metric_alarm" "unhealthy_hosts_count" {
   statistic                 = "Maximum"
   threshold                 = 0
   insufficient_data_actions = []
+  treat_missing_data        = var.suppress_missing_data_in_alarms ? "notBreaching" : "breaching"
 
   dimensions = {
     LoadBalancer = var.load_balancer_arn_suffix

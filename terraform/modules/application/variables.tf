@@ -165,6 +165,12 @@ variable "sns_topic_arn" {
   description = "The arn of the sns topic"
 }
 
+variable "suppress_missing_data_in_alarms" {
+  type        = bool
+  description = "If true, cpu / memory / host count alarms treat missing data as ok - otherwise they treat it as breaching"
+  default     = false
+}
+
 variable "vpc_id" {
   type        = string
   description = "The ID of the VPC to be associated with."
