@@ -95,6 +95,7 @@ resource "aws_cloudwatch_metric_alarm" "app_tasks_exited" {
   statistic                 = "Sum"
   threshold                 = 2 * var.app_task_desired_count
   insufficient_data_actions = []
+  treat_missing_data        = "notBreaching"
 
   dimensions = {
     RuleName = aws_cloudwatch_event_rule.app_task_exited.name
@@ -114,6 +115,7 @@ resource "aws_cloudwatch_metric_alarm" "app_service_action_problem" {
   statistic                 = "Sum"
   threshold                 = 1
   insufficient_data_actions = []
+  treat_missing_data        = "notBreaching"
 
   dimensions = {
     RuleName = aws_cloudwatch_event_rule.app_service_action_problem.name
@@ -217,6 +219,7 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_tasks_exited" {
   statistic                 = "Sum"
   threshold                 = 2 * var.sidekiq_task_desired_count
   insufficient_data_actions = []
+  treat_missing_data        = "notBreaching"
 
   dimensions = {
     RuleName = aws_cloudwatch_event_rule.sidekiq_task_exited.name
@@ -236,6 +239,7 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_service_action_problem" {
   statistic                 = "Sum"
   threshold                 = 1
   insufficient_data_actions = []
+  treat_missing_data        = "notBreaching"
 
   dimensions = {
     RuleName = aws_cloudwatch_event_rule.sidekiq_service_action_problem.name
