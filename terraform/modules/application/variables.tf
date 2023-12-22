@@ -171,6 +171,12 @@ variable "suppress_missing_data_in_alarms" {
   default     = false
 }
 
+variable "suppress_ok_notifications" {
+  type        = bool
+  description = "If true, do not send notifications when alarm states change to OK"
+  default     = false
+}
+
 variable "vpc_id" {
   type        = string
   description = "The ID of the VPC to be associated with."
