@@ -151,7 +151,7 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_max_task_cpu" {
   evaluation_periods        = 30
   metric_name               = "CPUUtilization"
   namespace                 = "AWS/ECS"
-  ok_actions                = [var.sns_topic_arn]
+  ok_actions                = var.suppress_ok_notifications ? [] : [var.sns_topic_arn]
   period                    = 60
   statistic                 = "Maximum"
   threshold                 = 90
