@@ -13,6 +13,12 @@ variable "backup_retention_period" {
   description = "The number of days to retain db backups for. If 0 then the database will not be backed up"
 }
 
+variable "create_replica" {
+  type        = bool
+  description = "If true, creates a replica db"
+  default     = false
+}
+
 variable "database_port" {
   type        = number
   description = "The network port the database runs on"
@@ -30,7 +36,8 @@ variable "enable_primary_deletion_protection" {
 
 variable "enable_replica_deletion_protection" {
   type        = bool
-  description = "Whether the replica database should have deletion protection enabled"
+  description = "Whether the replica database (if create_replica is true) should have deletion protection enabled"
+  default     = true
 }
 
 variable "ecs_security_group_id" {
@@ -43,14 +50,14 @@ variable "ecs_task_execution_role_arn" {
   description = "The arn of the app task execution role"
 }
 
-variable "highly_available" {
-  type        = bool
-  description = "Whether or not to make the db highly available (whether to have replicas or not)."
-}
-
 variable "instance_class" {
   type        = string
   description = "The instance class of the DB."
+}
+
+variable "multi_az" {
+  type        = bool
+  description = "Whether the database should be multi-az"
 }
 
 variable "prefix" {
