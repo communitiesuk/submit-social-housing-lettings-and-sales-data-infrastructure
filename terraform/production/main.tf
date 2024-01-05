@@ -193,9 +193,10 @@ module "database" {
   backup_retention_period = 7
 
   apply_changes_immediately          = false
+  create_replica                     = true
   enable_primary_deletion_protection = true
   enable_replica_deletion_protection = true
-  highly_available                   = true
+  multi_az                           = true
   skip_final_snapshot                = false
   instance_class                     = "db.t3.small"
 

@@ -22,7 +22,7 @@ resource "aws_db_instance" "this" {
   final_snapshot_identifier  = var.prefix
   instance_class             = var.instance_class
   maintenance_window         = "Mon:02:33-Mon:03:03"
-  multi_az                   = true
+  multi_az                   = var.multi_az
   password                   = random_password.this.result
   port                       = var.database_port
   publicly_accessible        = false
@@ -43,7 +43,7 @@ resource "aws_db_instance" "replica" {
   #checkov:skip=CKV_AWS_118:monitoring TODO CLDC-2660
   #checkov:skip=CKV_AWS_353:performance insights TODO CLDC-2660 if necessary
   #checkov:skip=CKV_AWS_354:performance insights TODO CLDC-2660 if insights are necessary
-  count = var.highly_available ? 1 : 0
+  count = var.create_replica ? 1 : 0
 
   identifier                 = "${var.prefix}-replica"
   apply_immediately          = aws_db_instance.this.apply_immediately
