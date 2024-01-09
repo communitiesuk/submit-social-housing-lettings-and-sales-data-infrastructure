@@ -133,7 +133,7 @@ module "certificates" {
 module "database" {
   source = "../../modules/rds"
 
-  allocated_storage       = 35
+  allocated_storage       = 50
   backup_retention_period = 0 # no backups
 
   apply_changes_immediately          = true
