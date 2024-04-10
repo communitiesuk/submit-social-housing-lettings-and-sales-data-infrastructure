@@ -24,8 +24,6 @@ locals {
 locals {
   app_container_environment_base = [
     { Name = "APP_HOST", Value = var.app_host },
-    { Name = "CSV_DOWNLOAD_PAAS_INSTANCE", Value = local.bulk_upload_bucket_key },
-    { Name = "EXPORT_PAAS_INSTANCE", Value = local.export_bucket_key },
     { Name = "BULK_UPLOAD_INSTANCE", Value = local.bulk_upload_bucket_key },
     { Name = "EXPORT_INSTANCE", Value = local.export_bucket_key },
     { Name = "RAILS_ENV", Value = var.rails_env },
