@@ -57,7 +57,7 @@ resource "aws_ecs_task_definition" "app" {
       name        = local.app_container_name
       environment = local.app_container_environment
       essential   = true
-      image       = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core:staging-20240416114809"
+      image       = var.ecr_repository_url
       user        = "nonroot"
 
       logConfiguration = {
@@ -118,7 +118,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
       command     = ["bundle", "exec", "sidekiq", "-t", "3"]
       environment = local.app_container_environment
       essential   = true
-      image       = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core:staging-20240416114809"
+      image       = var.ecr_repository_url
       user        = "nonroot"
 
       logConfiguration = {
@@ -170,7 +170,7 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
       name        = local.app_container_name
       environment = local.app_container_environment
       essential   = true
-      image       = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core:staging-20240416114809"
+      image       = var.ecr_repository_url
       user        = "nonroot"
 
       logConfiguration = {
