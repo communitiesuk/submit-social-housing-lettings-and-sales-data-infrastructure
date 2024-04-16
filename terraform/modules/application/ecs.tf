@@ -57,7 +57,7 @@ resource "aws_ecs_task_definition" "app" {
       name        = local.app_container_name
       environment = local.app_container_environment
       essential   = true
-      image       = var.ecr_repository_url
+      image       = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core:staging-20240416114809"
       user        = "nonroot"
 
       logConfiguration = {
@@ -98,7 +98,7 @@ resource "aws_ecs_task_definition" "app" {
     # The image will be updated by deployments - irritatingly we can't ignore changes just to the image
     # If changing other aspects of the container definition we'll need to temporarily not ignore changes
     # to force the update, ensuring the referenced image is the correct current one
-    ignore_changes = [container_definitions]
+#    ignore_changes = [container_definitions]
   }
 }
 
@@ -118,7 +118,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
       command     = ["bundle", "exec", "sidekiq", "-t", "3"]
       environment = local.app_container_environment
       essential   = true
-      image       = var.ecr_repository_url
+      image       = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core:staging-20240416114809"
       user        = "nonroot"
 
       logConfiguration = {
@@ -151,7 +151,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
     # The image will be updated by deployments - irritatingly we can't ignore changes just to the image
     # If changing other aspects of the container definition we'll need to temporarily not ignore changes
     # to force the update, ensuring the referenced image is the correct current one
-    ignore_changes = [container_definitions]
+#    ignore_changes = [container_definitions]
   }
 }
 
@@ -170,7 +170,7 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
       name        = local.app_container_name
       environment = local.app_container_environment
       essential   = true
-      image       = var.ecr_repository_url
+      image       = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core:staging-20240416114809"
       user        = "nonroot"
 
       logConfiguration = {
@@ -211,7 +211,7 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
     # The image will be updated by deployments - irritatingly we can't ignore changes just to the image
     # If changing other aspects of the container definition we'll need to temporarily not ignore changes
     # to force the update, ensuring the referenced image is the correct current one
-    ignore_changes = [container_definitions]
+#    ignore_changes = [container_definitions]
   }
 }
 
