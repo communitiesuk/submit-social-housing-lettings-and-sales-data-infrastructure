@@ -26,6 +26,8 @@ locals {
     { Name = "APP_HOST", Value = var.app_host },
     { Name = "CSV_DOWNLOAD_PAAS_INSTANCE", Value = local.bulk_upload_bucket_key },
     { Name = "EXPORT_PAAS_INSTANCE", Value = local.export_bucket_key },
+    { Name = "BULK_UPLOAD_BUCKET", Value = local.bulk_upload_bucket_key },
+    { Name = "EXPORT_BUCKET", Value = local.export_bucket_key },
     { Name = "RAILS_ENV", Value = var.rails_env },
     { Name = "RAILS_LOG_TO_STDOUT", Value = "true" },
     { Name = "RAILS_SERVE_STATIC_FILES", Value = "true" },
@@ -96,7 +98,7 @@ resource "aws_ecs_task_definition" "app" {
     # The image will be updated by deployments - irritatingly we can't ignore changes just to the image
     # If changing other aspects of the container definition we'll need to temporarily not ignore changes
     # to force the update, ensuring the referenced image is the correct current one
-    ignore_changes = [container_definitions]
+    # ignore_changes = [container_definitions]
   }
 }
 
@@ -149,7 +151,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
     # The image will be updated by deployments - irritatingly we can't ignore changes just to the image
     # If changing other aspects of the container definition we'll need to temporarily not ignore changes
     # to force the update, ensuring the referenced image is the correct current one
-    ignore_changes = [container_definitions]
+    # ignore_changes = [container_definitions]
   }
 }
 
@@ -209,7 +211,7 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
     # The image will be updated by deployments - irritatingly we can't ignore changes just to the image
     # If changing other aspects of the container definition we'll need to temporarily not ignore changes
     # to force the update, ensuring the referenced image is the correct current one
-    ignore_changes = [container_definitions]
+    # ignore_changes = [container_definitions]
   }
 }
 
