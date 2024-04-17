@@ -87,7 +87,7 @@ module "application" {
   sidekiq_task_desired_count = 2
   sidekiq_task_memory        = 8192
 
-  ecr_repository_url = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core:staging-20240416114809"
+  ecr_repository_url = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core"
 
   prefix                                            = local.prefix
   app_host                                          = local.app_host
