@@ -1,9 +1,10 @@
 resource "aws_lb_target_group" "this" {
-  name        = var.prefix
-  port        = var.application_port
-  protocol    = "HTTP"
-  vpc_id      = var.vpc_id
-  target_type = "ip"
+  name                          = var.prefix
+  port                          = var.application_port
+  protocol                      = "HTTP"
+  vpc_id                        = var.vpc_id
+  target_type                   = "ip"
+  load_balancing_algorithm_type = "least_outstanding_requests"
 
   health_check {
     healthy_threshold   = "3"
