@@ -75,6 +75,12 @@ variable "sns_topic_arn" {
   description = "The arn of the sns topic"
 }
 
+variable "use_customer_managed_key_for_performance_insights" {
+  type        = bool
+  description = "Whether to use a customer managed kms key for performance insights encryption (if false uses aws default)"
+  default     = true
+}
+
 variable "vpc_id" {
   type        = string
   description = "The ID of the VPC to be associated with"
