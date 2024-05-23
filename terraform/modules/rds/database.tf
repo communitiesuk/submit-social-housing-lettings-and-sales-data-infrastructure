@@ -1,4 +1,5 @@
 #tfsec:ignore:AVD-AWS-0176:iam authentication not suitable as tokens only last 15minutes, password authentication preferred
+#tfsec:ignore:aws-rds-enable-performance-insights-encryption: even when not using a customer managed key, this is encrypted with an AWS managed key
 resource "aws_db_instance" "this" {
   #checkov:skip=CKV_AWS_129:cloudwatch logs TODO CLDC-2660
   #checkov:skip=CKV_AWS_118:monitoring TODO CLDC-2660
