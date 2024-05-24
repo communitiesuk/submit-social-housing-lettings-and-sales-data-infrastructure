@@ -10,29 +10,14 @@ resource "aws_kms_key" "ssm" {
   enable_key_rotation = true
 }
 
-moved {
-  from = aws_kms_key.this
-  to   = aws_kms_key.ssm
-}
-
 resource "aws_kms_alias" "ssm" {
   name          = "alias/${var.prefix}-rds-ssm-parameters"
   target_key_id = aws_kms_key.ssm.key_id
 }
 
-moved {
-  from = aws_kms_alias.this
-  to   = aws_kms_alias.ssm
-}
-
 resource "aws_kms_key_policy" "ssm" {
   key_id = aws_kms_key.ssm.id
   policy = data.aws_iam_policy_document.kms_ssm.json
-}
-
-moved {
-  from = aws_kms_key_policy.this
-  to   = aws_kms_key_policy.ssm
 }
 
 data "aws_iam_policy_document" "kms_ssm" {
