@@ -23,7 +23,7 @@ resource "aws_db_instance" "this" {
   multi_az                              = var.multi_az
   password                              = random_password.this.result
   performance_insights_enabled          = true
-  performance_insights_kms_key_id       = var.use_customer_managed_key_for_performance_insights ? aws_kms_key.performance_insights[0] : ""
+  performance_insights_kms_key_id       = var.use_customer_managed_key_for_performance_insights ? aws_kms_key.performance_insights[0].arn : ""
   performance_insights_retention_period = 7
   port                                  = var.database_port
   publicly_accessible                   = false
