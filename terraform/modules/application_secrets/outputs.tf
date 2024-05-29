@@ -17,3 +17,8 @@ output "sentry_dsn_secret_arn" {
   value       = aws_secretsmanager_secret.sentry_dsn.arn
   description = "The arn of the sentry dsn secret"
 }
+
+output "openai_api_key_secret_arn" {
+  value       = aws_secretsmanager_secret.openai_api_key.arn
+  description = "The arn of the openai api key secret"
+}

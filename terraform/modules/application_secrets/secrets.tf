@@ -21,3 +21,9 @@ resource "aws_secretsmanager_secret" "sentry_dsn" {
   name       = "SENTRY_DSN"
   kms_key_id = aws_kms_key.this.arn
 }
+
+resource "aws_secretsmanager_secret" "openai_api_key" {
+  #checkov:skip=CKV2_AWS_57:secret is fixed, can't be automatically rotated
+  name       = "OPENAI_API_KEY"
+  kms_key_id = aws_kms_key.this.arn
+}

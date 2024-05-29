@@ -38,6 +38,11 @@ output "application_secrets_sentry_dsn_secret_arn" {
   description = "The arn of the sentry dsn secret"
 }
 
+output "application_secrets_openai_api_key_secret_arn" {
+  value       = module.application_secrets.openai_api_key_secret_arn
+  description = "The arn of the openai api key secret"
+}
+
 output "application_security_group_ecs_security_group_id" {
   value       = module.application_security_group.ecs_security_group_id
   description = "The id of the ecs security group"
