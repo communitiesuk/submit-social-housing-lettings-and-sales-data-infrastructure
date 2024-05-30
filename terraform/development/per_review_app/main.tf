@@ -81,9 +81,9 @@ module "application" {
   ecs_task_role_arn                                 = data.terraform_remote_state.development_shared.outputs.application_roles_ecs_task_role_arn
   export_bucket_details                             = data.terraform_remote_state.development_shared.outputs.cds_export_details
   govuk_notify_api_key_secret_arn                   = data.terraform_remote_state.development_shared.outputs.application_secrets_govuk_notify_api_key_secret_arn
-  openai_api_key_secret_arn                         = data.terraform_remote_state.development_shared.outputs.application_secrets_openai_api_key_secret_arn
   load_balancer_arn_suffix                          = data.terraform_remote_state.development_shared.outputs.front_door_load_balancer_arn_suffix
   load_balancer_listener_arn                        = data.terraform_remote_state.development_shared.outputs.front_door_load_balancer_listener_arn
+  openai_api_key_secret_arn                         = data.terraform_remote_state.development_shared.outputs.application_secrets_openai_api_key_secret_arn
   os_data_key_secret_arn                            = data.terraform_remote_state.development_shared.outputs.application_secrets_os_data_key_secret_arn
   private_subnet_ids                                = data.terraform_remote_state.development_shared.outputs.networking_private_subnet_ids
   rails_env                                         = local.rails_env

@@ -105,9 +105,9 @@ module "application" {
   ecs_task_role_arn                                 = module.application_roles.ecs_task_role_arn
   export_bucket_details                             = module.cds_export.details
   govuk_notify_api_key_secret_arn                   = module.application_secrets.govuk_notify_api_key_secret_arn
-  openai_api_key_secret_arn                         = module.application_secrets.openai_api_key_secret_arn
   load_balancer_arn_suffix                          = module.front_door.load_balancer_arn_suffix
   load_balancer_listener_arn                        = module.front_door.load_balancer_listener_arn
+  openai_api_key_secret_arn                         = module.application_secrets.openai_api_key_secret_arn
   os_data_key_secret_arn                            = module.application_secrets.os_data_key_secret_arn
   private_subnet_ids                                = module.networking.private_subnet_ids
   rails_env                                         = local.rails_env
@@ -132,10 +132,10 @@ module "application_roles" {
 
   secret_arns = [
     module.application_secrets.govuk_notify_api_key_secret_arn,
+    module.application_secrets.openai_api_key_secret_arn,
     module.application_secrets.os_data_key_secret_arn,
     module.application_secrets.rails_master_key_secret_arn,
-    module.application_secrets.sentry_dsn_secret_arn,
-    module.application_secrets.openai_api_key_secret_arn
+    module.application_secrets.sentry_dsn_secret_arn
   ]
 }
 

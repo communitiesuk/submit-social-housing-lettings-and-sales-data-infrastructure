@@ -94,11 +94,6 @@ variable "govuk_notify_api_key_secret_arn" {
   description = "The arn of the govuk notify api key secret"
 }
 
-variable "openai_api_key_secret_arn" {
-  type        = string
-  description = "The arn of the openai api key secret"
-}
-
 variable "load_balancer_arn_suffix" {
   type        = string
   description = "The arn suffix of the load balancer"
@@ -107,6 +102,11 @@ variable "load_balancer_arn_suffix" {
 variable "load_balancer_listener_arn" {
   type        = string
   description = "The arn of the load balancer listener"
+}
+
+variable "openai_api_key_secret_arn" {
+  type        = string
+  description = "The arn of the openai api key secret"
 }
 
 variable "os_data_key_secret_arn" {

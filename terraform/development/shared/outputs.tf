@@ -23,6 +23,11 @@ output "application_secrets_govuk_notify_api_key_secret_arn" {
   description = "The arn of the govuk notify api key secret"
 }
 
+output "application_secrets_openai_api_key_secret_arn" {
+  value       = module.application_secrets.openai_api_key_secret_arn
+  description = "The arn of the openai api key secret"
+}
+
 output "application_secrets_os_data_key_secret_arn" {
   value       = module.application_secrets.os_data_key_secret_arn
   description = "The arn of the os data key secret"
@@ -36,11 +41,6 @@ output "application_secrets_rails_master_key_secret_arn" {
 output "application_secrets_sentry_dsn_secret_arn" {
   value       = module.application_secrets.sentry_dsn_secret_arn
   description = "The arn of the sentry dsn secret"
-}
-
-output "application_secrets_openai_api_key_secret_arn" {
-  value       = module.application_secrets.openai_api_key_secret_arn
-  description = "The arn of the openai api key secret"
 }
 
 output "application_security_group_ecs_security_group_id" {
