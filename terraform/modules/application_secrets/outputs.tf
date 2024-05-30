@@ -3,6 +3,11 @@ output "govuk_notify_api_key_secret_arn" {
   description = "The arn of the govuk notify api key secret"
 }
 
+output "openai_api_key_secret_arn" {
+  value       = aws_secretsmanager_secret.openai_api_key.arn
+  description = "The arn of the openai api key secret"
+}
+
 output "os_data_key_secret_arn" {
   value       = aws_secretsmanager_secret.os_data_key.arn
   description = "The arn of the os data key secret"

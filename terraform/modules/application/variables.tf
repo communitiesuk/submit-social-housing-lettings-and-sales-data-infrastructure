@@ -104,6 +104,11 @@ variable "load_balancer_listener_arn" {
   description = "The arn of the load balancer listener"
 }
 
+variable "openai_api_key_secret_arn" {
+  type        = string
+  description = "The arn of the openai api key secret"
+}
+
 variable "os_data_key_secret_arn" {
   type        = string
   description = "The arn of the os data key secret"

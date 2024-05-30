@@ -80,6 +80,7 @@ module "application_roles" {
 
   secret_arns = [
     module.application_secrets.govuk_notify_api_key_secret_arn,
+    module.application_secrets.openai_api_key_secret_arn,
     module.application_secrets.os_data_key_secret_arn,
     module.application_secrets.rails_master_key_secret_arn,
     module.application_secrets.sentry_dsn_secret_arn

@@ -80,6 +80,7 @@ resource "aws_ecs_task_definition" "app" {
       secrets = [
         { Name = "DATABASE_URL", valueFrom = aws_ssm_parameter.complete_database_connection_string.arn },
         { Name = "GOVUK_NOTIFY_API_KEY", valueFrom = var.govuk_notify_api_key_secret_arn },
+        { Name = "OPENAI_API_KEY", valueFrom = var.openai_api_key_secret_arn },
         { Name = "OS_DATA_KEY", valueFrom = var.os_data_key_secret_arn },
         { Name = "RAILS_MASTER_KEY", valueFrom = var.rails_master_key_secret_arn },
         { Name = "SENTRY_DSN", valueFrom = var.sentry_dsn_secret_arn }
@@ -133,6 +134,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
       secrets = [
         { Name = "DATABASE_URL", valueFrom = aws_ssm_parameter.complete_database_connection_string.arn },
         { Name = "GOVUK_NOTIFY_API_KEY", valueFrom = var.govuk_notify_api_key_secret_arn },
+        { Name = "OPENAI_API_KEY", valueFrom = var.openai_api_key_secret_arn },
         { Name = "OS_DATA_KEY", valueFrom = var.os_data_key_secret_arn },
         { Name = "RAILS_MASTER_KEY", valueFrom = var.rails_master_key_secret_arn },
         { Name = "SENTRY_DSN", valueFrom = var.sentry_dsn_secret_arn }
@@ -193,6 +195,7 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
       secrets = [
         { Name = "DATABASE_URL", valueFrom = aws_ssm_parameter.complete_database_connection_string.arn },
         { Name = "GOVUK_NOTIFY_API_KEY", valueFrom = var.govuk_notify_api_key_secret_arn },
+        { Name = "OPENAI_API_KEY", valueFrom = var.openai_api_key_secret_arn },
         { Name = "OS_DATA_KEY", valueFrom = var.os_data_key_secret_arn },
         { Name = "RAILS_MASTER_KEY", valueFrom = var.rails_master_key_secret_arn },
         { Name = "SENTRY_DSN", valueFrom = var.sentry_dsn_secret_arn }
