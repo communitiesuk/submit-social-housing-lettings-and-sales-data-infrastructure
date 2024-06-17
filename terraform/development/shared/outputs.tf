@@ -105,8 +105,8 @@ output "front_door_load_balancer_listener_arn" {
 }
 
 output "monitoring_sns_topic_arn" {
-  value       = module.monitoring.sns_topic_arn
-  description = "The arn of the sns topic"
+  value       = module.monitoring_topic_main.sns_topic_arn
+  description = "The arn of the main sns topic for monitoring"
 }
 
 output "networking_private_subnet_ids" {

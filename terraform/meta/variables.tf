@@ -1,5 +1,5 @@
-variable "create_secrets_first" {
+variable "initial_create" {
   type        = bool
-  description = "Setting to true will avoid creating any infrastructure for which a terraform apply would fail if certain secret values are not set"
+  description = "Set to true for the initial creation of this environment to avoid referencing secret values that need to be set after they are first created"
   default     = false
 }

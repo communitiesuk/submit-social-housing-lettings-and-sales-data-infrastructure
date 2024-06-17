@@ -114,7 +114,7 @@ module "application" {
   rails_master_key_secret_arn                       = module.application_secrets.rails_master_key_secret_arn
   redis_connection_string                           = module.redis.redis_connection_string
   sentry_dsn_secret_arn                             = module.application_secrets.sentry_dsn_secret_arn
-  sns_topic_arn                                     = module.monitoring.sns_topic_arn
+  sns_topic_arn                                     = module.monitoring_topic_main.sns_topic_arn
   vpc_id                                            = module.networking.vpc_id
 
   depends_on = [module.database.rds_partial_connection_string_parameter_name]
@@ -205,7 +205,7 @@ module "database" {
   db_subnet_group_name                              = module.networking.db_private_subnet_group_name
   ecs_security_group_id                             = module.application_security_group.ecs_security_group_id
   ecs_task_execution_role_arn                       = module.application_roles.ecs_task_execution_role_arn
-  sns_topic_arn                                     = module.monitoring.sns_topic_arn
+  sns_topic_arn                                     = module.monitoring_topic_main.sns_topic_arn
   use_customer_managed_key_for_performance_insights = false # This was initially created in this environment with a default key, which can't be changed
   vpc_id                                            = module.networking.vpc_id
 }
@@ -268,6 +268,7 @@ module "front_door" {
   restrict_by_ip = true
 
   prefix                        = local.prefix
+  alarm_topic_arn               = module.monitoring_topic_us_east_1.sns_topic_arn
   application_port              = local.application_port
   cloudfront_certificate_arn    = module.certificates.cloudfront_certificate_arn
   cloudfront_domain_name        = local.app_host
@@ -295,15 +296,36 @@ module "networking" {
   vpc_flow_cloudwatch_log_expiration_days = 60
 }
 
-module "monitoring" {
-  source = "../modules/monitoring"
+module "monitoring_secrets" {
+  source = "../modules/monitoring_secrets"
 
-  create_email_subscription = false
+  prefix = local.prefix
 
+  initial_create = var.initial_create
+}
+
+module "monitoring_topic_main" {
+  source = "../modules/monitoring_topic"
+
+  create_email_subscription = true
+
+  email_subscription_endpoint          = module.monitoring_secrets.email_for_subscriptions
   prefix                               = local.prefix
   service_identifier_publishing_to_sns = "cloudwatch.amazonaws.com"
+}
 
-  create_secrets_first = var.create_secrets_first
+module "monitoring_topic_us_east_1" {
+  source = "../modules/monitoring_topic"
+
+  providers = {
+    aws = aws.us-east-1
+  }
+
+  create_email_subscription = true
+
+  email_subscription_endpoint          = module.monitoring_secrets.email_for_subscriptions
+  prefix                               = local.prefix
+  service_identifier_publishing_to_sns = "cloudwatch.amazonaws.com"
 }
 
 module "redis" {

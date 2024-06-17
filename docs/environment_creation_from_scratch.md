@@ -35,7 +35,7 @@ Run the command below to create partial infrastructure.
 N.B. we need to ensure we explicitly target the `networking` module, otherwise we get an error when creating the load 
 balancer, as there's some kind of dependency that Terraform doesn't quite get.
 
-```terraform apply -target="module.networking" -target="module.front_door" -target="module.application_secrets" -var="initial_create=true"```
+```terraform apply -target="module.networking" -target="module.front_door" -target="module.application_secrets" -target="module.monitoring_secrets" -var="initial_create=true"```
 
 (This will create the certificates, load balancer, cloudfront distribution, networking and other components which are 
 the minimum required for defining the DNS records that DLUHC will need to add. It will also create some app roles and 
@@ -60,7 +60,6 @@ and "success" statuses). N.B. the cloudfront certificate lives in the `us-east-1
 certificate lives in `eu-west-2`.
 
 
-
 ### Fill the application secrets
 
 When doing a full apply the complete application will be created, and will need to read values from the secrets. 
@@ -74,6 +73,7 @@ You can find / create values for the following secrets from the given locations:
 * `RAILS_MASTER_KEY` = Check application codebase config
 * `GOVUK_NOTIFY_API_KEY` = Check / use Gov UK Notify
 * `SENTRY_DSN` = Check / use Sentry
+* `MONITORING_EMAIL` = Email address for monitoring subscriptions
 
 ### Update meta environment
 
@@ -81,15 +81,6 @@ In the [meta/main.tf](../terraform/meta/main.tf) file, add the ARN of the `task-
 environment to the ECR module's `allow_access_by_roles` parameter. 
 
 `cd` into the meta folder and run `terraform apply` to update the meta environment with this change.
-
-### Create and set certain secrets which other infrastructure depends on
-
-At this point, running terraform apply will fail because there are some resources which depend on the value of a secret which hasn't been set yet (because the secret would also be created as part of this apply if the steps below aren't followed).
-
-At the moment the only resource in this situation is the SNS email subscription. If you don't need that subscription for this environment then make sure `create_email_subscription` is set to false in the monitoring module in the environment entrypoint module. You can ignore the rest of this section and move on to running a full apply. However if you do need that subscription then:
-- Make sure `create_email_subscription` is set to true in the monitoring module in the environment entrypoint module
-- Run ```terraform apply -target="module.monitoring" -var="create_secrets_first=true"``` (this will create the `MONITORING_EMAIL` secret)
-- Set the value of the secret (i.e. the email address you want monitoring alerts to go to) in the AWS console (do so as plaintext, and don't keep the curly braces or add quotation marks or any other punctuation)
 
 ### Run a full apply
 

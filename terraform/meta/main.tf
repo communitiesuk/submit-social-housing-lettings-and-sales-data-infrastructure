@@ -75,7 +75,7 @@ module "ecr" {
     "arn:aws:iam::107155005276:role/core-staging-task-execution",
     "arn:aws:iam::977287343304:role/core-prod-task-execution"
   ]
-  sns_topic_arn = module.monitoring.sns_topic_arn
+  sns_topic_arn = module.monitoring_topic.sns_topic_arn
 }
 
 module "ecr_rds_migration" {
@@ -106,15 +106,57 @@ module "ecr_s3_migration" {
   repository_name = "s3-migration"
 }
 
-module "monitoring" {
-  source = "../modules/monitoring"
+module "monitoring_secrets" {
+  source = "../modules/monitoring_secrets"
+
+  prefix = local.prefix
+
+  initial_create = var.initial_create
+}
+
+module "monitoring_topic" {
+  source = "../modules/monitoring_topic"
 
   create_email_subscription = true
 
+  email_subscription_endpoint          = module.monitoring_secrets.email_for_subscriptions
   prefix                               = local.prefix
   service_identifier_publishing_to_sns = "events.amazonaws.com"
+}
 
-  create_secrets_first = var.create_secrets_first
+moved {
+  from = module.monitoring.aws_secretsmanager_secret.email
+  to   = module.monitoring_secrets.aws_secretsmanager_secret.email
+}
+
+moved {
+  from = module.monitoring.aws_kms_key.this
+  to   = module.monitoring_secrets.aws_kms_key.this
+}
+
+moved {
+  from = module.monitoring.aws_kms_key_alias.this
+  to   = module.monitoring_secrets.aws_kms_key_alias.this
+}
+
+moved {
+  from = module.monitoring.aws_kms_key_policy.this
+  to   = module.monitoring_secrets.aws_kms_key_policy.this
+}
+
+moved {
+  from = module.monitoring.aws_sns_topic.this
+  to   = module.monitoring_topic.aws_sns_topic.this
+}
+
+moved {
+  from = module.monitoring.aws_sns_topic_policy.this
+  to   = module.monitoring_topic.aws_sns_topic_policy.this
+}
+
+moved {
+  from = module.monitoring.aws_sns_topic_subscription.email
+  to   = module.monitoring_topic.aws_sns_topic_subscription.email
 }
 
 data "aws_caller_identity" "current" {}
