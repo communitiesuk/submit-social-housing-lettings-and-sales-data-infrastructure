@@ -1,3 +1,9 @@
+variable "alarm_topic_arn" {
+  type        = string
+  description = "The arn of the sns topic to use for alarm actions"
+  default     = ""
+}
+
 variable "append_suffix_to_bucket_names" {
   type        = list(string)
   description = "List of buckets to append the account id as a suffix to the name of (in order to ensure uniqueness)"
