@@ -330,41 +330,6 @@ module "monitoring_topic_us_east_1" {
   service_identifier_publishing_to_sns = "cloudwatch.amazonaws.com"
 }
 
-moved {
-  from = module.monitoring.aws_secretsmanager_secret.email
-  to   = module.monitoring_secrets.aws_secretsmanager_secret.email
-}
-
-moved {
-  from = module.monitoring.aws_kms_key.this
-  to   = module.monitoring_secrets.aws_kms_key.this
-}
-
-moved {
-  from = module.monitoring.aws_kms_key_alias.this
-  to   = module.monitoring_secrets.aws_kms_key_alias.this
-}
-
-moved {
-  from = module.monitoring.aws_kms_key_policy.this
-  to   = module.monitoring_secrets.aws_kms_key_policy.this
-}
-
-moved {
-  from = module.monitoring.aws_sns_topic.this
-  to   = module.monitoring_topic_main.aws_sns_topic.this
-}
-
-moved {
-  from = module.monitoring.aws_sns_topic_policy.this
-  to   = module.monitoring_topic_main.aws_sns_topic_policy.this
-}
-
-moved {
-  from = module.monitoring.aws_sns_topic_subscription.email
-  to   = module.monitoring_topic_main.aws_sns_topic_subscription.email
-}
-
 module "redis" {
   source = "../modules/elasticache"
 
