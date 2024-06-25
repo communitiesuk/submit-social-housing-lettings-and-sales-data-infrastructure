@@ -288,6 +288,27 @@ resource "aws_cloudwatch_metric_alarm" "healthy_hosts_count" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "no_healthy_hosts" {
+  alarm_actions             = [var.sns_topic_arn]
+  alarm_name                = "${var.prefix}-no-healthy-hosts"
+  comparison_operator       = "LessThanOrEqualToThreshold"
+  datapoints_to_alarm       = 1
+  evaluation_periods        = 1
+  metric_name               = "HealthyHostCount"
+  namespace                 = "AWS/ApplicationELB"
+  ok_actions                = var.suppress_ok_notifications ? [] : [var.sns_topic_arn]
+  period                    = 60
+  statistic                 = "Minimum"
+  threshold                 = 0
+  insufficient_data_actions = []
+  treat_missing_data        = var.suppress_missing_data_in_alarms ? "notBreaching" : "breaching"
+
+  dimensions = {
+    LoadBalancer = var.load_balancer_arn_suffix
+    TargetGroup  = aws_lb_target_group.this.arn_suffix
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "unhealthy_hosts_count" {
   alarm_actions             = [var.sns_topic_arn]
   alarm_name                = "${var.prefix}-unhealthy-hosts-count"
