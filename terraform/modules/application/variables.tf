@@ -114,6 +114,24 @@ variable "os_data_key_secret_arn" {
   description = "The arn of the os data key secret"
 }
 
+variable "out_of_hours_scale_down" {
+  type = object({
+    enabled = bool
+    timings = optional(object({
+      workday_start = string
+      workday_end   = string
+    }))
+    scale_to = optional(object({
+      app     = number
+      sidekiq = number
+    }))
+  })
+  description = "Configuration for scaling down services outside of working hours. Working days are assumed to be Mon-Fri. Times should be [Minutes] [Hours] (space separated)"
+  default = {
+    enabled = false
+  }
+}
+
 variable "prefix" {
   type        = string
   description = "The prefix to be prepended to resource names."
