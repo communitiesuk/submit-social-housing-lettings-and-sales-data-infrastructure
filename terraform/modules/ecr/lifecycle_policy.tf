@@ -1,4 +1,4 @@
-resource "aws_ecr_lifecycle_policy" "core_production_policy" {
+resource "aws_ecr_lifecycle_policy" "core_lifecycle_policy" {
   repository = aws_ecr_repository.core.name
 
   policy = <<POLICY
@@ -16,19 +16,8 @@ resource "aws_ecr_lifecycle_policy" "core_production_policy" {
         "action": {
           "type": "expire"
         }
-      }
-    ]
-  }
-  POLICY
-}
-
-resource "aws_ecr_lifecycle_policy" "core_staging_policy" {
-  repository = aws_ecr_repository.core.name
-
-  policy = <<POLICY
-  {
-    "rules": [
-      {
+      },
+       {
         "rulePriority": 2,
         "description": "Retain last 10 staging images",
         "selection": {
@@ -40,18 +29,7 @@ resource "aws_ecr_lifecycle_policy" "core_staging_policy" {
         "action": {
           "type": "expire"
         }
-      }
-    ]
-  }
-  POLICY
-}
-
-resource "aws_ecr_lifecycle_policy" "core_review_policy" {
-  repository = aws_ecr_repository.core.name
-
-  policy = <<POLICY
-  {
-    "rules": [
+      },
       {
         "rulePriority": 3,
         "description": "Expire review images after 14 days",
