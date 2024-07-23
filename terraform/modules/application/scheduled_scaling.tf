@@ -1,17 +1,17 @@
 resource "aws_appautoscaling_target" "app" {
-    max_capacity = var.app_task_desired_count
-    min_capacity = var.app_task_desired_count
-    resource_id = "service/${aws_ecs_cluster.this.name}/${aws_ecs_service.app.name}"
-    scalable_dimension = "ecs:service:DesiredCount"
-    service_namespace = "ecs"
+  max_capacity       = var.app_task_desired_count
+  min_capacity       = var.app_task_desired_count
+  resource_id        = "service/${aws_ecs_cluster.this.name}/${aws_ecs_service.app.name}"
+  scalable_dimension = "ecs:service:DesiredCount"
+  service_namespace  = "ecs"
 }
 
 resource "aws_appautoscaling_target" "sidekiq" {
-    max_capacity = var.sidekiq_task_desired_count
-    min_capacity = var.sidekiq_task_desired_count
-    resource_id = "service/${aws_ecs_cluster.this.name}/${aws_ecs_service.sidekiq.name}"
-    scalable_dimension = "ecs:service:DesiredCount"
-    service_namespace = "ecs"
+  max_capacity       = var.sidekiq_task_desired_count
+  min_capacity       = var.sidekiq_task_desired_count
+  resource_id        = "service/${aws_ecs_cluster.this.name}/${aws_ecs_service.sidekiq.name}"
+  scalable_dimension = "ecs:service:DesiredCount"
+  service_namespace  = "ecs"
 }
 
 resource "aws_appautoscaling_scheduled_action" "app_workday_on" {
@@ -46,7 +46,7 @@ resource "aws_appautoscaling_scheduled_action" "app_workday_off" {
   }
 
   # These must be created in series
-  depends_on = [ aws_appautoscaling_scheduled_action.app_workday_on ]
+  depends_on = [aws_appautoscaling_scheduled_action.app_workday_on]
 }
 
 resource "aws_appautoscaling_scheduled_action" "sidekiq_workday_on" {
@@ -81,5 +81,5 @@ resource "aws_appautoscaling_scheduled_action" "sidekiq_workday_off" {
   }
 
   # These must be created in series
-  depends_on = [ aws_appautoscaling_scheduled_action.sidekiq_workday_on ]
+  depends_on = [aws_appautoscaling_scheduled_action.sidekiq_workday_on]
 }
