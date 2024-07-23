@@ -1,4 +1,6 @@
 resource "aws_appautoscaling_target" "app" {
+  count = var.out_of_hours_scale_down.enabled ? 1 : 0
+
   max_capacity       = var.app_task_desired_count
   min_capacity       = var.app_task_desired_count
   resource_id        = "service/${aws_ecs_cluster.this.name}/${aws_ecs_service.app.name}"
@@ -7,6 +9,8 @@ resource "aws_appautoscaling_target" "app" {
 }
 
 resource "aws_appautoscaling_target" "sidekiq" {
+  count = var.out_of_hours_scale_down.enabled ? 1 : 0
+
   max_capacity       = var.sidekiq_task_desired_count
   min_capacity       = var.sidekiq_task_desired_count
   resource_id        = "service/${aws_ecs_cluster.this.name}/${aws_ecs_service.sidekiq.name}"
