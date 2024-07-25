@@ -10,7 +10,7 @@ resource "aws_db_instance" "this" {
   auto_minor_version_upgrade            = true
   allocated_storage                     = var.allocated_storage #units are GiB
   backup_retention_period               = var.backup_retention_period
-  backup_window                         = "23:09-23:39"
+  backup_window                         = var.backup_window
   copy_tags_to_snapshot                 = true
   db_subnet_group_name                  = var.db_subnet_group_name
   delete_automated_backups              = false
@@ -19,7 +19,7 @@ resource "aws_db_instance" "this" {
   engine_version                        = "13.13"
   final_snapshot_identifier             = var.prefix
   instance_class                        = var.instance_class
-  maintenance_window                    = "Mon:02:33-Mon:03:03"
+  maintenance_window                    = var.maintenance_window
   multi_az                              = var.multi_az
   password                              = random_password.this.result
   performance_insights_enabled          = true

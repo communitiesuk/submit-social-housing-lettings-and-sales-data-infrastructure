@@ -63,6 +63,18 @@ module "application" {
   sidekiq_task_desired_count = 1
   sidekiq_task_memory        = 1024
 
+  out_of_hours_scale_down = {
+    enabled = true
+    timings = {
+      workday_start = "0 8"
+      workday_end   = "0 19"
+    }
+    scale_to = {
+      app     = 0
+      sidekiq = 0
+    }
+  }
+
   ecr_repository_url = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core"
 
   prefix                                            = local.prefix

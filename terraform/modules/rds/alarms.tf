@@ -11,6 +11,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_cpu" {
   statistic                 = "Average"
   threshold                 = 90
   insufficient_data_actions = []
+  treat_missing_data        = var.scheduled_stop.enabled ? "notBreaching" : "breaching"
 
   dimensions = {
     DBInstanceIdentifier = aws_db_instance.this.identifier
@@ -30,6 +31,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_storage" {
   statistic                 = "Minimum"
   threshold                 = aws_db_instance.this.allocated_storage * 0.15
   insufficient_data_actions = []
+  treat_missing_data        = "breaching"
 
   dimensions = {
     DBInstanceIdentifier = aws_db_instance.this.identifier
