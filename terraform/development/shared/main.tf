@@ -71,7 +71,7 @@ locals {
 module "budget" {
   source = "../../modules/budget"
 
-  cost_limit = 750
+  cost_limit = 800
 
   prefix                 = local.prefix
   notification_topic_arn = module.monitoring_topic_main.sns_topic_arn
