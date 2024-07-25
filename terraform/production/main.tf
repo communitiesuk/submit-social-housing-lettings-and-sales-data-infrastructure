@@ -77,6 +77,15 @@ locals {
   create_s3_migration_infra = true
 }
 
+module "budget" {
+  source = "../modules/budget"
+
+  cost_limit = 750
+
+  prefix = local.prefix
+  notification_topic_arn = module.monitoring_topic_main.sns_topic_arn
+}
+
 module "application" {
   source = "../modules/application"
 
@@ -313,7 +322,7 @@ module "monitoring_topic_main" {
 
   email_subscription_endpoint          = module.monitoring_secrets.email_for_subscriptions
   prefix                               = local.prefix
-  service_identifier_publishing_to_sns = "cloudwatch.amazonaws.com"
+  service_identifiers_publishing_to_sns = ["cloudwatch.amazonaws.com", "budgets.amazonaws.com"]
 }
 
 module "monitoring_topic_us_east_1" {
@@ -327,7 +336,7 @@ module "monitoring_topic_us_east_1" {
 
   email_subscription_endpoint          = module.monitoring_secrets.email_for_subscriptions
   prefix                               = local.prefix
-  service_identifier_publishing_to_sns = "cloudwatch.amazonaws.com"
+  service_identifiers_publishing_to_sns = ["cloudwatch.amazonaws.com"]
 }
 
 module "redis" {
