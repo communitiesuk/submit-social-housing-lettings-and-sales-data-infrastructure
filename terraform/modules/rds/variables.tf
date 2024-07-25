@@ -13,6 +13,12 @@ variable "backup_retention_period" {
   description = "The number of days to retain db backups for. If 0 then the database will not be backed up"
 }
 
+variable "backup_window" {
+  type        = string
+  description = "Backup window for the db. If scheduled stop is enabled this should be within the db on times"
+  default     = "23:09-23:39"
+}
+
 variable "create_replica" {
   type        = bool
   description = "If true, creates a replica db"
@@ -55,6 +61,12 @@ variable "instance_class" {
   description = "The instance class of the DB."
 }
 
+variable "maintenance_window" {
+  type        = string
+  description = "Maintenance window for the db. If scheduled stop is enabled this sholud be during the db on times"
+  default     = "Mon:02:33-Mon:03:03"
+}
+
 variable "multi_az" {
   type        = bool
   description = "Whether the database should be multi-az"
@@ -63,6 +75,20 @@ variable "multi_az" {
 variable "prefix" {
   type        = string
   description = "The prefix to be prepended to resource names."
+}
+
+variable "scheduled_stop" {
+  type = object({
+    enabled = bool
+    timings = optional(object({
+      workday_start = string
+      workday_end   = string
+    }))
+  })
+  description = "Settings for automatically stopping the database outside of working hours. Currently assumes that no replica is being created."
+  default = {
+    enabled = false
+  }
 }
 
 variable "skip_final_snapshot" {

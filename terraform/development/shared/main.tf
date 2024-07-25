@@ -152,6 +152,15 @@ module "database" {
   skip_final_snapshot                = true
   instance_class                     = "db.t4g.small"
 
+  scheduled_stop = {
+    enabled = true
+    timings = {
+      workday_start = "30 7"
+      workday_end   = "0 20"
+    }
+  }
+  maintenance_window = "Mon:18:00-Mon:18:30"
+
   prefix = local.prefix
 
   database_port               = local.database_port
