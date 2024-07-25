@@ -49,7 +49,7 @@ module "budget" {
 
   cost_limit = 50
 
-  prefix = local.prefix
+  prefix                 = local.prefix
   notification_topic_arn = module.monitoring_topic.sns_topic_arn
 }
 
@@ -128,9 +128,9 @@ module "monitoring_topic" {
 
   create_email_subscription = true
 
-  email_subscription_endpoint          = module.monitoring_secrets.email_for_subscriptions
-  prefix                               = local.prefix
-  service_identifier_publishing_to_sns = ["events.amazonaws.com", "budgets.amazonaws.com"]
+  email_subscription_endpoint           = module.monitoring_secrets.email_for_subscriptions
+  prefix                                = local.prefix
+  service_identifiers_publishing_to_sns = ["events.amazonaws.com", "budgets.amazonaws.com"]
 }
 
 data "aws_caller_identity" "current" {}

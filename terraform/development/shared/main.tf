@@ -69,11 +69,11 @@ locals {
 }
 
 module "budget" {
-  source = "../modules/budget"
+  source = "../../modules/budget"
 
   cost_limit = 750
 
-  prefix = local.prefix
+  prefix                 = local.prefix
   notification_topic_arn = module.monitoring_topic_main.sns_topic_arn
 }
 
@@ -219,8 +219,8 @@ module "monitoring_topic_main" {
 
   create_email_subscription = true
 
-  email_subscription_endpoint          = module.monitoring_secrets.email_for_subscriptions
-  prefix                               = local.prefix
+  email_subscription_endpoint           = module.monitoring_secrets.email_for_subscriptions
+  prefix                                = local.prefix
   service_identifiers_publishing_to_sns = ["cloudwatch.amazonaws.com", "budgets.amazonaws.com"]
 }
 
@@ -233,8 +233,8 @@ module "monitoring_topic_us_east_1" {
 
   create_email_subscription = true
 
-  email_subscription_endpoint          = module.monitoring_secrets.email_for_subscriptions
-  prefix                               = local.prefix
+  email_subscription_endpoint           = module.monitoring_secrets.email_for_subscriptions
+  prefix                                = local.prefix
   service_identifiers_publishing_to_sns = ["cloudwatch.amazonaws.com"]
 }
 
