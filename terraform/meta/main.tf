@@ -44,6 +44,15 @@ locals {
   create_s3_migration_infra = true
 }
 
+module "budget" {
+  source = "../modules/budget"
+
+  cost_limit = 50
+
+  prefix                 = local.prefix
+  notification_topic_arn = module.monitoring_topic.sns_topic_arn
+}
+
 # We create two backends for managing the terraform state of different accounts:
 # non_prod manages meta, development and staging
 # prod manages just production
@@ -119,9 +128,9 @@ module "monitoring_topic" {
 
   create_email_subscription = true
 
-  email_subscription_endpoint          = module.monitoring_secrets.email_for_subscriptions
-  prefix                               = local.prefix
-  service_identifier_publishing_to_sns = "events.amazonaws.com"
+  email_subscription_endpoint           = module.monitoring_secrets.email_for_subscriptions
+  prefix                                = local.prefix
+  service_identifiers_publishing_to_sns = ["events.amazonaws.com", "budgets.amazonaws.com"]
 }
 
 data "aws_caller_identity" "current" {}
