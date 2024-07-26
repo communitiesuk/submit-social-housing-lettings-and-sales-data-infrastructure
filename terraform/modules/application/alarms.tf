@@ -1,3 +1,22 @@
+locals {
+  app_scales_to_zero               = var.out_of_hours_scale_down.enabled ? var.out_of_hours_scale_down.scale_to.app == 0 : false
+  sidekiq_scales_to_zero           = var.out_of_hours_scale_down.enabled ? var.out_of_hours_scale_down.scale_to.sidekiq == 0 : false
+  app_desired_count_for_alarms     = (!var.out_of_hours_scale_down.enabled || local.app_scales_to_zero) ? var.app_task_desired_count : var.out_of_hours_scale_down.scale_to.app
+  sidekiq_desired_count_for_alarms = (!var.out_of_hours_scale_down.enabled || local.sidekiq_scales_to_zero) ? var.sidekiq_task_desired_count : var.out_of_hours_scale_down.scale_to.sidekiq
+}
+
+check "suppress_missing_alarm_data_when_scaling_to_zero" {
+  assert {
+    condition     = var.suppress_missing_data_in_alarms || !local.app_scales_to_zero
+    error_message = "You should suppress missing data in alarms when setting out of hours scaling to 0 app tasks to avoid alarms from expected scaling actions"
+  }
+
+  assert {
+    condition     = var.suppress_missing_data_in_alarms || !local.sidekiq_scales_to_zero
+    error_message = "You should suppress missing data in alarms when setting out of hours scaling to 0 sidekiq tasks to avoid alarms from expected scaling actions"
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "app_average_cpu" {
   alarm_actions             = [var.sns_topic_arn]
   alarm_name                = "${var.prefix}-app-average-cpu"
@@ -257,7 +276,7 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_running_tasks" {
   ok_actions                = var.suppress_ok_notifications ? [] : [var.sns_topic_arn]
   period                    = 60
   statistic                 = "SampleCount"
-  threshold                 = var.sidekiq_task_desired_count
+  threshold                 = local.sidekiq_desired_count_for_alarms
   insufficient_data_actions = []
   treat_missing_data        = var.suppress_missing_data_in_alarms ? "notBreaching" : "breaching"
 
@@ -266,6 +285,7 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_running_tasks" {
     ServiceName = aws_ecs_service.sidekiq.name
   }
 }
+
 
 resource "aws_cloudwatch_metric_alarm" "healthy_hosts_count" {
   alarm_actions             = [var.sns_topic_arn]
@@ -278,7 +298,7 @@ resource "aws_cloudwatch_metric_alarm" "healthy_hosts_count" {
   ok_actions                = var.suppress_ok_notifications ? [] : [var.sns_topic_arn]
   period                    = 60
   statistic                 = "Minimum"
-  threshold                 = var.app_task_desired_count
+  threshold                 = local.app_desired_count_for_alarms
   insufficient_data_actions = []
   treat_missing_data        = var.suppress_missing_data_in_alarms ? "notBreaching" : "breaching"
 
