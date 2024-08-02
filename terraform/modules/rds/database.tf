@@ -11,6 +11,7 @@ resource "aws_db_instance" "this" {
   allocated_storage                     = var.allocated_storage #units are GiB
   backup_retention_period               = var.backup_retention_period
   backup_window                         = var.backup_window
+  ca_cert_identifier                    = "rds-ca-rsa4096-g1"
   copy_tags_to_snapshot                 = true
   db_subnet_group_name                  = var.db_subnet_group_name
   delete_automated_backups              = false
@@ -49,6 +50,7 @@ resource "aws_db_instance" "replica" {
   identifier                 = "${var.prefix}-replica"
   apply_immediately          = aws_db_instance.this.apply_immediately
   auto_minor_version_upgrade = aws_db_instance.this.auto_minor_version_upgrade
+  ca_cert_identifier         = aws_db_instance.this.ca_cert_identifier
   copy_tags_to_snapshot      = aws_db_instance.this.copy_tags_to_snapshot
   delete_automated_backups   = aws_db_instance.this.delete_automated_backups
   deletion_protection        = var.enable_replica_deletion_protection # needs to be set to false and applied if you need to delete the replica DB
