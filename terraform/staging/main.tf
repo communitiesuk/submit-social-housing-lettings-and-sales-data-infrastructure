@@ -242,7 +242,7 @@ module "database_migration" {
 
   ecr_repository_url = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/db-migration"
 
-  cloudfoundry_service = "dluhc-core-staging-postgres"
+  cloudfoundry_service = "mhclg-core-staging-postgres"
   cloudfoundry_space   = "staging"
 
   prefix                                  = local.prefix
