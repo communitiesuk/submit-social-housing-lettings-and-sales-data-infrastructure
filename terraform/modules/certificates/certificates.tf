@@ -2,6 +2,8 @@ resource "aws_acm_certificate" "cloudfront" {
   domain_name       = var.cloudfront_domain_name
   validation_method = "DNS"
 
+  subject_alternative_names = var.cloudfront_additional_names
+
   provider = aws.us-east-1
 
   lifecycle {
