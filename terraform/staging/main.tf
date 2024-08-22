@@ -63,6 +63,9 @@ locals {
   app_host                  = "staging.submit-social-housing-data.levellingup.gov.uk"
   load_balancer_domain_name = "staging.lb.submit-social-housing-data.levellingup.gov.uk"
 
+  new_app_host                  = "staging.submit-social-housing-data.communities.gov.uk"
+  new_load_balancer_domain_name = "staging.lb.submit-social-housing-data.communities.gov.uk"
+
   provider_role_arn = "arn:aws:iam::107155005276:role/developer"
 
   app_task_desired_count = 4
@@ -206,6 +209,18 @@ module "certificates" {
 
   cloudfront_domain_name    = local.app_host
   load_balancer_domain_name = local.load_balancer_domain_name
+}
+
+module "certs_for_new_domain" {
+  source = "../modules/certificates"
+
+  providers = {
+    aws.us-east-1 = aws.us-east-1
+  }
+
+  cloudfront_domain_name      = local.new_app_host
+  cloudfront_additional_names = [local.app_host]
+  load_balancer_domain_name   = local.new_load_balancer_domain_name
 }
 
 module "database" {
