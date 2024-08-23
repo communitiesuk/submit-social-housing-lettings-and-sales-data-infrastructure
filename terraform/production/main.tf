@@ -303,7 +303,7 @@ module "front_door" {
     aws.us-east-1 = aws.us-east-1
   }
 
-  restrict_by_ip = false
+  restrict_by_geolocation = false
 
   prefix                        = local.prefix
   alarm_topic_arn               = module.monitoring_topic_us_east_1.sns_topic_arn
