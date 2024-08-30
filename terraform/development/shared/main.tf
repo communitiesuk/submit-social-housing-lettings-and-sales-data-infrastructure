@@ -95,6 +95,7 @@ module "application_roles" {
     module.application_secrets.openai_api_key_secret_arn,
     module.application_secrets.os_data_key_secret_arn,
     module.application_secrets.rails_master_key_secret_arn,
+    module.application_secrets.review_app_user_password_secret_arn,
     module.application_secrets.sentry_dsn_secret_arn
   ]
 }

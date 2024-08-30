@@ -102,6 +102,7 @@ module "application" {
   rails_master_key_secret_arn                       = data.terraform_remote_state.development_shared.outputs.application_secrets_rails_master_key_secret_arn
   redis_connection_string                           = module.redis.redis_connection_string
   relative_root                                     = "/${terraform.workspace}"
+  review_app_user_password_secret_arn               = data.terraform_remote_state.development_shared.outputs.application_secrets_review_app_user_password_secret_arn
   sentry_dsn_secret_arn                             = data.terraform_remote_state.development_shared.outputs.application_secrets_sentry_dsn_secret_arn
   sns_topic_arn                                     = data.terraform_remote_state.development_shared.outputs.monitoring_sns_topic_arn
   suppress_missing_data_in_alarms                   = true

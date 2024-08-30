@@ -38,6 +38,11 @@ output "application_secrets_rails_master_key_secret_arn" {
   description = "The arn of the rails master key secret"
 }
 
+output "application_secrets_review_app_user_password_secret_arn" {
+  value       = module.application_secrets.review_app_user_password_secret_arn
+  description = "Password for seeded review app users"
+}
+
 output "application_secrets_sentry_dsn_secret_arn" {
   value       = module.application_secrets.sentry_dsn_secret_arn
   description = "The arn of the sentry dsn secret"

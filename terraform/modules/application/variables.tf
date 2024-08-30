@@ -163,6 +163,11 @@ variable "relative_root" {
   default     = ""
 }
 
+variable "review_app_user_password_secret_arn" {
+  type        = string
+  description = "Password for seeded review app users"
+}
+
 variable "sentry_dsn_secret_arn" {
   type        = string
   description = "The arn of the sentry dsn secret"
