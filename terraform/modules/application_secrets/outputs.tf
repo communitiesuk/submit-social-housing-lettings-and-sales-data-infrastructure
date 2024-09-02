@@ -18,6 +18,11 @@ output "rails_master_key_secret_arn" {
   description = "The arn of the rails master key secret"
 }
 
+output "review_app_user_password_secret_arn" {
+  value       = aws_secretsmanager_secret.review_app_user_password.arn
+  description = "The arn of the rails master key secret"
+}
+
 output "sentry_dsn_secret_arn" {
   value       = aws_secretsmanager_secret.sentry_dsn.arn
   description = "The arn of the sentry dsn secret"

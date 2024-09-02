@@ -60,9 +60,9 @@ variable "public_subnet_ids" {
   description = "The ids of all the public subnets"
 }
 
-variable "restrict_by_ip" {
+variable "restrict_by_geolocation" {
   type        = bool
-  description = "True if access to cloudfront should be restricted by ip, e.g. before release or for a test environment"
+  description = "True if access to cloudfront should be restricted by geolocation, e.g. before release or for a test environment"
 }
 
 variable "vpc_id" {

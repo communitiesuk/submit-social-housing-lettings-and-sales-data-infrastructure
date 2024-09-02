@@ -95,6 +95,7 @@ module "application_roles" {
     module.application_secrets.openai_api_key_secret_arn,
     module.application_secrets.os_data_key_secret_arn,
     module.application_secrets.rails_master_key_secret_arn,
+    module.application_secrets.review_app_user_password_secret_arn,
     module.application_secrets.sentry_dsn_secret_arn
   ]
 }
@@ -203,7 +204,7 @@ module "front_door" {
     aws.us-east-1 = aws.us-east-1
   }
 
-  restrict_by_ip = true
+  restrict_by_geolocation = true
 
   prefix                        = local.prefix
   alarm_topic_arn               = module.monitoring_topic_us_east_1.sns_topic_arn

@@ -22,6 +22,12 @@ resource "aws_secretsmanager_secret" "rails_master_key" {
   kms_key_id = aws_kms_key.this.arn
 }
 
+resource "aws_secretsmanager_secret" "review_app_user_password" {
+  #checkov:skip=CKV2_AWS_57:secret doesn't require automatic rotation
+  name       = "REVIEW_APP_USER_PASSWORD"
+  kms_key_id = aws_kms_key.this.arn
+}
+
 resource "aws_secretsmanager_secret" "sentry_dsn" {
   #checkov:skip=CKV2_AWS_57:secret is fixed, can't be automatically rotated
   name       = "SENTRY_DSN"

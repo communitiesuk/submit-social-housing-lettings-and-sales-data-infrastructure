@@ -17,35 +17,6 @@ resource "aws_wafv2_web_acl" "this" {
     sampled_requests_enabled   = false
   }
 
-  dynamic "rule" {
-    # Will not be applied for the empty list, i.e. when restrict_by_ip is false
-    for_each = var.restrict_by_ip ? [1] : []
-    content {
-      name     = "ip-allowlist"
-      priority = 1
-
-      action {
-        block {}
-      }
-
-      statement {
-        not_statement {
-          statement {
-            ip_set_reference_statement {
-              arn = aws_wafv2_ip_set.allowed_ips.arn
-            }
-          }
-        }
-      }
-
-      visibility_config {
-        cloudwatch_metrics_enabled = true
-        metric_name                = "waf-restrict-by-ip"
-        sampled_requests_enabled   = true
-      }
-    }
-  }
-
   rule {
     name     = "aws-managed-rules-amazon-ip-reputation-list"
     priority = 2
@@ -281,13 +252,4 @@ resource "aws_wafv2_regex_pattern_set" "waf_rate_limit_urls" {
   regular_expression {
     regex_string = "/account/two-factor-authentication/resend"
   }
-}
-
-resource "aws_wafv2_ip_set" "allowed_ips" {
-  provider = aws.us-east-1
-
-  name               = "${var.prefix}-waf-allowed-ip-set"
-  scope              = "CLOUDFRONT"
-  ip_address_version = "IPV4"
-  addresses          = local.ip_allowlist
 }

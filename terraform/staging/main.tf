@@ -136,6 +136,7 @@ module "application" {
   private_subnet_ids                                = module.networking.private_subnet_ids
   rails_env                                         = local.rails_env
   rails_master_key_secret_arn                       = module.application_secrets.rails_master_key_secret_arn
+  review_app_user_password_secret_arn               = module.application_secrets.review_app_user_password_secret_arn
   redis_connection_string                           = module.redis.redis_connection_string
   sentry_dsn_secret_arn                             = module.application_secrets.sentry_dsn_secret_arn
   sns_topic_arn                                     = module.monitoring_topic_main.sns_topic_arn
@@ -159,6 +160,7 @@ module "application_roles" {
     module.application_secrets.openai_api_key_secret_arn,
     module.application_secrets.os_data_key_secret_arn,
     module.application_secrets.rails_master_key_secret_arn,
+    module.application_secrets.review_app_user_password_secret_arn,
     module.application_secrets.sentry_dsn_secret_arn
   ]
 }
@@ -301,7 +303,7 @@ module "front_door" {
     aws.us-east-1 = aws.us-east-1
   }
 
-  restrict_by_ip = true
+  restrict_by_geolocation = true
 
   prefix                        = local.prefix
   alarm_topic_arn               = module.monitoring_topic_us_east_1.sns_topic_arn
