@@ -253,3 +253,12 @@ resource "aws_wafv2_regex_pattern_set" "waf_rate_limit_urls" {
     regex_string = "/account/two-factor-authentication/resend"
   }
 }
+
+resource "aws_wafv2_ip_set" "allowed_ips" {
+  provider = aws.us-east-1
+
+  name               = "${var.prefix}-waf-allowed-ip-set"
+  scope              = "CLOUDFRONT"
+  ip_address_version = "IPV4"
+  addresses          = local.ip_allowlist
+}
