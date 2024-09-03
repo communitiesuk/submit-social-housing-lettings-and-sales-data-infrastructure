@@ -45,6 +45,11 @@ variable "load_balancer_certificate_arn" {
   description = "The arn of the certifcate to be associated with the load balancer HTTPS listener"
 }
 
+variable "load_balancer_additional_certificate_arn" {
+  type        = string
+  description = "Arn of additional certificate to be associated with the load balancer"
+}
+
 variable "load_balancer_domain_name" {
   type        = string
   description = "Then domain name of the load balancer"

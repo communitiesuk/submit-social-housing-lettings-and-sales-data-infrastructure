@@ -305,17 +305,18 @@ module "front_door" {
 
   restrict_by_geolocation = true
 
-  prefix                        = local.prefix
-  alarm_topic_arn               = module.monitoring_topic_us_east_1.sns_topic_arn
-  application_port              = local.application_port
-  cloudfront_certificate_arn    = module.certificates.cloudfront_certificate_arn
-  cloudfront_domain_name        = local.app_host
-  ecs_security_group_id         = module.application_security_group.ecs_security_group_id
-  enable_aws_shield             = local.enable_aws_shield
-  load_balancer_certificate_arn = module.certificates.load_balancer_certificate_arn
-  load_balancer_domain_name     = local.load_balancer_domain_name
-  public_subnet_ids             = module.networking.public_subnet_ids
-  vpc_id                        = module.networking.vpc_id
+  prefix                                   = local.prefix
+  alarm_topic_arn                          = module.monitoring_topic_us_east_1.sns_topic_arn
+  application_port                         = local.application_port
+  cloudfront_certificate_arn               = module.certs_for_new_domain.cloudfront_certificate_arn
+  cloudfront_domain_name                   = local.app_host
+  ecs_security_group_id                    = module.application_security_group.ecs_security_group_id
+  enable_aws_shield                        = local.enable_aws_shield
+  load_balancer_certificate_arn            = module.certificates.load_balancer_certificate_arn
+  load_balancer_additional_certificate_arn = module.certs_for_new_domain.load_balancer_certificate_arn
+  load_balancer_domain_name                = local.load_balancer_domain_name
+  public_subnet_ids                        = module.networking.public_subnet_ids
+  vpc_id                                   = module.networking.vpc_id
 
   initial_create = var.initial_create
 }
