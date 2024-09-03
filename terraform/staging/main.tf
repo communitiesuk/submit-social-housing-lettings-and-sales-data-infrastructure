@@ -310,6 +310,7 @@ module "front_door" {
   application_port                         = local.application_port
   cloudfront_certificate_arn               = module.certs_for_new_domain.cloudfront_certificate_arn
   cloudfront_domain_name                   = local.app_host
+  cloudfront_additional_domain_name        = local.new_app_host
   ecs_security_group_id                    = module.application_security_group.ecs_security_group_id
   enable_aws_shield                        = local.enable_aws_shield
   load_balancer_certificate_arn            = module.certificates.load_balancer_certificate_arn
