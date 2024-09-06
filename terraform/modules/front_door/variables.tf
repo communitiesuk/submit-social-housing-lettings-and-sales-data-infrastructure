@@ -25,6 +25,11 @@ variable "cloudfront_domain_name" {
   description = "The domain name of the cloudfront distribution"
 }
 
+variable "cloudfront_additional_domain_name" {
+  type        = string
+  description = "Additional domain name for cloudfront distribution"
+}
+
 variable "ecs_security_group_id" {
   type        = string
   description = "The id of the ecs security group for ecs egress"
@@ -43,6 +48,11 @@ variable "initial_create" {
 variable "load_balancer_certificate_arn" {
   type        = string
   description = "The arn of the certifcate to be associated with the load balancer HTTPS listener"
+}
+
+variable "load_balancer_additional_certificate_arn" {
+  type        = string
+  description = "Arn of additional certificate to be associated with the load balancer"
 }
 
 variable "load_balancer_domain_name" {
