@@ -221,9 +221,10 @@ module "certs_for_new_domain" {
     aws.us-east-1 = aws.us-east-1
   }
 
-  cloudfront_domain_name      = local.new_app_host
-  cloudfront_additional_names = [local.app_host]
-  load_balancer_domain_name   = local.new_load_balancer_domain_name
+  cloudfront_domain_name         = local.new_app_host
+  cloudfront_additional_names    = [local.app_host]
+  load_balancer_domain_name      = local.new_load_balancer_domain_name
+  load_balancer_additional_names = [local.load_balancer_domain_name]
 }
 
 module "database" {
