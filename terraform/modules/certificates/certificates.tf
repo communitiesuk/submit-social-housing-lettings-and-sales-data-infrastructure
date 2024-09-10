@@ -15,6 +15,8 @@ resource "aws_acm_certificate" "load_balancer" {
   domain_name       = var.load_balancer_domain_name
   validation_method = "DNS"
 
+  subject_alternative_names = var.load_balancer_additional_names
+
   lifecycle {
     create_before_destroy = true
   }
