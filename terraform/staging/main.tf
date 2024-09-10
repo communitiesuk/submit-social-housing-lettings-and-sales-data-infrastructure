@@ -140,6 +140,8 @@ module "application" {
   redis_connection_string                           = module.redis.redis_connection_string
   sentry_dsn_secret_arn                             = module.application_secrets.sentry_dsn_secret_arn
   sns_topic_arn                                     = module.monitoring_topic_main.sns_topic_arn
+  staging_performance_test_email_secret_arn         = module.application_secrets.staging_performance_test_email_secret_arn
+  staging_performance_test_password_secret_arn      = module.application_secrets.staging_performance_test_password_secret_arn
   vpc_id                                            = module.networking.vpc_id
 
   depends_on = [module.database.rds_partial_connection_string_parameter_name]
@@ -161,7 +163,9 @@ module "application_roles" {
     module.application_secrets.os_data_key_secret_arn,
     module.application_secrets.rails_master_key_secret_arn,
     module.application_secrets.review_app_user_password_secret_arn,
-    module.application_secrets.sentry_dsn_secret_arn
+    module.application_secrets.sentry_dsn_secret_arn,
+    module.application_secrets.staging_performance_test_email_secret_arn,
+    module.application_secrets.staging_performance_test_password_secret_arn
   ]
 }
 

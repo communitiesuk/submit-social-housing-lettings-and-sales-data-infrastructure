@@ -84,7 +84,9 @@ resource "aws_ecs_task_definition" "app" {
         { Name = "OS_DATA_KEY", valueFrom = var.os_data_key_secret_arn },
         { Name = "RAILS_MASTER_KEY", valueFrom = var.rails_master_key_secret_arn },
         { Name = "REVIEW_APP_USER_PASSWORD", valueFrom = var.review_app_user_password_secret_arn },
-        { Name = "SENTRY_DSN", valueFrom = var.sentry_dsn_secret_arn }
+        { Name = "SENTRY_DSN", valueFrom = var.sentry_dsn_secret_arn },
+        { Name = "STAGING_PERFORMANCE_TEST_EMAIL", valueFrom = var.staging_performance_test_email_secret_arn },
+        { Name = "STAGING_PERFORMANCE_TEST_PASSWORD", valueFrom = var.staging_performance_test_password_secret_arn }
       ]
     }
   ])
@@ -139,7 +141,9 @@ resource "aws_ecs_task_definition" "sidekiq" {
         { Name = "OS_DATA_KEY", valueFrom = var.os_data_key_secret_arn },
         { Name = "RAILS_MASTER_KEY", valueFrom = var.rails_master_key_secret_arn },
         { Name = "REVIEW_APP_USER_PASSWORD", valueFrom = var.review_app_user_password_secret_arn },
-        { Name = "SENTRY_DSN", valueFrom = var.sentry_dsn_secret_arn }
+        { Name = "SENTRY_DSN", valueFrom = var.sentry_dsn_secret_arn },
+        { Name = "STAGING_PERFORMANCE_TEST_EMAIL", valueFrom = var.staging_performance_test_email_secret_arn },
+        { Name = "STAGING_PERFORMANCE_TEST_PASSWORD", valueFrom = var.staging_performance_test_password_secret_arn },
       ]
     }
   ])
@@ -201,7 +205,9 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
         { Name = "OS_DATA_KEY", valueFrom = var.os_data_key_secret_arn },
         { Name = "RAILS_MASTER_KEY", valueFrom = var.rails_master_key_secret_arn },
         { Name = "REVIEW_APP_USER_PASSWORD", valueFrom = var.review_app_user_password_secret_arn },
-        { Name = "SENTRY_DSN", valueFrom = var.sentry_dsn_secret_arn }
+        { Name = "SENTRY_DSN", valueFrom = var.sentry_dsn_secret_arn },
+        { Name = "STAGING_PERFORMANCE_TEST_EMAIL", valueFrom = var.staging_performance_test_email_secret_arn },
+        { Name = "STAGING_PERFORMANCE_TEST_PASSWORD", valueFrom = var.staging_performance_test_password_secret_arn },
       ]
     }
   ])
