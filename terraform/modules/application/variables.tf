@@ -196,11 +196,13 @@ variable "sns_topic_arn" {
 variable "staging_performance_test_email_secret_arn" {
   type        = string
   description = "The arn of the staging performance test email secret"
+  default     = null
 }
 
 variable "staging_performance_test_password_secret_arn" {
   type        = string
   description = "The arn of the staging performance test password secret"
+  default     = null
 }
 
 variable "suppress_missing_data_in_alarms" {
