@@ -38,10 +38,3 @@ resource "aws_lb_listener" "https" {
     order = 50000 # this is the highest value possible so will be performed last out of all listener rules
   }
 }
-
-resource "aws_lb_listener_certificate" "additional_cert" {
-  count = var.initial_create ? 0 : 1
-
-  listener_arn    = aws_lb_listener.https[0].arn
-  certificate_arn = var.load_balancer_additional_certificate_arn
-}
