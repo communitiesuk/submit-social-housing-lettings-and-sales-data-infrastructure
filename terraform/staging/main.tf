@@ -114,7 +114,7 @@ module "application" {
   ecr_repository_url = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core"
 
   prefix                                            = local.prefix
-  app_host                                          = local.app_host
+  app_host                                          = local.new_app_host
   app_task_desired_count                            = local.app_task_desired_count
   application_port                                  = local.application_port
   bulk_upload_bucket_details                        = module.bulk_upload.details

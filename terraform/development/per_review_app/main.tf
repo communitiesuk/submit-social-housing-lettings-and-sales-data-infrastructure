@@ -43,7 +43,7 @@ locals {
 
   rails_env = "review"
 
-  app_host = "review.submit-social-housing-data.levellingup.gov.uk"
+  app_host = "review.submit-social-housing-data.communities.gov.uk"
 
   provider_role_arn = data.terraform_remote_state.development_shared.outputs.deployment_role_arn
 
