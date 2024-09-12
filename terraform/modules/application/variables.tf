@@ -193,6 +193,18 @@ variable "sns_topic_arn" {
   description = "The arn of the sns topic"
 }
 
+variable "staging_performance_test_email_secret_arn" {
+  type        = string
+  description = "The arn of the staging performance test email secret"
+  default     = null
+}
+
+variable "staging_performance_test_password_secret_arn" {
+  type        = string
+  description = "The arn of the staging performance test password secret"
+  default     = null
+}
+
 variable "suppress_missing_data_in_alarms" {
   type        = bool
   description = "If true, cpu / memory / host count alarms treat missing data as ok - otherwise they treat it as breaching"
