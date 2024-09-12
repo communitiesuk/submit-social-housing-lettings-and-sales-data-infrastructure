@@ -25,6 +25,11 @@ variable "cloudfront_domain_name" {
   description = "The domain name of the cloudfront distribution"
 }
 
+variable "cloudfront_additional_domain_name" {
+  type        = string
+  description = "Additional domain name for cloudfront distribution"
+}
+
 variable "ecs_security_group_id" {
   type        = string
   description = "The id of the ecs security group for ecs egress"

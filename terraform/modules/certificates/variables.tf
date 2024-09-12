@@ -13,3 +13,9 @@ variable "load_balancer_domain_name" {
   type        = string
   description = "Then domain name of the load balancer"
 }
+
+variable "load_balancer_additional_names" {
+  type        = list(string)
+  description = "Additional names to add to the load balancer certificate"
+  default     = []
+}
