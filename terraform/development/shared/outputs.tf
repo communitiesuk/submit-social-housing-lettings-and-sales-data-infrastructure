@@ -58,6 +58,16 @@ output "application_security_group_redis_security_group_id" {
   description = "The id of the redis security group"
 }
 
+output "application_secrets_staging_performance_test_email_secret_arn" {
+  value       = module.application_secrets.staging_performance_test_email_secret_arn
+  description = "The arn of the staging performance test email secret"
+}
+
+output "application_secrets_staging_performance_test_password_secret_arn" {
+  value       = module.application_secrets.staging_performance_test_password_secret_arn
+  description = "The arn of the staging performance test password secret"
+}
+
 output "bulk_upload_details" {
   value       = module.bulk_upload.details
   description = "Details block of the bulk upload bucket for the application to use to connect"
