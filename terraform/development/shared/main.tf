@@ -87,6 +87,7 @@ module "application_roles" {
 
   prefix                               = local.prefix
   bulk_upload_bucket_access_policy_arn = module.bulk_upload.read_write_policy_arn
+  collection_resources_bucket_access_policy_arn      = module.collection_resources.details.bucket_name
   database_data_access_policy_arn      = module.database.rds_data_access_policy_arn
   export_bucket_access_policy_arn      = module.cds_export.read_write_policy_arn
 
@@ -157,6 +158,13 @@ module "certs_for_new_domain" {
   cloudfront_additional_names    = [local.app_host]
   load_balancer_domain_name      = local.new_load_balancer_domain_name
   load_balancer_additional_names = [local.load_balancer_domain_name]
+}
+
+module "collection_resources" {
+  source = "../../modules/collection_resources"
+
+  prefix          = local.prefix
+  ecs_task_role_arn = module.application_roles.ecs_task_role_arn
 }
 
 module "database" {
