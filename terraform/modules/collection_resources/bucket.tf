@@ -15,6 +15,10 @@ resource "aws_s3_bucket_logging" "access_logging" {
 resource "aws_s3_bucket_public_access_block" "collection_resources" {
   bucket = aws_s3_bucket.collection_resources.id
 
+  #checkov:skip=CKV_AWS_53: Bypass ensuring S3 bucket has block public ACLS enabled
+  #checkov:skip=CKV_AWS_54: Bypass ensuring S3 bucket has block public policy enabled
+  #checkov:skip=CKV_AWS_55: Bypass ensuring S3 bucket has ignore public ACLs enabled
+  #checkov:skip=CKV_AWS_56: Bypass ensuring S3 bucket has 'restrict_public_bucket' enabled
   block_public_acls       = false
   block_public_policy     = false
   ignore_public_acls      = false
@@ -24,6 +28,7 @@ resource "aws_s3_bucket_public_access_block" "collection_resources" {
 resource "aws_s3_bucket_policy" "public_read" {
   bucket = aws_s3_bucket.collection_resources.id
 
+  #checkov:skip=CKV_AWS_70: Bypass ensuring S3 bucket does not allow an action with any Principal
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
