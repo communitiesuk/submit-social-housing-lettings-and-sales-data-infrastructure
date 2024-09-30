@@ -5,11 +5,11 @@ resource "aws_ecs_cluster" "this" {
 }
 
 locals {
-  app_container_name     = "app"
-  bulk_upload_bucket_key = "bulk-upload-bucket"
+  app_container_name              = "app"
+  bulk_upload_bucket_key          = "bulk-upload-bucket"
   collection_resources_bucket_key = "collection-resources-bucket"
-  export_bucket_key      = "export-bucket"
-  sidekiq_container_name = "sidekiq"
+  export_bucket_key               = "export-bucket"
+  sidekiq_container_name          = "sidekiq"
   s3_config = [
     {
       instance_name : local.bulk_upload_bucket_key,
