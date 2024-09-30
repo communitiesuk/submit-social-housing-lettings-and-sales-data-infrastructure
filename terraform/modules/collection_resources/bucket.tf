@@ -33,7 +33,7 @@ resource "aws_s3_bucket_public_access_block" "collection_resources" {
 resource "aws_s3_bucket_policy" "public_read" {
   bucket = aws_s3_bucket.collection_resources.id
 
-  #checkov:skip=CKV_AWS_70: Bypass ensuring S3 bucket does not allow an action with any Principal
+  #checkov:skip=CKV_AWS_70: Public access block is intentionally disabled for this bucket
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
