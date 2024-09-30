@@ -3,6 +3,11 @@ variable "bulk_upload_bucket_access_policy_arn" {
   description = "The arn of the policy allowing access to the bulk upload bucket"
 }
 
+variable "collection_resources_bucket_access_policy_arn" {
+  type        = string
+  description = "The arn of the policy allowing access to the collection resources bucket"
+}
+
 variable "database_data_access_policy_arn" {
   type        = string
   description = "The arn of the policy allowing database data access"
