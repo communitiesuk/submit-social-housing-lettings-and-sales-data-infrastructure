@@ -1,4 +1,8 @@
 #tfsec:ignore:aws-s3-enable-versioning: Not important, each upload creates a new file with a different name (a random UUID)
+#tfsec:ignore:aws-s3-block-public-acls: This bucket will be public
+#tfsec:ignore:aws-s3-block-public-policy: This bucket will be public
+#tfsec:ignore:aws-s3-ignore-public-acls: This bucket will be public
+#tfsec:ignore:aws-s3-no-public-buckets: This bucket will be public
 resource "aws_s3_bucket" "collection_resources" {
   #checkov:skip=CKV2_AWS_6: Bypass ensuring that S3 bucket has a Public Access block
   #checkov:skip=CKV2_AWS_62: no need for event notifications
