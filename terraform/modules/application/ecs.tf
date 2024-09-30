@@ -22,6 +22,7 @@ locals {
 }
 
 locals {
+  image = var.ecr_repository_url
   app_container_environment_base = [
     { Name = "APP_HOST", Value = var.app_host },
     { Name = "BULK_UPLOAD_BUCKET", Value = local.bulk_upload_bucket_key },
@@ -55,7 +56,7 @@ resource "aws_ecs_task_definition" "app" {
       name        = local.app_container_name
       environment = local.app_container_environment
       essential   = true
-      image       = var.ecr_repository_url
+      image       = local.image
       user        = "nonroot"
 
       logConfiguration = {
@@ -120,7 +121,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
       command     = ["bundle", "exec", "sidekiq", "-t", "3"]
       environment = local.app_container_environment
       essential   = true
-      image       = var.ecr_repository_url
+      image       = local.image
       user        = "nonroot"
 
       logConfiguration = {
@@ -176,7 +177,7 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
       name        = local.app_container_name
       environment = local.app_container_environment
       essential   = true
-      image       = var.ecr_repository_url
+      image       = local.image
       user        = "nonroot"
 
       logConfiguration = {
