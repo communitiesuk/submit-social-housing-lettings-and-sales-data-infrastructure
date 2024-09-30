@@ -1,10 +1,6 @@
 #tfsec:ignore:aws-s3-enable-versioning: Not important, each upload creates a new file with a different name (a random UUID)
-#tfsec:ignore:aws-s3-block-public-acls: This bucket will be public
-#tfsec:ignore:aws-s3-block-public-policy: This bucket will be public
-#tfsec:ignore:aws-s3-ignore-public-acls: This bucket will be public
-#tfsec:ignore:aws-s3-no-public-buckets: This bucket will be public
 resource "aws_s3_bucket" "collection_resources" {
-  #checkov:skip=CKV2_AWS_6: Bypass ensuring that S3 bucket has a Public Access block
+  #checkov:skip=CKV2_AWS_6: Public access block is intentionally disabled for this bucket
   #checkov:skip=CKV2_AWS_62: no need for event notifications
   #checkov:skip=CKV_AWS_144: cross region replication is overkill when this is only for data transfer
   #checkov:skip=CKV_AWS_21: versioning not important, each upload creates a new file with a different name (a random UUID)
@@ -17,13 +13,17 @@ resource "aws_s3_bucket_logging" "access_logging" {
   target_prefix = ""
 }
 
+#tfsec:ignore:aws-s3-block-public-acls: Public ACLs are allowed for this bucket
+#tfsec:ignore:aws-s3-block-public-policy: Public policies are allowed for this bucket
+#tfsec:ignore:aws-s3-ignore-public-acls: Public ACLs are allowed for this bucket
+#tfsec:ignore:aws-s3-no-public-buckets: This bucket is intentionally public
 resource "aws_s3_bucket_public_access_block" "collection_resources" {
   bucket = aws_s3_bucket.collection_resources.id
 
-  #checkov:skip=CKV_AWS_53: Bypass ensuring S3 bucket has block public ACLS enabled
-  #checkov:skip=CKV_AWS_54: Bypass ensuring S3 bucket has block public policy enabled
-  #checkov:skip=CKV_AWS_55: Bypass ensuring S3 bucket has ignore public ACLs enabled
-  #checkov:skip=CKV_AWS_56: Bypass ensuring S3 bucket has 'restrict_public_bucket' enabled
+  #checkov:skip=CKV_AWS_53: Public ACLs are intentionally allowed for this bucket
+  #checkov:skip=CKV_AWS_54: Public policies are intentionally allowed for this bucket
+  #checkov:skip=CKV_AWS_55: Public ACLs are intentionally allowed for this bucket
+  #checkov:skip=CKV_AWS_56: This bucket is intentionally public
   block_public_acls       = false
   block_public_policy     = false
   ignore_public_acls      = false
