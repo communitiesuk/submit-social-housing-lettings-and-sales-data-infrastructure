@@ -60,9 +60,6 @@ locals {
 
   default_database_name = "data_collector"
 
-  old_app_host                  = "submit-social-housing-data.levellingup.gov.uk"
-  old_load_balancer_domain_name = "lb.submit-social-housing-data.levellingup.gov.uk"
-
   app_host                  = "submit-social-housing-data.communities.gov.uk"
   load_balancer_domain_name = "lb.submit-social-housing-data.communities.gov.uk"
 
@@ -214,19 +211,6 @@ module "certificates" {
   load_balancer_domain_name = local.load_balancer_domain_name
 }
 
-module "certs_for_new_domain" {
-  source = "../modules/certificates"
-
-  providers = {
-    aws.us-east-1 = aws.us-east-1
-  }
-
-  cloudfront_domain_name         = local.app_host
-  cloudfront_additional_names    = [local.old_app_host]
-  load_balancer_domain_name      = local.load_balancer_domain_name
-  load_balancer_additional_names = [local.old_load_balancer_domain_name]
-}
-
 module "database" {
   source = "../modules/rds"
 
@@ -308,18 +292,17 @@ module "front_door" {
 
   restrict_by_geolocation = false
 
-  prefix                            = local.prefix
-  alarm_topic_arn                   = module.monitoring_topic_us_east_1.sns_topic_arn
-  application_port                  = local.application_port
-  cloudfront_certificate_arn        = module.certs_for_new_domain.cloudfront_certificate_arn
-  cloudfront_domain_name            = local.app_host
-  cloudfront_additional_domain_name = local.old_app_host
-  ecs_security_group_id             = module.application_security_group.ecs_security_group_id
-  enable_aws_shield                 = local.enable_aws_shield
-  load_balancer_certificate_arn     = module.certs_for_new_domain.load_balancer_certificate_arn
-  load_balancer_domain_name         = local.load_balancer_domain_name
-  public_subnet_ids                 = module.networking.public_subnet_ids
-  vpc_id                            = module.networking.vpc_id
+  prefix                        = local.prefix
+  alarm_topic_arn               = module.monitoring_topic_us_east_1.sns_topic_arn
+  application_port              = local.application_port
+  cloudfront_certificate_arn    = module.certificates.cloudfront_certificate_arn
+  cloudfront_domain_name        = local.app_host
+  ecs_security_group_id         = module.application_security_group.ecs_security_group_id
+  enable_aws_shield             = local.enable_aws_shield
+  load_balancer_certificate_arn = module.certificates.load_balancer_certificate_arn
+  load_balancer_domain_name     = local.load_balancer_domain_name
+  public_subnet_ids             = module.networking.public_subnet_ids
+  vpc_id                        = module.networking.vpc_id
 
   initial_create = var.initial_create
 }
