@@ -1,4 +1,5 @@
-#tfsec:ignore:aws-s3-enable-versioning: Not important, each upload creates a new file with a different name (a random UUID)
+#tfsec:ignore:aws-s3-encryption-customer-key: requires public access
+#tfsec:ignore:aws-s3-enable-bucket-encryption: requires public access
 resource "aws_s3_bucket" "collection_resources" {
   #checkov:skip=CKV2_AWS_6: Public access block is intentionally disabled for this bucket
   #checkov:skip=CKV2_AWS_62: no need for event notifications
