@@ -36,6 +36,8 @@ resource "aws_db_instance" "this" {
 
   lifecycle {
     prevent_destroy = true
+    # AWS will perform automatic minor version updates, so we want to ignore these - remove this temporarily if wanting to e.g. change the major version
+    ignore_changes = [engine_version]
   }
 }
 

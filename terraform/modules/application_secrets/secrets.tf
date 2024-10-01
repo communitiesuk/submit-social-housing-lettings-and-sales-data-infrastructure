@@ -33,3 +33,15 @@ resource "aws_secretsmanager_secret" "sentry_dsn" {
   name       = "SENTRY_DSN"
   kms_key_id = aws_kms_key.this.arn
 }
+
+resource "aws_secretsmanager_secret" "staging_performance_test_email" {
+  #checkov:skip=CKV2_AWS_57:secret is fixed, can't be automatically rotated
+  name       = "STAGING_PERFORMANCE_TEST_EMAIL"
+  kms_key_id = aws_kms_key.this.arn
+}
+
+resource "aws_secretsmanager_secret" "staging_performance_test_password" {
+  #checkov:skip=CKV2_AWS_57:secret is fixed, can't be automatically rotated
+  name       = "STAGING_PERFORMANCE_TEST_PASSWORD"
+  kms_key_id = aws_kms_key.this.arn
+}

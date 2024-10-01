@@ -106,6 +106,8 @@ module "application" {
   sentry_dsn_secret_arn                             = data.terraform_remote_state.development_shared.outputs.application_secrets_sentry_dsn_secret_arn
   sns_topic_arn                                     = data.terraform_remote_state.development_shared.outputs.monitoring_sns_topic_arn
   suppress_missing_data_in_alarms                   = true
+  staging_performance_test_email_secret_arn         = data.terraform_remote_state.development_shared.outputs.application_secrets_staging_performance_test_email_secret_arn
+  staging_performance_test_password_secret_arn      = data.terraform_remote_state.development_shared.outputs.application_secrets_staging_performance_test_password_secret_arn
   suppress_ok_notifications                         = true
   vpc_id                                            = data.terraform_remote_state.development_shared.outputs.networking_vpc_id
 }

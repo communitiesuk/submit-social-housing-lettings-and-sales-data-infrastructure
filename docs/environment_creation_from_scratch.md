@@ -74,6 +74,9 @@ You can find / create values for the following secrets from the given locations:
 * `GOVUK_NOTIFY_API_KEY` = Check / use Gov UK Notify
 * `SENTRY_DSN` = Check / use Sentry
 * `MONITORING_EMAIL` = Email address for monitoring subscriptions
+* `REVIEW_APP_USER_PASSWORD` = Password for seed users in review apps
+* `STAGING_PERFORMANCE_TEST_EMAIL` = Email to login for automated performance tests on staging
+* `STAGING_PERFORMANCE_TEST_PASSWORD` = Password to login for automated performance tests on staging
 
 ### Update meta environment
 

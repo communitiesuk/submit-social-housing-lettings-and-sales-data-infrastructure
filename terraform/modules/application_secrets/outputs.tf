@@ -27,3 +27,13 @@ output "sentry_dsn_secret_arn" {
   value       = aws_secretsmanager_secret.sentry_dsn.arn
   description = "The arn of the sentry dsn secret"
 }
+
+output "staging_performance_test_email_secret_arn" {
+  value       = aws_secretsmanager_secret.staging_performance_test_email.arn
+  description = "The arn of the staging performance test email secret"
+}
+
+output "staging_performance_test_password_secret_arn" {
+  value       = aws_secretsmanager_secret.staging_performance_test_password.arn
+  description = "The arn of the staging performance test password secret"
+}
