@@ -163,7 +163,7 @@ module "certs_for_new_domain" {
 module "collection_resources" {
   source = "../../modules/collection_resources"
 
-  prefix            = local.prefix
+  prefix = local.prefix
 }
 
 module "database" {
