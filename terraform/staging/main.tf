@@ -236,7 +236,6 @@ module "collection_resources" {
   source = "../modules/collection_resources"
 
   prefix            = local.prefix
-  ecs_task_role_arn = module.application_roles.ecs_task_role_arn
 }
 
 module "database" {
