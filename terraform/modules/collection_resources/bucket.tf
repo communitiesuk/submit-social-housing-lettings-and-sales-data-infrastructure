@@ -4,7 +4,7 @@ resource "aws_s3_bucket" "collection_resources" {
   #checkov:skip=CKV2_AWS_6: Public access block is intentionally disabled for this bucket
   #checkov:skip=CKV2_AWS_62: no need for event notifications
   #checkov:skip=CKV_AWS_144: cross region replication is overkill when this is only for data transfer
-  #checkov:skip=CKV_AWS_21: versioning not important, each upload creates a new file with a different name (a random UUID)
+  #checkov:skip=CKV_AWS_145: requires public access
   bucket = "${var.prefix}-collection-resources"
 }
 
