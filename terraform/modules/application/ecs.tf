@@ -27,6 +27,7 @@ locals {
 }
 
 locals {
+  image = var.ecr_repository_url
   app_container_environment_base = [
     { Name = "APP_HOST", Value = var.app_host },
     { Name = "BULK_UPLOAD_BUCKET", Value = local.bulk_upload_bucket_key },
@@ -42,6 +43,26 @@ locals {
     var.relative_root == "" ?
     local.app_container_environment_base :
     concat(local.app_container_environment_base, [{ Name = "RAILS_RELATIVE_URL_ROOT", Value = var.relative_root }])
+  )
+  app_container_secrets_base = [
+    { Name = "DATABASE_URL", valueFrom = aws_ssm_parameter.complete_database_connection_string.arn },
+    { Name = "GOVUK_NOTIFY_API_KEY", valueFrom = var.govuk_notify_api_key_secret_arn },
+    { Name = "OPENAI_API_KEY", valueFrom = var.openai_api_key_secret_arn },
+    { Name = "OS_DATA_KEY", valueFrom = var.os_data_key_secret_arn },
+    { Name = "RAILS_MASTER_KEY", valueFrom = var.rails_master_key_secret_arn },
+    { Name = "REVIEW_APP_USER_PASSWORD", valueFrom = var.review_app_user_password_secret_arn },
+    { Name = "SENTRY_DSN", valueFrom = var.sentry_dsn_secret_arn }
+  ]
+  app_container_secrets = (
+    var.staging_performance_test_email_secret_arn == null || var.staging_performance_test_password_secret_arn == null ?
+    local.app_container_secrets_base :
+    concat(
+      local.app_container_secrets_base,
+      [
+        { Name = "STAGING_PERFORMANCE_TEST_EMAIL", valueFrom = var.staging_performance_test_email_secret_arn },
+        { Name = "STAGING_PERFORMANCE_TEST_PASSWORD", valueFrom = var.staging_performance_test_password_secret_arn }
+      ]
+    )
   )
 }
 
@@ -61,7 +82,7 @@ resource "aws_ecs_task_definition" "app" {
       name        = local.app_container_name
       environment = local.app_container_environment
       essential   = true
-      image       = var.ecr_repository_url
+      image       = local.image
       user        = "nonroot"
 
       logConfiguration = {
@@ -83,17 +104,7 @@ resource "aws_ecs_task_definition" "app" {
         }
       ]
 
-      secrets = [
-        { Name = "DATABASE_URL", valueFrom = aws_ssm_parameter.complete_database_connection_string.arn },
-        { Name = "GOVUK_NOTIFY_API_KEY", valueFrom = var.govuk_notify_api_key_secret_arn },
-        { Name = "OPENAI_API_KEY", valueFrom = var.openai_api_key_secret_arn },
-        { Name = "OS_DATA_KEY", valueFrom = var.os_data_key_secret_arn },
-        { Name = "RAILS_MASTER_KEY", valueFrom = var.rails_master_key_secret_arn },
-        { Name = "REVIEW_APP_USER_PASSWORD", valueFrom = var.review_app_user_password_secret_arn },
-        { Name = "SENTRY_DSN", valueFrom = var.sentry_dsn_secret_arn },
-        { Name = "STAGING_PERFORMANCE_TEST_EMAIL", valueFrom = var.staging_performance_test_email_secret_arn },
-        { Name = "STAGING_PERFORMANCE_TEST_PASSWORD", valueFrom = var.staging_performance_test_password_secret_arn }
-      ]
+      secrets = local.app_container_secrets
     }
   ])
 
@@ -126,7 +137,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
       command     = ["bundle", "exec", "sidekiq", "-t", "3"]
       environment = local.app_container_environment
       essential   = true
-      image       = var.ecr_repository_url
+      image       = local.image
       user        = "nonroot"
 
       logConfiguration = {
@@ -140,17 +151,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
         }
       }
 
-      secrets = [
-        { Name = "DATABASE_URL", valueFrom = aws_ssm_parameter.complete_database_connection_string.arn },
-        { Name = "GOVUK_NOTIFY_API_KEY", valueFrom = var.govuk_notify_api_key_secret_arn },
-        { Name = "OPENAI_API_KEY", valueFrom = var.openai_api_key_secret_arn },
-        { Name = "OS_DATA_KEY", valueFrom = var.os_data_key_secret_arn },
-        { Name = "RAILS_MASTER_KEY", valueFrom = var.rails_master_key_secret_arn },
-        { Name = "REVIEW_APP_USER_PASSWORD", valueFrom = var.review_app_user_password_secret_arn },
-        { Name = "SENTRY_DSN", valueFrom = var.sentry_dsn_secret_arn },
-        { Name = "STAGING_PERFORMANCE_TEST_EMAIL", valueFrom = var.staging_performance_test_email_secret_arn },
-        { Name = "STAGING_PERFORMANCE_TEST_PASSWORD", valueFrom = var.staging_performance_test_password_secret_arn },
-      ]
+      secrets = local.app_container_secrets
     }
   ])
 
@@ -182,7 +183,7 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
       name        = local.app_container_name
       environment = local.app_container_environment
       essential   = true
-      image       = var.ecr_repository_url
+      image       = local.image
       user        = "nonroot"
 
       logConfiguration = {
@@ -204,17 +205,7 @@ resource "aws_ecs_task_definition" "ad_hoc_tasks" {
         }
       ]
 
-      secrets = [
-        { Name = "DATABASE_URL", valueFrom = aws_ssm_parameter.complete_database_connection_string.arn },
-        { Name = "GOVUK_NOTIFY_API_KEY", valueFrom = var.govuk_notify_api_key_secret_arn },
-        { Name = "OPENAI_API_KEY", valueFrom = var.openai_api_key_secret_arn },
-        { Name = "OS_DATA_KEY", valueFrom = var.os_data_key_secret_arn },
-        { Name = "RAILS_MASTER_KEY", valueFrom = var.rails_master_key_secret_arn },
-        { Name = "REVIEW_APP_USER_PASSWORD", valueFrom = var.review_app_user_password_secret_arn },
-        { Name = "SENTRY_DSN", valueFrom = var.sentry_dsn_secret_arn },
-        { Name = "STAGING_PERFORMANCE_TEST_EMAIL", valueFrom = var.staging_performance_test_email_secret_arn },
-        { Name = "STAGING_PERFORMANCE_TEST_PASSWORD", valueFrom = var.staging_performance_test_password_secret_arn },
-      ]
+      secrets = local.app_container_secrets
     }
   ])
 
