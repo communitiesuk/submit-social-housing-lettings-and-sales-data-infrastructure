@@ -76,6 +76,11 @@ resource "aws_iam_role_policy_attachment" "task_bulk_upload_bucket_access" {
   policy_arn = var.bulk_upload_bucket_access_policy_arn
 }
 
+resource "aws_iam_role_policy_attachment" "task_collection_resources_bucket_access" {
+  role       = aws_iam_role.task.name
+  policy_arn = var.collection_resources_bucket_access_policy_arn
+}
+
 resource "aws_iam_role_policy_attachment" "task_export_bucket_access" {
   role       = aws_iam_role.task.name
   policy_arn = var.export_bucket_access_policy_arn

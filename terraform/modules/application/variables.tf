@@ -41,6 +41,14 @@ variable "cloudfront_header_password" {
   description = "The password on the custom header used for cloudfront"
 }
 
+variable "collection_resources_bucket_details" {
+  type = object({
+    aws_region  = string
+    bucket_name = string
+  })
+  description = "Details block for collection resources bucket"
+}
+
 variable "database_name" {
   type        = string
   description = "The name of the database to connect to"

@@ -5,19 +5,24 @@ resource "aws_ecs_cluster" "this" {
 }
 
 locals {
-  app_container_name     = "app"
-  sidekiq_container_name = "sidekiq"
-  export_bucket_key      = "export-bucket"
-  bulk_upload_bucket_key = "bulk-upload-bucket"
+  app_container_name              = "app"
+  bulk_upload_bucket_key          = "bulk-upload-bucket"
+  collection_resources_bucket_key = "collection-resources-bucket"
+  export_bucket_key               = "export-bucket"
+  sidekiq_container_name          = "sidekiq"
   s3_config = [
     {
       instance_name : local.bulk_upload_bucket_key,
       credentials : var.bulk_upload_bucket_details
     },
     {
+      instance_name : local.collection_resources_bucket_key,
+      credentials : var.collection_resources_bucket_details
+    },
+    {
       instance_name : local.export_bucket_key,
       credentials : var.export_bucket_details
-    },
+    }
   ]
 }
 
@@ -26,6 +31,7 @@ locals {
   app_container_environment_base = [
     { Name = "APP_HOST", Value = var.app_host },
     { Name = "BULK_UPLOAD_BUCKET", Value = local.bulk_upload_bucket_key },
+    { Name = "COLLECTION_RESOURCES_BUCKET", Value = local.collection_resources_bucket_key },
     { Name = "EXPORT_BUCKET", Value = local.export_bucket_key },
     { Name = "RAILS_ENV", Value = var.rails_env },
     { Name = "RAILS_LOG_TO_STDOUT", Value = "true" },

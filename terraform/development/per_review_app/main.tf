@@ -84,6 +84,7 @@ module "application" {
   bulk_upload_bucket_details                        = data.terraform_remote_state.development_shared.outputs.bulk_upload_details
   cloudfront_header_name                            = data.terraform_remote_state.development_shared.outputs.front_door_cloudfront_header_name
   cloudfront_header_password                        = data.terraform_remote_state.development_shared.outputs.front_door_cloudfront_header_password
+  collection_resources_bucket_details               = data.terraform_remote_state.development_shared.outputs.collection_resources_details
   database_name                                     = local.prefix
   database_partial_connection_string_parameter_name = data.terraform_remote_state.development_shared.outputs.database_rds_partial_connection_string_parameter_name
   ecs_deployment_role_name                          = data.terraform_remote_state.development_shared.outputs.application_roles_ecs_deployment_role_name
