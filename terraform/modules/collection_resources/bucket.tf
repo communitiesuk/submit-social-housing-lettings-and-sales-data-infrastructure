@@ -109,3 +109,11 @@ resource "aws_iam_policy" "read_write" {
   description = "Policy that allows read/write access to the collection resources bucket"
   policy      = data.aws_iam_policy_document.read_write.json
 }
+
+resource "aws_s3_bucket_versioning" "collection_resources" {
+  bucket = aws_s3_bucket.collection_resources.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
