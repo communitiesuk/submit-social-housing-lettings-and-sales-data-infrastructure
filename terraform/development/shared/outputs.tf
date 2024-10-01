@@ -88,16 +88,6 @@ output "certificates_load_balancer_certificate_validation" {
   description = "The domain validation objects for the load balancer certificate"
 }
 
-output "certificates_new_cloudfront_certificate_validation" {
-  value       = module.certs_for_new_domain.cloudfront_certificate_validation
-  description = "The domain validation objects for the cloudfront certificate"
-}
-
-output "certificates_new_load_balancer_certificate_validation" {
-  value       = module.certs_for_new_domain.load_balancer_certificate_validation
-  description = "The domain validation objects for the load balancer certificate"
-}
-
 output "collection_resources_details" {
   value       = module.collection_resources.details
   description = "Details block of the collection resources bucket for the application to use to connect"
