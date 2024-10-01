@@ -60,11 +60,11 @@ locals {
 
   default_database_name = "data_collector"
 
-  app_host                  = "staging.submit-social-housing-data.levellingup.gov.uk"
-  load_balancer_domain_name = "staging.lb.submit-social-housing-data.levellingup.gov.uk"
+  old_app_host                  = "staging.submit-social-housing-data.levellingup.gov.uk"
+  old_load_balancer_domain_name = "staging.lb.submit-social-housing-data.levellingup.gov.uk"
 
-  new_app_host                  = "staging.submit-social-housing-data.communities.gov.uk"
-  new_load_balancer_domain_name = "staging.lb.submit-social-housing-data.communities.gov.uk"
+  app_host                  = "staging.submit-social-housing-data.communities.gov.uk"
+  load_balancer_domain_name = "staging.lb.submit-social-housing-data.communities.gov.uk"
 
   provider_role_arn = "arn:aws:iam::107155005276:role/developer"
 
@@ -114,7 +114,7 @@ module "application" {
   ecr_repository_url = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core"
 
   prefix                                            = local.prefix
-  app_host                                          = local.new_app_host
+  app_host                                          = local.app_host
   app_task_desired_count                            = local.app_task_desired_count
   application_port                                  = local.application_port
   bulk_upload_bucket_details                        = module.bulk_upload.details
@@ -224,10 +224,10 @@ module "certs_for_new_domain" {
     aws.us-east-1 = aws.us-east-1
   }
 
-  cloudfront_domain_name         = local.new_app_host
-  cloudfront_additional_names    = [local.app_host]
-  load_balancer_domain_name      = local.new_load_balancer_domain_name
-  load_balancer_additional_names = [local.load_balancer_domain_name]
+  cloudfront_domain_name         = local.app_host
+  cloudfront_additional_names    = [local.old_app_host]
+  load_balancer_domain_name      = local.load_balancer_domain_name
+  load_balancer_additional_names = [local.old_load_balancer_domain_name]
 }
 
 module "database" {
@@ -315,11 +315,11 @@ module "front_door" {
   application_port                  = local.application_port
   cloudfront_certificate_arn        = module.certs_for_new_domain.cloudfront_certificate_arn
   cloudfront_domain_name            = local.app_host
-  cloudfront_additional_domain_name = local.new_app_host
+  cloudfront_additional_domain_name = local.old_app_host
   ecs_security_group_id             = module.application_security_group.ecs_security_group_id
   enable_aws_shield                 = local.enable_aws_shield
   load_balancer_certificate_arn     = module.certs_for_new_domain.load_balancer_certificate_arn
-  load_balancer_domain_name         = local.new_load_balancer_domain_name
+  load_balancer_domain_name         = local.load_balancer_domain_name
   public_subnet_ids                 = module.networking.public_subnet_ids
   vpc_id                            = module.networking.vpc_id
 
