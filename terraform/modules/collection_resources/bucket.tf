@@ -89,18 +89,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "collection_resources" {
   }
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
-  bucket = aws_s3_bucket.collection_resources.id
-
-  rule {
-    apply_server_side_encryption_by_default {
-      kms_master_key_id = aws_kms_key.this.arn
-      sse_algorithm     = "aws:kms"
-    }
-    bucket_key_enabled = true
-  }
-}
-
 #tfsec:ignore:aws-iam-no-policy-wildcards: require access to all objects in bucket
 data "aws_iam_policy_document" "read_write" {
   statement {
@@ -112,12 +100,6 @@ data "aws_iam_policy_document" "read_write" {
   statement {
     actions   = ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"]
     resources = ["${aws_s3_bucket.collection_resources.arn}/*"]
-    effect    = "Allow"
-  }
-
-  statement {
-    actions   = ["kms:GenerateDataKey", "kms:Decrypt"]
-    resources = [aws_kms_key.this.arn]
     effect    = "Allow"
   }
 }
