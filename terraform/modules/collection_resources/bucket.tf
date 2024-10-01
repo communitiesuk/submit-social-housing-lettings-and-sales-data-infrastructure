@@ -31,47 +31,53 @@ resource "aws_s3_bucket_public_access_block" "collection_resources" {
   restrict_public_buckets = false
 }
 
+data "aws_iam_policy_document" "public_read_policy" {
+  statement {
+    sid    = "PublicReadGetObject"
+    effect = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.collection_resources.arn}/*"]
+  }
+}
+
 resource "aws_s3_bucket_policy" "public_read" {
   bucket = aws_s3_bucket.collection_resources.id
 
   #checkov:skip=CKV_AWS_70: Public access block is intentionally disabled for this bucket
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Sid       = "PublicReadGetObject",
-        Effect    = "Allow",
-        Principal = "*",
-        Action    = "s3:GetObject",
-        Resource  = "${aws_s3_bucket.collection_resources.arn}/*"
-      }
+  policy = data.aws_iam_policy_document.public_read_policy.json
+}
+
+data "aws_iam_policy_document" "force_ssl_policy" {
+  statement {
+    sid     = "AllowSSLRequestsOnly"
+    effect  = "Deny"
+    actions = ["s3:*"]
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+    resources = [
+      aws_s3_bucket.collection_resources.arn,
+      "${aws_s3_bucket.collection_resources.arn}/*"
     ]
-  })
+
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values   = ["false"]
+    }
+  }
 }
 
 resource "aws_s3_bucket_policy" "force_ssl" {
   bucket = aws_s3_bucket.collection_resources.id
 
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Sid       = "AllowSSLRequestsOnly",
-        Action    = "s3:*",
-        Effect    = "Deny",
-        Principal = "*",
-        Resource = [
-          aws_s3_bucket.collection_resources.arn,
-          "${aws_s3_bucket.collection_resources.arn}/*"
-        ],
-        Condition = {
-          Bool = {
-            "aws:SecureTransport" = "false"
-          }
-        }
-      }
-    ]
-  })
+  policy = data.aws_iam_policy_document.force_ssl_policy.json
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "collection_resources" {
