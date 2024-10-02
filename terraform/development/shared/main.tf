@@ -144,6 +144,12 @@ module "certificates" {
   load_balancer_domain_name = local.load_balancer_domain_name
 }
 
+module "collection_resources" {
+  source = "../../modules/collection_resources"
+
+  prefix = local.prefix
+}
+
 module "database" {
   source = "../../modules/rds"
 
