@@ -88,16 +88,6 @@ output "certificates_load_balancer_certificate_validation" {
   description = "The domain validation objects for the load balancer certificate"
 }
 
-output "certificates_new_cloudfront_certificate_validation" {
-  value       = module.certs_for_new_domain.cloudfront_certificate_validation
-  description = "The domain validation objects for the cloudfront certificate"
-}
-
-output "certificates_new_load_balancer_certificate_validation" {
-  value       = module.certs_for_new_domain.load_balancer_certificate_validation
-  description = "The domain validation objects for the load balancer certificate"
-}
-
 output "database_rds_partial_connection_string_parameter_name" {
   value       = module.database.rds_partial_connection_string_parameter_name
   description = "The name of the partial database connection string in the parameter store"
