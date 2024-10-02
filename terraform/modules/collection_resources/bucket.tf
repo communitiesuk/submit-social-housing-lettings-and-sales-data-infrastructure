@@ -1,9 +1,10 @@
-#tfsec:ignore:aws-s3-enable-versioning: Not important, each upload creates a new file with a different name (a random UUID)
+#tfsec:ignore:aws-s3-encryption-customer-key: requires public access
+#tfsec:ignore:aws-s3-enable-bucket-encryption: requires public access
 resource "aws_s3_bucket" "collection_resources" {
   #checkov:skip=CKV2_AWS_6: Public access block is intentionally disabled for this bucket
   #checkov:skip=CKV2_AWS_62: no need for event notifications
   #checkov:skip=CKV_AWS_144: cross region replication is overkill when this is only for data transfer
-  #checkov:skip=CKV_AWS_21: versioning not important, each upload creates a new file with a different name (a random UUID)
+  #checkov:skip=CKV_AWS_145: requires public access
   bucket = "${var.prefix}-collection-resources"
 }
 
@@ -30,47 +31,55 @@ resource "aws_s3_bucket_public_access_block" "collection_resources" {
   restrict_public_buckets = false
 }
 
+data "aws_iam_policy_document" "public_read_policy" {
+  #checkov:skip=CKV_AWS_283: Requires public access
+
+  statement {
+    sid    = "PublicReadGetObject"
+    effect = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.collection_resources.arn}/*"]
+  }
+}
+
 resource "aws_s3_bucket_policy" "public_read" {
   bucket = aws_s3_bucket.collection_resources.id
 
   #checkov:skip=CKV_AWS_70: Public access block is intentionally disabled for this bucket
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Sid       = "PublicReadGetObject",
-        Effect    = "Allow",
-        Principal = "*",
-        Action    = "s3:GetObject",
-        Resource  = "${aws_s3_bucket.collection_resources.arn}/*"
-      }
+  policy = data.aws_iam_policy_document.public_read_policy.json
+}
+
+data "aws_iam_policy_document" "force_ssl_policy" {
+  statement {
+    sid     = "AllowSSLRequestsOnly"
+    effect  = "Deny"
+    actions = ["s3:*"]
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+    resources = [
+      aws_s3_bucket.collection_resources.arn,
+      "${aws_s3_bucket.collection_resources.arn}/*"
     ]
-  })
+
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values   = ["false"]
+    }
+  }
 }
 
 resource "aws_s3_bucket_policy" "force_ssl" {
   bucket = aws_s3_bucket.collection_resources.id
 
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Sid       = "AllowSSLRequestsOnly",
-        Action    = "s3:*",
-        Effect    = "Deny",
-        Principal = "*",
-        Resource = [
-          aws_s3_bucket.collection_resources.arn,
-          "${aws_s3_bucket.collection_resources.arn}/*"
-        ],
-        Condition = {
-          Bool = {
-            "aws:SecureTransport" = "false"
-          }
-        }
-      }
-    ]
-  })
+  policy = data.aws_iam_policy_document.force_ssl_policy.json
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "collection_resources" {
@@ -89,18 +98,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "collection_resources" {
   }
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
-  bucket = aws_s3_bucket.collection_resources.id
-
-  rule {
-    apply_server_side_encryption_by_default {
-      kms_master_key_id = aws_kms_key.this.arn
-      sse_algorithm     = "aws:kms"
-    }
-    bucket_key_enabled = true
-  }
-}
-
 #tfsec:ignore:aws-iam-no-policy-wildcards: require access to all objects in bucket
 data "aws_iam_policy_document" "read_write" {
   statement {
@@ -114,16 +111,18 @@ data "aws_iam_policy_document" "read_write" {
     resources = ["${aws_s3_bucket.collection_resources.arn}/*"]
     effect    = "Allow"
   }
-
-  statement {
-    actions   = ["kms:GenerateDataKey", "kms:Decrypt"]
-    resources = [aws_kms_key.this.arn]
-    effect    = "Allow"
-  }
 }
 
 resource "aws_iam_policy" "read_write" {
   name        = "${var.prefix}-collection-resources-bucket-read-write"
   description = "Policy that allows read/write access to the collection resources bucket"
   policy      = data.aws_iam_policy_document.read_write.json
+}
+
+resource "aws_s3_bucket_versioning" "collection_resources" {
+  bucket = aws_s3_bucket.collection_resources.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
 }
