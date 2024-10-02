@@ -82,10 +82,11 @@ module "application_roles" {
 
   github_actions_role_arn = "arn:aws:iam::815624722760:role/core-application-repo"
 
-  prefix                               = local.prefix
-  bulk_upload_bucket_access_policy_arn = module.bulk_upload.read_write_policy_arn
-  database_data_access_policy_arn      = module.database.rds_data_access_policy_arn
-  export_bucket_access_policy_arn      = module.cds_export.read_write_policy_arn
+  prefix                                        = local.prefix
+  bulk_upload_bucket_access_policy_arn          = module.bulk_upload.read_write_policy_arn
+  collection_resources_bucket_access_policy_arn = module.collection_resources.details.bucket_name
+  database_data_access_policy_arn               = module.database.rds_data_access_policy_arn
+  export_bucket_access_policy_arn               = module.cds_export.read_write_policy_arn
 
   secret_arns = [
     module.application_secrets.govuk_notify_api_key_secret_arn,
@@ -141,6 +142,12 @@ module "certificates" {
 
   cloudfront_domain_name    = local.app_host
   load_balancer_domain_name = local.load_balancer_domain_name
+}
+
+module "collection_resources" {
+  source = "../../modules/collection_resources"
+
+  prefix = local.prefix
 }
 
 module "database" {

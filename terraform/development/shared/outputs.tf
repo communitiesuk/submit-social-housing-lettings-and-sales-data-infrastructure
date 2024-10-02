@@ -88,6 +88,11 @@ output "certificates_load_balancer_certificate_validation" {
   description = "The domain validation objects for the load balancer certificate"
 }
 
+output "collection_resources_details" {
+  value       = module.collection_resources.details
+  description = "Details block of the collection resources bucket for the application to use to connect"
+}
+
 output "database_rds_partial_connection_string_parameter_name" {
   value       = module.database.rds_partial_connection_string_parameter_name
   description = "The name of the partial database connection string in the parameter store"
