@@ -150,7 +150,7 @@ module "application_roles" {
 
   prefix                                        = local.prefix
   bulk_upload_bucket_access_policy_arn          = module.bulk_upload.read_write_policy_arn
-  collection_resources_bucket_access_policy_arn = module.collection_resources.details.bucket_name
+  collection_resources_bucket_access_policy_arn = module.collection_resources.read_write_policy_arn
   database_data_access_policy_arn               = module.database.rds_data_access_policy_arn
   export_bucket_access_policy_arn               = module.cds_export.read_write_policy_arn
 
