@@ -31,7 +31,7 @@ resource "aws_s3_bucket_public_access_block" "collection_resources" {
   restrict_public_buckets = false
 }
 
-data "aws_iam_policy_document" "public_read_policy" {
+data "aws_iam_policy_document" "public_read_and_force_ssl_policy" {
   #checkov:skip=CKV_AWS_283: Requires public access
 
   statement {
@@ -45,16 +45,7 @@ data "aws_iam_policy_document" "public_read_policy" {
     actions   = ["s3:GetObject"]
     resources = ["${aws_s3_bucket.collection_resources.arn}/*"]
   }
-}
 
-resource "aws_s3_bucket_policy" "public_read" {
-  bucket = aws_s3_bucket.collection_resources.id
-
-  #checkov:skip=CKV_AWS_70: Public access block is intentionally disabled for this bucket
-  policy = data.aws_iam_policy_document.public_read_policy.json
-}
-
-data "aws_iam_policy_document" "force_ssl_policy" {
   statement {
     sid     = "AllowSSLRequestsOnly"
     effect  = "Deny"
@@ -76,10 +67,11 @@ data "aws_iam_policy_document" "force_ssl_policy" {
   }
 }
 
-resource "aws_s3_bucket_policy" "force_ssl" {
+resource "aws_s3_bucket_policy" "public_read_and_force_ssl" {
   bucket = aws_s3_bucket.collection_resources.id
 
-  policy = data.aws_iam_policy_document.force_ssl_policy.json
+  #checkov:skip=CKV_AWS_70: Public access block is intentionally disabled for this bucket
+  policy = data.aws_iam_policy_document.public_read_and_force_ssl_policy.json
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "collection_resources" {
