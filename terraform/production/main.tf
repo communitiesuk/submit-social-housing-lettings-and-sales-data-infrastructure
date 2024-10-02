@@ -218,7 +218,7 @@ module "collection_resources" {
 
   prefix = local.prefix
 }
-  
+
 module "database" {
   source = "../modules/rds"
 
