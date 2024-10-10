@@ -25,7 +25,7 @@ Currently, all other infrastructure deployments must be done by manually applyin
 
 This might change in future, at least for the shared development infrastructure. 
 
-To do so, use your aws cli profile for your main dluhc account (i.e. not having assumed a role in any of the application accounts), select the relevant entrypoint folder, and run `terraform apply`.
+To do so, use your aws cli profile for your main mhclg account (i.e. not having assumed a role in any of the application accounts), select the relevant entrypoint folder, and run `terraform apply`.
 
 While doing so, confirm that the plan you see matches the changes you expect before approving it.
 
