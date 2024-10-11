@@ -1,10 +1,9 @@
-#tfsec:ignore:aws-s3-encryption-customer-key: requires public access
-#tfsec:ignore:aws-s3-enable-bucket-encryption: requires public access
+#tfsec:ignore:aws-s3-encryption-customer-key: these are public files
+#tfsec:ignore:aws-s3-enable-bucket-encryption: these are public files
 resource "aws_s3_bucket" "collection_resources" {
-  #checkov:skip=CKV2_AWS_6: Public access block is intentionally disabled for this bucket
   #checkov:skip=CKV2_AWS_62: no need for event notifications
-  #checkov:skip=CKV_AWS_144: cross region replication is overkill when this is only for data transfer
-  #checkov:skip=CKV_AWS_145: requires public access
+  #checkov:skip=CKV_AWS_144: cross region replication is overkill
+  #checkov:skip=CKV_AWS_145: bucket encryption not needed for public files
   bucket = "${var.prefix}-collection-resources"
 }
 
@@ -14,38 +13,16 @@ resource "aws_s3_bucket_logging" "access_logging" {
   target_prefix = ""
 }
 
-#tfsec:ignore:aws-s3-block-public-acls: Public ACLs are allowed for this bucket
-#tfsec:ignore:aws-s3-block-public-policy: Public policies are allowed for this bucket
-#tfsec:ignore:aws-s3-ignore-public-acls: Public ACLs are allowed for this bucket
-#tfsec:ignore:aws-s3-no-public-buckets: This bucket is intentionally public
 resource "aws_s3_bucket_public_access_block" "collection_resources" {
   bucket = aws_s3_bucket.collection_resources.id
 
-  #checkov:skip=CKV_AWS_53: Public ACLs are intentionally allowed for this bucket
-  #checkov:skip=CKV_AWS_54: Public policies are intentionally allowed for this bucket
-  #checkov:skip=CKV_AWS_55: Public ACLs are intentionally allowed for this bucket
-  #checkov:skip=CKV_AWS_56: This bucket is intentionally public
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
-data "aws_iam_policy_document" "public_read_and_force_ssl_policy" {
-  #checkov:skip=CKV_AWS_283: Requires public access
-
-  statement {
-    sid    = "PublicReadGetObject"
-    effect = "Allow"
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
-    }
-
-    actions   = ["s3:GetObject"]
-    resources = ["${aws_s3_bucket.collection_resources.arn}/*"]
-  }
-
+data "aws_iam_policy_document" "force_ssl_policy" {
   statement {
     sid     = "AllowSSLRequestsOnly"
     effect  = "Deny"
@@ -67,11 +44,10 @@ data "aws_iam_policy_document" "public_read_and_force_ssl_policy" {
   }
 }
 
-resource "aws_s3_bucket_policy" "public_read_and_force_ssl" {
+resource "aws_s3_bucket_policy" "force_ssl" {
   bucket = aws_s3_bucket.collection_resources.id
 
-  #checkov:skip=CKV_AWS_70: Public access block is intentionally disabled for this bucket
-  policy = data.aws_iam_policy_document.public_read_and_force_ssl_policy.json
+  policy = data.aws_iam_policy_document.force_ssl_policy.json
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "collection_resources" {
