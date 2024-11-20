@@ -1,7 +1,7 @@
 # Creating a new environment from scratch
 
 When setting up a new environment:
-1. DNS records will need to be added by DLUHC for certificate validation and to point at the cloudfront distribution and 
+1. DNS records will need to be added by MHCLG for certificate validation and to point at the cloudfront distribution and 
 app load balancer
 2. Secret values will need to be filled in manually
 3. The meta account will need updating with additional roles access to the ecr, since this is currently manual
@@ -38,12 +38,12 @@ balancer, as there's some kind of dependency that Terraform doesn't quite get.
 ```terraform apply -target="module.networking" -target="module.front_door" -target="module.application_secrets" -target="module.monitoring_secrets" -var="initial_create=true"```
 
 (This will create the certificates, load balancer, cloudfront distribution, networking and other components which are 
-the minimum required for defining the DNS records that DLUHC will need to add. It will also create some app roles and 
+the minimum required for defining the DNS records that MHCLG will need to add. It will also create some app roles and 
 secrets; which are necessary before creating the full app).
 
 ### Get DNS Records set up
 
-Request DLUHC to add the DNS records for the new environment.
+Request MHCLG to add the DNS records for the new environment.
 
 There will be four records, which will be;
 * CNAME for the cloudfront domain pointing at the cloudfront distribution
@@ -51,11 +51,11 @@ There will be four records, which will be;
 * Validation for the cloudfront certificate
 * Validation for the load balancer certificate
 
-See the screenshot below for an example of the form DLUHC asked us to complete for the request above (values aren't actual):
+See the screenshot below for an example of the form MHCLG asked us to complete for the request above (values aren't actual):
 
-![add_dns_records_dluhc_request_example.png](add_dns_records_dluhc_request_example.png)
+![add_dns_records_mhclg_request_example.png](add_dns_records_mhclg_request_example.png)
 
-Once DLUHC has set up the records, check the certificates have been validated in AWS console (they should have "issued" 
+Once MHCLG has set up the records, check the certificates have been validated in AWS console (they should have "issued" 
 and "success" statuses). N.B. the cloudfront certificate lives in the `us-east-1` region, whereas the load balancer 
 certificate lives in `eu-west-2`.
 

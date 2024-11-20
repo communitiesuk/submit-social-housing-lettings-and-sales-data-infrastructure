@@ -101,22 +101,22 @@ As this requires multiple accounts, we are using [AWS Vault](https://github.com/
 
 You'll probably want to configure profiles for all accounts.
 
-1. Go to the AWS console and log into the main DLUHC (mhclg) account as your user. Once there, go to the `My security credentials` page of `AWS IAM` and create an `Access key`, noting down both `access key id` itself and the `secret access key` given to you. While there, also look up your mfa_serial.
-1. In your terminal, run `aws-vault add dluhc` and enter the access key id and secret access key as requested
-1. If you are using a Mac you may be prompted to store the credentials in a Keychain - if so it's recommended that you create a custom keychain (in the Keychain Access app) called `aws-vault` to store the keychain item in. When creating the item (which will get a name like `aws-vault (dluhc)`) you will need to generate a password. It's recommended that you store this password somewhere secure, e.g. also in Keychain (but not in your new `aws-vault` custom keychain, since then you'd be storing the password inside what the password is for), or in Keeper or an equivalent secrets manager.
-1. Open your `~/.aws/config` file. Update the `[profile dluhc]` section to add your mfa serial, and (optionally) default region and output settings;
+1. Go to the AWS console and log into the main MHCLG account as your user. Once there, go to the `My security credentials` page of `AWS IAM` and create an `Access key`, noting down both `access key id` itself and the `secret access key` given to you. While there, also look up your mfa_serial.
+1. In your terminal, run `aws-vault add mhclg` and enter the access key id and secret access key as requested
+1. If you are using a Mac you may be prompted to store the credentials in a Keychain - if so it's recommended that you create a custom keychain (in the Keychain Access app) called `aws-vault` to store the keychain item in. When creating the item (which will get a name like `aws-vault (mhclg)`) you will need to generate a password. It's recommended that you store this password somewhere secure, e.g. also in Keychain (but not in your new `aws-vault` custom keychain, since then you'd be storing the password inside what the password is for), or in Keeper or an equivalent secrets manager.
+1. Open your `~/.aws/config` file. Update the `[profile mhclg]` section to add your mfa serial, and (optionally) default region and output settings;
     ```
-    [profile dluhc]
-    mfa_serial=arn:aws:iam::<DLUHC-ACCOUNT-ID>:mfa/<IAM-USERNAME>
+    [profile mhclg]
+    mfa_serial=arn:aws:iam::<MHCLG-ACCOUNT-ID>:mfa/<IAM-USERNAME>
     region=eu-west-2
     output=json
     ```
 1. To create other profiles for each account (meta, development, staging, and production), you can add to this file e.g. 
     ```
-    [profile dluhc-meta]
-    source_profile=dluhc
-    mfa_serial=arn:aws:iam::<DLUHC-ACCOUNT-ID>:mfa/<IAM-USERNAME>
+    [profile mhclg-meta]
+    source_profile=mhclg
+    mfa_serial=arn:aws:iam::<MHCLG-ACCOUNT-ID>:mfa/<IAM-USERNAME>
     role_arn=arn:aws:iam::<META-ACCOUNT-ID>:role/<ROLE-NAME>
     ```
     This should automatically use the same credentials - annoyingly repeating the mfa_serial in the config is necessary.
-1. You can now run e.g. `aws-vault exec dluhc` to launch an aws-vault subshell which uses the `dluhc` profile/credentials you just set up. When running this command, you will probably asked to enter your MFA code (you will unless you've recently had a session open that hasn't yet expired). If you are a Windows user, you may need to run the command `aws-vault exec dluhc -- bash` or `aws-vault exec dluhc -- powershell` in order to get aws-vault to open a subshell without erroring.
+1. You can now run e.g. `aws-vault exec mhclg` to launch an aws-vault subshell which uses the `mhclg` profile/credentials you just set up. When running this command, you will probably asked to enter your MFA code (you will unless you've recently had a session open that hasn't yet expired). If you are a Windows user, you may need to run the command `aws-vault exec mhclg -- bash` or `aws-vault exec mhclg -- powershell` in order to get aws-vault to open a subshell without erroring.
