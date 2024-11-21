@@ -2,7 +2,7 @@
 
 echo 'Logging into Gov PaaS'
 
-if cf login -a api.london.cloud.service.gov.uk -o "dluhc-core" -u ${CF_USERNAME} -p ${CF_PASSWORD} -s ${CF_SPACE}; then
+if cf login -a api.london.cloud.service.gov.uk -o "mhclg-core" -u ${CF_USERNAME} -p ${CF_PASSWORD} -s ${CF_SPACE}; then
   echo 'Logged into Gov PaaS successfully'
 else
   echo 'ERROR could not log into Gov Paas'

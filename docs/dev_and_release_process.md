@@ -7,7 +7,7 @@
 * Create a branch off main for your changes
 * Make your changes
 * Merge to the dev branch and push - dev is a long running branch, but there's no need to create PR for this
-* Apply your changes to **staging** by running `terraform apply` from `terraform/staging` locally (in a console with your dluhc profile) - make sure the plan only includes changes you expect
+* Apply your changes to **staging** by running `terraform apply` from `terraform/staging` locally (in a console with your mhclg profile) - make sure the plan only includes changes you expect
 * Try out your changes on staging
 * When happy, raise a PR from your branch to main and get a technical review
 * Get someone to do some testing/PO review on staging (exactly what form this applies in will depend on the ticket, and this might not be needed for some types of ticket)
@@ -46,7 +46,7 @@ We expect to make this automated (or at least less manual) at some point, certai
 
 To release an infrastructure change;
 
-1. In a terminal, use e.g. `aws-vault exec dluhc` to get a shell logged in to your main AWS profile - see [development setup](./development_setup.md#set-up-aws-vault--cli)
+1. In a terminal, use e.g. `aws-vault exec mhclg` to get a shell logged in to your main AWS profile - see [development setup](./development_setup.md#set-up-aws-vault--cli)
 1. Navigate to the relevant entrypoint module;
     * `terraform/development/shared` for the shared parts of the dev/review environment
     * `terraform/staging` for the staging environment
