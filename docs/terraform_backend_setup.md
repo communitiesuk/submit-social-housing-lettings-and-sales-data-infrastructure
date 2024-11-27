@@ -9,7 +9,7 @@ We use the [Cloud Posse](https://github.com/cloudposse) `tfstate-backend` and `s
 the module can be found [here](https://github.com/cloudposse/terraform-aws-tfstate-backend#usage) if necessary, however
 please follow the steps below for our use case:
 
-1. Ensure your machine is set up to use the credentials of your DLUHC profile / account (using `AWS Vault` is
+1. Ensure your machine is set up to use the credentials of your MHCLG profile / account (using `AWS Vault` is
    recommended).
 
 
