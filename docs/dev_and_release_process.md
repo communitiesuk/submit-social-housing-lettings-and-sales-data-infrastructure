@@ -53,3 +53,27 @@ To release an infrastructure change;
     * `terraform/production` for the production environment
 1. Run `terraform apply`. This will start by showing you a plan of what terraform will attempt to change - check that this plan matches your expectations before allowing it to continue, e.g. it's not dropping and recreating anything unusual (particularly if it's something a DNS record points at, or that stores data), you recognise all the changes etc. If you're happy, give it confirmation and it will proceed.
 1. Keep an eye out for any problems, particularly if changes are taking a while to complete.
+
+### Releasing changes to ECS container/task definitions
+
+These changes are ignored by default in our terraform, because the process for releasing updated application versions changes them.
+
+To release such a change, you'll need to temporarily remove the ignore changes instructions locally - which means you'll need to set whatever the current image is so that you're not accidentally changing that as well.
+
+To do this;
+
+1. Ensure there are no code releases currently in progress / due to happen while you're doing this
+1. In the relevant aws account context for the environment, run `aws ecs describe-task-definition --task-definition core-ENV-app --query taskDefinition.containerDefinitions[0].image` (replacing ENV with staging or prod as appropriate) to get the currently in use image definition
+1. In `modules/application/ecs.tf`;
+    1. Update the value of "image" in the second locals block to the result of the previous step
+    1. Remove the `ignore_changes = [container_definitions]` line from each of the app, sidekiq, and ad_hoc task definitions
+    1. Remove the `ignore_changes = [task_definition]` line from each of the app and sidekiq services
+1. In the main aws account context, run terraform apply from the relevant entrypoint (as you would for any other release). In addition to any other changes you are releasing, the terraform plan should include  3 to add, 3 to change, 3 to destroy;
+    * Update the app service task_definition
+    * Update the sidekiq service task_definition
+    * Replace each of the 3 task definitions
+    * Update the `run_ecs_task_and_update_service` iam policy in place (as this relies on reading outputs that might have changed)
+
+You can discard your local changes once the apply is done.
+
+Note that there is normally no need to do this for review apps, unless there is a specific long running review app that needs the update - as soon as the change is merged to main any new review apps will use the updated definitions, and it's usually ok to leave existing ones on the old version.
