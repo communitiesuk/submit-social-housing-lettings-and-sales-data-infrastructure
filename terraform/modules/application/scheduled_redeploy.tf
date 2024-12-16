@@ -6,6 +6,8 @@ resource "aws_scheduler_schedule" "collection_rollover_redeploy" {
   schedule_expression          = "cron(0 0 1 4 ? *)"
   schedule_expression_timezone = "UTC"
 
+  kms_key_arn = aws_kms_key.scheduler[0].arn
+
   flexible_time_window {
     mode = "OFF"
   }
