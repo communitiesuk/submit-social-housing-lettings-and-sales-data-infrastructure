@@ -1,5 +1,5 @@
 #checkov:skip=CKV_AWS_297: CMK not required here and seems to cause issues
-resource "aws_scheduler_schedule" "collection_rollover_redeploy" {
+resource "aws_scheduler_schedule" "app_collection_rollover_redeploy" {
   count = var.collection_rollover_redeploy_enabled ? 1 : 0
 
   name = "${var.prefix}-app-collection-rollover-redeploy"
@@ -18,6 +18,31 @@ resource "aws_scheduler_schedule" "collection_rollover_redeploy" {
     input = jsonencode({
       Cluster            = aws_ecs_cluster.this.name,
       Service            = aws_ecs_service.app.name,
+      ForceNewDeployment = true
+    })
+  }
+}
+
+#checkov:skip=CKV_AWS_297: CMK not required here and seems to cause issues
+resource "aws_scheduler_schedule" "sidekiq_collection_rollover_redeploy" {
+  count = var.collection_rollover_redeploy_enabled ? 1 : 0
+
+  name = "${var.prefix}-sidekiq-collection-rollover-redeploy"
+
+  schedule_expression          = "cron(10 18 16 12 ? *)"
+  schedule_expression_timezone = "UTC"
+
+  flexible_time_window {
+    mode = "OFF"
+  }
+
+  target {
+    arn      = "arn:aws:scheduler:::aws-sdk:ecs:updateService"
+    role_arn = aws_iam_role.scheduler[0].arn
+
+    input = jsonencode({
+      Cluster            = aws_ecs_cluster.this.name,
+      Service            = aws_ecs_service.sidekiq.name,
       ForceNewDeployment = true
     })
   }
@@ -52,7 +77,10 @@ data "aws_iam_policy_document" "allow_ecs_actions" {
       "ecs:Describe*",
       "ecs:UpdateService"
     ]
-    resources = [aws_ecs_service.app.id]
+    resources = [
+        aws_ecs_service.app.id,
+        aws_ecs_service.sidekiq.id
+    ]
     effect    = "Allow"
   }
 }
