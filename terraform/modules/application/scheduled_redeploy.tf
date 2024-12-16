@@ -1,5 +1,5 @@
-#checkov:skip=CKV_AWS_297: CMK not required here and seems to cause issues
 resource "aws_scheduler_schedule" "app_collection_rollover_redeploy" {
+  #checkov:skip=CKV_AWS_297: CMK not required here and seems to cause issues
   count = var.collection_rollover_redeploy_enabled ? 1 : 0
 
   name = "${var.prefix}-app-collection-rollover-redeploy"
@@ -23,8 +23,8 @@ resource "aws_scheduler_schedule" "app_collection_rollover_redeploy" {
   }
 }
 
-#checkov:skip=CKV_AWS_297: CMK not required here and seems to cause issues
 resource "aws_scheduler_schedule" "sidekiq_collection_rollover_redeploy" {
+  #checkov:skip=CKV_AWS_297: CMK not required here and seems to cause issues
   count = var.collection_rollover_redeploy_enabled ? 1 : 0
 
   name = "${var.prefix}-sidekiq-collection-rollover-redeploy"
