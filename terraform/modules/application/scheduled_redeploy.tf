@@ -4,7 +4,7 @@ resource "aws_scheduler_schedule" "app_collection_rollover_redeploy" {
 
   name = "${var.prefix}-app-collection-rollover-redeploy"
 
-  schedule_expression          = "cron(10 18 16 12 ? *)"
+  schedule_expression          = "cron(0 18 16 12 ? *)"
   schedule_expression_timezone = "UTC"
 
   flexible_time_window {
@@ -29,7 +29,7 @@ resource "aws_scheduler_schedule" "sidekiq_collection_rollover_redeploy" {
 
   name = "${var.prefix}-sidekiq-collection-rollover-redeploy"
 
-  schedule_expression          = "cron(10 18 16 12 ? *)"
+  schedule_expression          = "cron(18 18 16 12 ? *)"
   schedule_expression_timezone = "UTC"
 
   flexible_time_window {
