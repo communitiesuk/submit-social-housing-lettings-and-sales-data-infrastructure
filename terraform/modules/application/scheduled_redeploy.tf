@@ -69,3 +69,40 @@ resource "aws_iam_role_policy_attachment" "scheduler_allow_ecs_actions" {
   role       = aws_iam_role.scheduler[0].name
   policy_arn = aws_iam_policy.allow_ecs_actions[0].arn
 }
+
+resource "aws_kms_key" "scheduler" {
+  count = var.collection_rollover_redeploy_enabled ? 1 : 0
+
+  description         = "KMS key used for ecs scheduled redeploy"
+  enable_key_rotation = true
+}
+
+resource "aws_kms_alias" "scheduler" {
+  count = var.collection_rollover_redeploy_enabled ? 1 : 0
+
+  name          = "alias/${var.prefix}-ecs-scheduler"
+  target_key_id = aws_kms_key.scheduler[0].key_id
+}
+
+resource "aws_kms_key_policy" "scheduler" {
+  count = var.collection_rollover_redeploy_enabled ? 1 : 0
+
+  key_id = aws_kms_key.scheduler[0].id
+  policy = data.aws_iam_policy_document.scheduler[0].json
+}
+
+data "aws_iam_policy_document" "scheduler" {
+  count = var.collection_rollover_redeploy_enabled ? 1 : 0
+
+  statement {
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+    }
+
+    actions = ["kms:*"]
+
+    resources = [aws_kms_key.scheduler[0].arn]
+  }
+}
+
