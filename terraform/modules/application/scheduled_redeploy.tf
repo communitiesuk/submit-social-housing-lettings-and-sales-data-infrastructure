@@ -78,10 +78,10 @@ data "aws_iam_policy_document" "allow_ecs_actions" {
       "ecs:UpdateService"
     ]
     resources = [
-        aws_ecs_service.app.id,
-        aws_ecs_service.sidekiq.id
+      aws_ecs_service.app.id,
+      aws_ecs_service.sidekiq.id
     ]
-    effect    = "Allow"
+    effect = "Allow"
   }
 }
 
