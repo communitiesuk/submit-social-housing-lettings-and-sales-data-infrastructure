@@ -3,7 +3,7 @@ resource "aws_scheduler_schedule" "collection_rollover_redeploy" {
 
   name = "${var.prefix}-app-collection-rollover-redeploy"
 
-  schedule_expression          = "cron(40 17 16 12 ? *)"
+  schedule_expression          = "cron(0 0 1 4 ? *)"
   schedule_expression_timezone = "UTC"
 
   flexible_time_window {
