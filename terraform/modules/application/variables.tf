@@ -49,6 +49,12 @@ variable "collection_resources_bucket_details" {
   description = "Details block for collection resources bucket"
 }
 
+variable "collection_rollover_redeploy_enabled" {
+  type        = bool
+  description = "Schedules redeploy overnight on the 1st April if true"
+  default     = false
+}
+
 variable "database_name" {
   type        = string
   description = "The name of the database to connect to"

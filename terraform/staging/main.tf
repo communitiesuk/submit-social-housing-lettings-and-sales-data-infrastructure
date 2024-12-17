@@ -108,6 +108,8 @@ module "application" {
     }
   }
 
+  collection_rollover_redeploy_enabled = true
+
   ecr_repository_url = "815624722760.dkr.ecr.eu-west-2.amazonaws.com/core"
 
   prefix                                            = local.prefix
