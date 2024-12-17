@@ -18,6 +18,7 @@ resource "aws_elasticache_replication_group" "this" {
   maintenance_window          = "sun:23:00-mon:01:30"
   multi_az_enabled            = var.highly_available ? true : false
   node_type                   = var.node_type
+  notification_topic_arn      = var.notification_topic_arn
   num_cache_clusters          = var.highly_available ? 2 : 1
   parameter_group_name        = aws_elasticache_parameter_group.this.id
   port                        = var.redis_port

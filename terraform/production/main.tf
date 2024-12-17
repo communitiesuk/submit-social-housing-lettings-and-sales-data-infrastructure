@@ -372,6 +372,8 @@ module "redis" {
   highly_available          = true
   node_type                 = "cache.t4g.micro"
 
+  notification_topic_arn = module.monitoring_topic_main.sns_topic_arn
+
   prefix                  = local.prefix
   redis_port              = local.redis_port
   redis_security_group_id = module.application_security_group.redis_security_group_id
