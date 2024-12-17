@@ -18,6 +18,12 @@ variable "node_type" {
   description = "The type of node for the redis elasticache."
 }
 
+variable "notification_topic_arn" {
+  type        = string
+  description = "If set, send maintenance notifications to this topic"
+  default     = null
+}
+
 variable "prefix" {
   type        = string
   description = "The prefix to be prepended to resource names."
