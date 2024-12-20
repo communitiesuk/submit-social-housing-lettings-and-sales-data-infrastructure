@@ -368,8 +368,8 @@ module "monitoring_topic_us_east_1" {
 module "monitoring_slack_alerts" {
   source = "../modules/slack_alerts"
 
-  environment = "staging"
-  monitoring_topics = [ module.monitoring_topic_main.sns_topic_arn, module.monitoring_topic_us_east_1.sns_topic_arn ]
+  environment = "Staging"
+  monitoring_topics = [ module.monitoring_topic_main.sns_topic_arn ]
   prefix = local.prefix
   slack_webhook_url = module.monitoring_secrets.slack_webhook_for_subscriptions
 }

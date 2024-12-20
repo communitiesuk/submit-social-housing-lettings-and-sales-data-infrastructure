@@ -2,34 +2,32 @@ require 'json'
 require 'net/https'
 require 'logger'
 
-def send_alert(event, context)
+def send_alert(event)
   logger = Logger.new($stdout)
 
   logger.info("Event recieved: #{event}")
 
   alarm = parse_alarm(event)
+  message = message_for_alarm(alarm)
 
   uri = URI(ENV['SLACK_WEBHOOK_URL'])
-  request = Net::HTTP::Post.new(uri)
-  request.body = JSON.dump(message_for_alarm(alarm))
-  request.content_type = 'application/json'
-  response = Net::Http.start(uri.host, uri.port, :use_ssl => true) do |http|
-    http.request(request)
-  end
+  http = Net::HTTP.new(uri.host, 443)
+  http.use_ssl = true
+  response = http.post(uri, message, "Content-Type" => "application/json")
 
-  logger.info("Send slack message. Response: #{response.code} #{response.body}")
+  logger.info("Sent slack message. Response: #{response.code} #{response.body}")
 
   # Should raise if not success
   response.value
 end
 
 def parse_alarm(event)
-  message = JSON.parse(event)['Records'][0]['Sns']['Message']
+  message = JSON.parse(event[:event]['Records'][0]['Sns']['Message'])
   {
     name: message['AlarmName'],
     description: message['AlarmDescription'],
     reason: message['NewStateReason'],
-    resource_name: (message['Trigger']['Dimensions'].map { |d| d['value']}).join(' - '),
+    resource_name: ((message.dig('Trigger', 'Dimensions') || []).map { |d| d['value']}).join(' - '),
     state: message['NewStateValue'],
     previous_state: message['OldStateValue'],
     time: message['StateChangeTime']
@@ -37,7 +35,7 @@ def parse_alarm(event)
 end
 
 def message_for_alarm(alarm)
-  case alarm.state
+  case alarm[:state]
   when 'ALARM'
     alarm_activated_message(alarm)
   when 'OK'

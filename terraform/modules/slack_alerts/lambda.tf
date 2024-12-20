@@ -22,12 +22,6 @@ resource "aws_lambda_function" "send_slack_alerts" {
   }
 }
 
-resource "aws_ssm_parameter" "slack_alerts_webhook" {
-    name = "${var.prefix}-slack-alerts-webhook"
-    type = "SecureString"
-
-}
-
 resource "aws_sns_topic_subscription" "trigger_lambda" {
     for_each = toset(var.monitoring_topics)
     topic_arn = each.key
@@ -51,4 +45,18 @@ data "aws_iam_policy_document" "lambda_assume_role" {
 resource "aws_iam_role" "slack_alerts_lambda" {
     name = "${var.prefix}-slack-alerts-lambda"
     assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_execution" {
+    role = aws_iam_role.slack_alerts_lambda.name
+    policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+resource "aws_lambda_permission" "with_sns" {
+    for_each = toset(var.monitoring_topics)
+    statement_id = "AllowExecutionFromSNS"
+    action = "lambda:InvokeFunction"
+    function_name = aws_lambda_function.send_slack_alerts.function_name
+    principal = "sns.amazonaws.com"
+    source_arn = each.key
 }
