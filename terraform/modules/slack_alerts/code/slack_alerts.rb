@@ -6,18 +6,33 @@ def send_alert(event)
   logger = Logger.new($stdout)
 
   logger.info("Event recieved: #{event}")
-  alarm = parse_alarm(event)
-  logger.info("Alarm: #{alarm}")
-  message = message_for_alarm(alarm)
+
+  message = construct_message(event)
   response = send_message(message)
+
   logger.info("Sent slack message. Response: #{response.code} #{response.body}")
 
   # Should raise if not success
   response.value
 end
 
+def construct_message(event)
+  return alarm_message(event) if is_alarm?(event)
+  return budget_alert_message(event) if is_budget_alert?(event)
+  unknown_alert_message(event)
+end
+
+def is_alarm?(event)
+  event_message(event).match?('AlarmName')
+end
+
+def alarm_message(event)
+  alarm = parse_alarm(event)
+  message_for_alarm(alarm)
+end
+
 def parse_alarm(event)
-  message = JSON.parse(event[:event]['Records'][0]['Sns']['Message'])
+  message = JSON.parse(event_message(event))
   {
     name: message['AlarmName'],
     description: message['AlarmDescription'],
@@ -148,6 +163,73 @@ def format_state(state)
   when 'INSUFFICIENT_DATA'
     ':white_circle: Insufficient Data'
   end
+end
+
+def is_budget_alert?(event)
+  event_subject(event).start_with?("AWS Budgets:")
+end
+
+def budget_alert_message(event)
+  {
+    blocks: [
+      {
+        type: 'header',
+        text: {
+          type: 'plain_text',
+          text: ":moneybag: #{ENV['ENVIRONMENT']} budget alert triggered"
+        }
+      },
+      {
+        type: 'divider'
+      },
+      {
+        type: 'section',
+        text: {
+          type: 'plain_text',
+          text: event_message(event)
+        }
+      }
+    ]
+  }.to_json
+end
+
+def unknown_alert_message(event)
+  {
+    blocks: [
+      {
+        type: 'header',
+        text: {
+          type: 'plain_text',
+          text: "#{alarming_slack_emoji} #{ENV['ENVIRONMENT']} unknown alert type"
+        }
+      },
+      {
+        type: 'divider'
+      },
+      {
+        type: 'section',
+        text: {
+          type: 'plain_text',
+          text: event_subject(event)
+        }
+      },
+      {
+        type: 'section',
+        text: {
+          type: 'plain_text',
+          text: event_message(event)
+        }
+      }
+    ]
+  }.to_json
+end
+
+def event_subject(event)
+  event[:event]['Records'][0]['Sns']['Subject']
+end
+
+def event_message(event)
+  event[:event]['Records'][0]['Sns']['Message']
 end
 
 def send_message(message)
