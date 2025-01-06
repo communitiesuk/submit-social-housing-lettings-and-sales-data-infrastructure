@@ -5,7 +5,7 @@ variable "environment" {
 
 variable "monitoring_topics" {
     type = list(string)
-    description = "A list of arns of all sns topics to send alerts from"
+    description = "A list of arns of all sns topics to allow to trigger the alert function"
 }
 
 variable "prefix" {
