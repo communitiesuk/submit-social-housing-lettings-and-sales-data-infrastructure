@@ -344,8 +344,7 @@ module "monitoring_secrets" {
 module "monitoring_topic_main" {
   source = "../modules/monitoring_topic"
 
-  create_email_subscription   = true
-  email_subscription_endpoint = module.monitoring_secrets.email_for_subscriptions
+  create_email_subscription = false
 
   create_lambda_subscription = true
   lambda_subscription_arn    = module.monitoring_slack_alerts.lambda_function_arn
@@ -361,8 +360,7 @@ module "monitoring_topic_us_east_1" {
     aws = aws.us-east-1
   }
 
-  create_email_subscription   = true
-  email_subscription_endpoint = module.monitoring_secrets.email_for_subscriptions
+  create_email_subscription = false
 
   create_lambda_subscription = true
   lambda_subscription_arn    = module.monitoring_slack_alerts.lambda_function_arn
