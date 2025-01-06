@@ -50,7 +50,10 @@ def message_for_alarm(alarm)
   when 'OK'
     alarm_resolved_message(alarm)
   when 'INSUFFICIENT_DATA'
+    # We set notifications not to be sent to sns when we don't care about these
     alarm_activated_message(alarm)
+  else
+    raise "Unrecognised alarm state #{alarm[:state]}"
   end
 end
 
@@ -100,17 +103,6 @@ def alarm_activated_message(alarm)
       },
     ].compact
   }.to_json
-end
-
-def alarming_slack_emoji
-  case ENV['ENVIRONMENT']
-  when 'Production'
-    ':bangbang:'
-  when 'Staging'
-    ':exclamation:'
-  when 'Review'
-    ':grey_exclamation:'
-  end
 end
 
 def alarm_resolved_message(alarm)
@@ -222,6 +214,19 @@ def unknown_alert_message(event)
       }
     ]
   }.to_json
+end
+
+def alarming_slack_emoji
+  case ENV['ENVIRONMENT']
+  when 'Production'
+    ':bangbang:'
+  when 'Staging'
+    ':exclamation:'
+  when 'Review'
+    ':grey_exclamation:'
+  else
+    ':warning: (!unrecognised environment)'
+  end
 end
 
 def event_subject(event)
