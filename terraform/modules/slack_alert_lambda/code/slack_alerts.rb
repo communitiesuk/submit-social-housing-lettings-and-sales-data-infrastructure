@@ -220,6 +220,8 @@ def alarming_slack_emoji
   case ENV['ENVIRONMENT']
   when 'Production'
     ':bangbang:'
+  when 'Meta'
+    ':bangbang:'
   when 'Staging'
     ':exclamation:'
   when 'Review'
