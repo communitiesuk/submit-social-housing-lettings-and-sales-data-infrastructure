@@ -253,7 +253,7 @@ module "monitoring_topic_us_east_1" {
 }
 
 module "monitoring_slack_alerts" {
-  source = "../modules/slack_alert_lambda"
+  source = "../../modules/slack_alert_lambda"
 
   environment       = "Review"
   monitoring_topics = [module.monitoring_topic_main.sns_topic_arn, module.monitoring_topic_us_east_1.sns_topic_arn]
