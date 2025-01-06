@@ -365,6 +365,15 @@ module "monitoring_topic_us_east_1" {
   service_identifiers_publishing_to_sns = ["cloudwatch.amazonaws.com"]
 }
 
+module "monitoring_slack_alerts" {
+  source = "../modules/slack_alerts"
+
+  environment = "Staging"
+  monitoring_topics = [ module.monitoring_topic_main.sns_topic_arn ]
+  prefix = local.prefix
+  slack_webhook_url = module.monitoring_secrets.slack_webhook_for_subscriptions
+}
+
 module "redis" {
   source = "../modules/elasticache"
 
