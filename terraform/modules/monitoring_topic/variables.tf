@@ -4,7 +4,7 @@ variable "create_email_subscription" {
 }
 
 variable "create_lambda_subscription" {
-  type = bool
+  type        = bool
   description = "Setting to true will create a lambda subscription for this topic."
 }
 
@@ -15,9 +15,9 @@ variable "email_subscription_endpoint" {
 }
 
 variable "lambda_subscription_arn" {
-  type = string
+  type        = string
   description = "Lambda function arn to set up subscription for - must be set if create_lambda_subscription is true"
-  default = null
+  default     = null
 }
 
 variable "prefix" {
