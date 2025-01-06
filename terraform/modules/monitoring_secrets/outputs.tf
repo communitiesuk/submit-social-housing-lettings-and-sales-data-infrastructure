@@ -4,6 +4,6 @@ output "email_for_subscriptions" {
 }
 
 output "slack_webhook_for_subscriptions" {
-  value       = one(data.aws_secretsmanager_secret_version.slack_webhook[*].secret_string)
+  value = one(data.aws_secretsmanager_secret_version.slack_webhook[*].secret_string)
   description = "Slack webhook to be used for monitoring, from value set in AWS"
 }

@@ -12,7 +12,7 @@ data "aws_secretsmanager_secret_version" "email" {
 
 resource "aws_secretsmanager_secret" "slack_webhook" {
   #checkov:skip=CKV2_AWS_57:secret doesn't require automatic rotation
-  name       = "MONITORING_SLACK_WEBHOOK"
+  name = "MONITORING_SLACK_WEBHOOK"
   kms_key_id = aws_kms_key.this.arn
 }
 
