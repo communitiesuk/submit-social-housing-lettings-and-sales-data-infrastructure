@@ -1,3 +1,8 @@
+variable "dead_letter_monitoring_email" {
+  type        = string
+  description = "Email to recieve alerts for messages sent to the dead letter queue"
+}
+
 variable "environment" {
   type        = string
   description = "Environment identifier to use in slack alert"

@@ -4,7 +4,12 @@ data "archive_file" "slack_alerts_lambda" {
   output_path = "slack_alerts.zip"
 }
 
+#tfsec:ignore:aws-lambda-enable-tracing:Overkill for what this does
 resource "aws_lambda_function" "send_slack_alerts" {
+  #checkov:skip=CKV_AWS_50:Tracing is overkill for what this does
+  #checkov:skip=CKV_AWS_173:Default AWS key is fine for encryption here
+  #checkov:skip=CKV_AWS_117:This should be outside our VPC
+  #checkov:skip=CKV_AWS_272:Our deployment is sufficiently controlled
   filename      = data.archive_file.slack_alerts_lambda.output_path
   function_name = "${var.prefix}-slack-alerts"
   role          = aws_iam_role.slack_alerts_lambda.arn
@@ -13,6 +18,13 @@ resource "aws_lambda_function" "send_slack_alerts" {
   handler = "slack_alerts.send_alert"
 
   source_code_hash = data.archive_file.slack_alerts_lambda.output_base64sha256
+
+  timeout                        = 30
+  reserved_concurrent_executions = 50
+
+  dead_letter_config {
+    target_arn = module.dead_letter_topic.sns_topic_arn
+  }
 
   environment {
     variables = {

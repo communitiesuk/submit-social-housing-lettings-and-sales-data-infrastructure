@@ -73,7 +73,8 @@ You can find / create values for the following secrets from the given locations:
 * `RAILS_MASTER_KEY` = Check application codebase config
 * `GOVUK_NOTIFY_API_KEY` = Check / use Gov UK Notify
 * `SENTRY_DSN` = Check / use Sentry
-* `MONITORING_EMAIL` = Email address for monitoring subscriptions
+* `MONITORING_SLACK_WEBHOOK` = Webhook to reach monitoring slack channel
+* `MONITORING_EMAIL` = Email address for monitoring subscriptions (used for dead letter queue from slack lambda)
 * `REVIEW_APP_USER_PASSWORD` = Password for seed users in review apps
 * `STAGING_PERFORMANCE_TEST_EMAIL` = Email to login for automated performance tests on staging
 * `STAGING_PERFORMANCE_TEST_PASSWORD` = Password to login for automated performance tests on staging

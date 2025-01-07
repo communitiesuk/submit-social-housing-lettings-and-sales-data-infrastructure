@@ -372,10 +372,12 @@ module "monitoring_topic_us_east_1" {
 module "monitoring_slack_alerts" {
   source = "../modules/slack_alert_lambda"
 
-  environment       = "Staging"
-  monitoring_topics = [module.monitoring_topic_main.sns_topic_arn, module.monitoring_topic_us_east_1.sns_topic_arn]
-  prefix            = local.prefix
-  slack_webhook_url = module.monitoring_secrets.slack_webhook_for_subscriptions
+  environment = "Staging"
+
+  dead_letter_monitoring_email = module.monitoring_secrets.email_for_subscriptions
+  monitoring_topics            = [module.monitoring_topic_main.sns_topic_arn, module.monitoring_topic_us_east_1.sns_topic_arn]
+  prefix                       = local.prefix
+  slack_webhook_url            = module.monitoring_secrets.slack_webhook_for_subscriptions
 }
 
 module "redis" {
