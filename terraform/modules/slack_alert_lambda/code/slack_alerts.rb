@@ -19,6 +19,8 @@ end
 def construct_message(event)
   return alarm_message(event) if is_alarm?(event)
   return budget_alert_message(event) if is_budget_alert?(event)
+  return ecr_scan_result_message(event) if is_ecr_scan_result?(event)
+
   unknown_alert_message(event)
 end
 
@@ -183,6 +185,81 @@ def budget_alert_message(event)
       }
     ]
   }.to_json
+end
+
+def is_ecr_scan_result?(event)
+  event_message(event).match?("ECR Image Scan")
+end
+
+def ecr_scan_result_message(event)
+  result = parse_ecr_scan_result(event)
+  {
+    blocks: [
+      {
+        type: 'header',
+        text: {
+          type: 'plain_text',
+          text: "#{alarming_slack_emoji} ECR Image scan found vulnerabilities"
+        }
+      },
+      {
+        type: 'divider'
+      },
+      {
+        type: 'section',
+        text: {
+          type: 'plain_text',
+          text: 'Check and update docker image'
+        }
+      },
+      {
+        type: 'section',
+        fields: [
+          {
+            type: 'mrkdwn',
+            text: "*Critical Findings:*\n#{result[:critical_findings]}"
+          },
+          {
+            type: 'mrkdwn',
+            text: "*High Findings:*\n#{result[:high_findings]}"
+          },
+          {
+            type: 'mrkdwn',
+            text: "*Medium Findings:*\n#{result[:medium_findings]}"
+          },
+          {
+            type: 'mrkdwn',
+            text: "*Scanned at:*\n#{result[:time]}"
+          },
+          {
+            type: 'mrkdwn',
+            text: "*Image:*\n#{result[:image]}"
+          },
+          {
+            type: 'mrkdwn',
+            text: "*Tags:*\n#{result[:image_tags].join(', ')}"
+          },
+          {
+            type: 'mrkdwn',
+            text: "*Repository:*\n#{result[:repository]}"
+          },
+        ]
+      }
+    ]
+  }.to_json
+end
+
+def parse_ecr_scan_result(event)
+  message = JSON.parse(event_message(event))
+  {
+    time: message['time'],
+    repository: message.dig('detail', 'repository-name'),
+    critical_findings: message.dig('detail', 'finding-severity-counts', 'CRITICAL'),
+    high_findings: message.dig('detail', 'finding-severity-counts', 'HIGH'),
+    medium_findings: message.dig('detail', 'finding-severity-counts', 'MEDIUM'),
+    image: message.dig('detail', 'image-digest'),
+    image_tags: message.dig('detail', 'image-tags')
+  }
 end
 
 def unknown_alert_message(event)
