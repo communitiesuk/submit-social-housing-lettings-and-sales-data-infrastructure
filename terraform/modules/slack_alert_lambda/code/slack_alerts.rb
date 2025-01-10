@@ -66,7 +66,14 @@ def alarm_activated_message(alarm)
         type: 'header',
         text: {
           type: 'plain_text',
-          text: "#{alarming_slack_emoji} #{ENV['ENVIRONMENT']} alarm triggered: #{alarm[:name]}"
+          text: "#{alarming_slack_emoji} #{ENV['ENVIRONMENT']} alarm triggered: #{format_alarm_name(alarm[:name])}"
+        }
+      },
+      {
+        type: 'section',
+        text: {
+          type: 'plain_text',
+          text: alarm[:name]
         }
       },
       {
@@ -114,7 +121,14 @@ def alarm_resolved_message(alarm)
         type: 'header',
         text: {
           type: 'plain_text',
-          text: ":large_green_circle: #{ENV['ENVIRONMENT']} alarm resolved: #{alarm[:name]}"
+          text: ":large_green_circle: #{ENV['ENVIRONMENT']} alarm resolved: #{format_alarm_name(alarm[:name])}"
+        }
+      },
+      {
+        type: 'section',
+        text: {
+          type: 'plain_text',
+          text: alarm[:name]
         }
       },
       {
@@ -124,7 +138,7 @@ def alarm_resolved_message(alarm)
         type: 'section',
         text: {
           type: 'plain_text',
-          text: " #{alarm[:reason]}"
+          text: "#{alarm[:reason]}"
         }
       } unless alarm[:reason].nil? || alarm[:reason].empty?),
       {
@@ -146,6 +160,11 @@ def alarm_resolved_message(alarm)
       },
     ].compact
   }.to_json
+end
+
+def format_alarm_name(name)
+  without_prefix = name.sub(/core-((prod)|(staging)|(meta)|(dev)|(review-\d+))-/, '')
+  without_prefix.split("-").map(&:capitalize).join(" ")
 end
 
 def format_state(state)
