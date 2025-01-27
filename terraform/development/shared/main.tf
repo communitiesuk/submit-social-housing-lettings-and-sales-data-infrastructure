@@ -59,7 +59,7 @@ locals {
   app_host                  = "review.submit-social-housing-data.communities.gov.uk"
   load_balancer_domain_name = "review.lb.submit-social-housing-data.communities.gov.uk"
   # all the review apps will be in this test subdomain (nothing to do with automated tests etc.)
-  test_app_host             = "test.submit-social-housing-data.communities.gov.uk"
+  test_app_host = "test.submit-social-housing-data.communities.gov.uk"
 
   provider_role_arn = "arn:aws:iam::837698168072:role/developer"
 
