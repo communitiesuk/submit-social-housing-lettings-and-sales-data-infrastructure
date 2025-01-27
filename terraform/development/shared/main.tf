@@ -264,6 +264,19 @@ module "networking" {
   vpc_flow_cloudwatch_log_expiration_days = 60
 }
 
+resource "aws_cloudwatch_log_group" "test_zone_log_group" {
+  name = "test-zone-logs"
+}
+
+resource "aws_route53_query_logging_config" "test_zone_logging_config" {
+  name                      = "test-zone-logging-config"
+  record_type               = "QUERY_LOGGING"
+  cloudwatch_logs_group_arn = aws_cloudwatch_log_group.test_zone_log_group.arn
+}
+
 resource "aws_route53_zone" "test_zone" {
   name = local.test_app_host
+  query_logging_config {
+    id = aws_route53_query_logging_config.test_zone_logging_config.id
+  }
 }
