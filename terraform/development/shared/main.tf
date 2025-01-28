@@ -274,9 +274,74 @@ resource "aws_route53_query_logging_config" "test_zone_logging_config" {
   cloudwatch_logs_group_arn = aws_cloudwatch_log_group.test_zone_log_group.arn
 }
 
+data "aws_caller_identity" "current" {}
+
+resource "aws_kms_key" "dnssec_kms_key" {
+  description              = "KMS key used to create key-signing key (KSK) for Route53."
+  customer_master_key_spec = "ECC_NIST_P256"
+  key_usage                = "SIGN_VERIFY"
+}
+
+resource "aws_kms_key_policy" "dnssec_policy" {
+  key_id = aws_kms_key.dnssec_kms_key.id
+  policy = data.aws_iam_policy_document.dnssec_policy_document.json
+}
+
+data "aws_iam_policy_document" "dnssec_policy_document" {
+  statement {
+    sid = "AllowRoute53DNSSECService"
+
+    actions = [
+      "kms:DescribeKey",
+      "kms:GetPublicKey",
+      "kms:Sign",
+      "kms:Verify"
+    ]
+
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["dnssec-route53.amazonaws.com"]
+    }
+
+    resources = [aws_kms_key.dnssec_kms_key.arn]
+  }
+
+  statement {
+    sid = "EnableIAMUserPermissions"
+
+    actions = [
+      "kms:*"
+    ]
+
+    effect = "Allow"
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+    }
+
+    resources = [aws_kms_key.dnssec_kms_key.arn]
+  }
+}
+
 resource "aws_route53_zone" "test_zone" {
   name = local.test_app_host
   query_logging_config {
     id = aws_route53_query_logging_config.test_zone_logging_config.id
   }
+}
+
+resource "aws_route53_key_signing_key" "test_zone_ksk" {
+  hosted_zone_id             = aws_route53_zone.test_zone.id
+  key_management_service_arn = aws_kms_key.dnssec_kms_key.arn
+  name                       = "test_zone_ksk"
+}
+
+resource "aws_route53_hosted_zone_dnssec" "test_zone_dnssec" {
+  depends_on = [
+    aws_route53_key_signing_key.test_zone_ksk
+  ]
+  hosted_zone_id = aws_route53_key_signing_key.test_zone_ksk.hosted_zone_id
 }
