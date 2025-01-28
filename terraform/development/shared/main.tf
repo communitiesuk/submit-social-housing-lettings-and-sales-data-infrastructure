@@ -295,6 +295,7 @@ resource "aws_cloudwatch_log_resource_policy" "test_zone_query_logging_policy" {
 data "aws_caller_identity" "current" {}
 
 resource "aws_kms_key" "dnssec_kms_key" {
+  provider                 = aws.us-east-1
   description              = "KMS key used to create key-signing key (KSK) for Route53."
   customer_master_key_spec = "ECC_NIST_P256"
   key_usage                = "SIGN_VERIFY"
