@@ -278,7 +278,7 @@ data "aws_iam_policy_document" "test_zone_query_logging_policy_document" {
       "logs:PutLogEvents",
     ]
 
-    resources = ["arn:aws:logs:*:*:log-group:/aws/route53/*"]
+    resources = ["${aws_cloudwatch_log_group.test_zone_log_group.arn}:*"]
 
     principals {
       identifiers = ["route53.amazonaws.com"]
