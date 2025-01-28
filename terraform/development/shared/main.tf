@@ -265,13 +265,29 @@ module "networking" {
 }
 
 resource "aws_cloudwatch_log_group" "test_zone_log_group" {
-  name = "test-zone-logs"
+  name              = "/aws/route53/${aws_route53_zone.test_zone.name}"
+  retention_in_days = 30
 }
 
-resource "aws_route53_query_logging_config" "test_zone_logging_config" {
-  name                      = "test-zone-logging-config"
-  record_type               = "QUERY_LOGGING"
-  cloudwatch_logs_group_arn = aws_cloudwatch_log_group.test_zone_log_group.arn
+data "aws_iam_policy_document" "test_zone_query_logging_policy_document" {
+  statement {
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+
+    resources = ["arn:aws:logs:*:*:log-group:/aws/route53/*"]
+
+    principals {
+      identifiers = ["route53.amazonaws.com"]
+      type        = "Service"
+    }
+  }
+}
+
+resource "aws_cloudwatch_log_resource_policy" "test_zone_query_logging_policy" {
+  policy_document = data.aws_iam_policy_document.test_zone_query_logging_policy_document.json
+  policy_name     = "test_zone_query_logging_policy"
 }
 
 data "aws_caller_identity" "current" {}
@@ -328,9 +344,13 @@ data "aws_iam_policy_document" "dnssec_policy_document" {
 
 resource "aws_route53_zone" "test_zone" {
   name = local.test_app_host
-  query_logging_config {
-    id = aws_route53_query_logging_config.test_zone_logging_config.id
-  }
+}
+
+resource "aws_route53_query_log" "test_zone_query_log" {
+  depends_on = [aws_cloudwatch_log_resource_policy.test_zone_query_logging_policy]
+
+  cloudwatch_log_group_arn = aws_cloudwatch_log_group.test_zone_log_group.arn
+  zone_id                  = aws_route53_zone.test_zone.zone_id
 }
 
 resource "aws_route53_key_signing_key" "test_zone_ksk" {
