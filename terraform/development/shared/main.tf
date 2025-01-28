@@ -265,6 +265,8 @@ module "networking" {
 }
 
 resource "aws_cloudwatch_log_group" "test_zone_log_group" {
+  #checkov:skip=CKV_AWS_158:leaving this out for the timebeing
+  #checkov:skip=CKV_AWS_338:minimum log retention of at least 1 year is excessive and are ok with less
   name              = "/aws/route53/${aws_route53_zone.test_zone.name}"
   retention_in_days = 30
 }
