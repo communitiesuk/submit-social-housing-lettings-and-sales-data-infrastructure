@@ -267,6 +267,7 @@ module "networking" {
 resource "aws_cloudwatch_log_group" "test_zone_log_group" {
   #checkov:skip=CKV_AWS_158:leaving this out for the timebeing
   #checkov:skip=CKV_AWS_338:minimum log retention of at least 1 year is excessive and are ok with less
+  provider          = aws.us-east-1
   name              = "/aws/route53/${aws_route53_zone.test_zone.name}"
   retention_in_days = 30
 }
@@ -357,12 +358,14 @@ resource "aws_route53_query_log" "test_zone_query_log" {
 }
 
 resource "aws_route53_key_signing_key" "test_zone_ksk" {
+  provider                   = aws.us-east-1
   hosted_zone_id             = aws_route53_zone.test_zone.id
   key_management_service_arn = aws_kms_key.dnssec_kms_key.arn
   name                       = "test_zone_ksk"
 }
 
 resource "aws_route53_hosted_zone_dnssec" "test_zone_dnssec" {
+  provider = aws.us-east-1
   depends_on = [
     aws_route53_key_signing_key.test_zone_ksk
   ]
