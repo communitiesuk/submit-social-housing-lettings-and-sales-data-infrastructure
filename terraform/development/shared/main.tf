@@ -58,6 +58,8 @@ locals {
 
   app_host                  = "review.submit-social-housing-data.communities.gov.uk"
   load_balancer_domain_name = "review.lb.submit-social-housing-data.communities.gov.uk"
+  # all the review apps will be in this test subdomain (nothing to do with automated tests etc.)
+  test_app_host = "test.submit-social-housing-data.communities.gov.uk"
 
   provider_role_arn = "arn:aws:iam::837698168072:role/developer"
 
@@ -260,4 +262,115 @@ module "networking" {
   prefix                                  = local.prefix
   vpc_cidr_block                          = "10.0.0.0/16"
   vpc_flow_cloudwatch_log_expiration_days = 60
+}
+
+resource "aws_cloudwatch_log_group" "test_zone_log_group" {
+  #checkov:skip=CKV_AWS_158:leaving this out for the timebeing
+  #checkov:skip=CKV_AWS_338:minimum log retention of at least 1 year is excessive and are ok with less
+  provider          = aws.us-east-1
+  name              = "/aws/route53/${aws_route53_zone.test_zone.name}"
+  retention_in_days = 30
+}
+
+data "aws_iam_policy_document" "test_zone_query_logging_policy_document" {
+  statement {
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+
+    resources = ["arn:aws:logs:*:*:log-group:/aws/route53/*"]
+
+    principals {
+      identifiers = ["route53.amazonaws.com"]
+      type        = "Service"
+    }
+  }
+}
+
+resource "aws_cloudwatch_log_resource_policy" "test_zone_query_logging_policy" {
+  provider        = aws.us-east-1
+  policy_document = data.aws_iam_policy_document.test_zone_query_logging_policy_document.json
+  policy_name     = "test_zone_query_logging_policy"
+}
+
+data "aws_caller_identity" "current" {}
+
+resource "aws_kms_key" "dnssec_kms_key" {
+  provider                 = aws.us-east-1
+  description              = "KMS key used to create key-signing key (KSK) for Route53."
+  customer_master_key_spec = "ECC_NIST_P256"
+  key_usage                = "SIGN_VERIFY"
+}
+
+resource "aws_kms_key_policy" "dnssec_policy" {
+  provider = aws.us-east-1
+  key_id   = aws_kms_key.dnssec_kms_key.id
+  policy   = data.aws_iam_policy_document.dnssec_policy_document.json
+}
+
+data "aws_iam_policy_document" "dnssec_policy_document" {
+  provider = aws.us-east-1
+  statement {
+    sid = "AllowRoute53DNSSECService"
+
+    actions = [
+      "kms:DescribeKey",
+      "kms:GetPublicKey",
+      "kms:Sign",
+      "kms:Verify"
+    ]
+
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["dnssec-route53.amazonaws.com"]
+    }
+
+    resources = [aws_kms_key.dnssec_kms_key.arn]
+  }
+
+  statement {
+    sid = "EnableIAMUserPermissions"
+
+    actions = [
+      "kms:*"
+    ]
+
+    effect = "Allow"
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+    }
+
+    resources = [aws_kms_key.dnssec_kms_key.arn]
+  }
+}
+
+resource "aws_route53_zone" "test_zone" {
+  name = local.test_app_host
+}
+
+resource "aws_route53_query_log" "test_zone_query_log" {
+  depends_on = [aws_cloudwatch_log_resource_policy.test_zone_query_logging_policy]
+
+  cloudwatch_log_group_arn = aws_cloudwatch_log_group.test_zone_log_group.arn
+  zone_id                  = aws_route53_zone.test_zone.zone_id
+}
+
+resource "aws_route53_key_signing_key" "test_zone_ksk" {
+  provider                   = aws.us-east-1
+  hosted_zone_id             = aws_route53_zone.test_zone.id
+  key_management_service_arn = aws_kms_key.dnssec_kms_key.arn
+  name                       = "test_zone_ksk"
+}
+
+resource "aws_route53_hosted_zone_dnssec" "test_zone_dnssec" {
+  provider = aws.us-east-1
+  depends_on = [
+    aws_route53_key_signing_key.test_zone_ksk
+  ]
+  hosted_zone_id = aws_route53_key_signing_key.test_zone_ksk.hosted_zone_id
 }
