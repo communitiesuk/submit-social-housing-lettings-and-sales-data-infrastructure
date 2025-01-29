@@ -279,7 +279,7 @@ data "aws_iam_policy_document" "test_zone_query_logging_policy_document" {
       "logs:PutLogEvents",
     ]
 
-    resources = ["${aws_cloudwatch_log_group.test_zone_log_group.arn}:*"]
+    resources = ["arn:aws:logs:*:*:log-group:/aws/route53/*"]
 
     principals {
       identifiers = ["route53.amazonaws.com"]
@@ -289,6 +289,7 @@ data "aws_iam_policy_document" "test_zone_query_logging_policy_document" {
 }
 
 resource "aws_cloudwatch_log_resource_policy" "test_zone_query_logging_policy" {
+  provider        = aws.us-east-1
   policy_document = data.aws_iam_policy_document.test_zone_query_logging_policy_document.json
   policy_name     = "test_zone_query_logging_policy"
 }
@@ -303,11 +304,13 @@ resource "aws_kms_key" "dnssec_kms_key" {
 }
 
 resource "aws_kms_key_policy" "dnssec_policy" {
-  key_id = aws_kms_key.dnssec_kms_key.id
-  policy = data.aws_iam_policy_document.dnssec_policy_document.json
+  provider = aws.us-east-1
+  key_id   = aws_kms_key.dnssec_kms_key.id
+  policy   = data.aws_iam_policy_document.dnssec_policy_document.json
 }
 
 data "aws_iam_policy_document" "dnssec_policy_document" {
+  provider = aws.us-east-1
   statement {
     sid = "AllowRoute53DNSSECService"
 
