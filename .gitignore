@@ -43,3 +43,5 @@ terraform.rc
 
 # Ignore Mac custom folder attributes
 .DS_Store
+
+**/*.zip

@@ -229,9 +229,11 @@ module "monitoring_secrets" {
 module "monitoring_topic_main" {
   source = "../../modules/monitoring_topic"
 
-  create_email_subscription = true
+  create_email_subscription = false
 
-  email_subscription_endpoint           = module.monitoring_secrets.email_for_subscriptions
+  create_lambda_subscription = true
+  lambda_subscription_arn    = module.monitoring_slack_alerts.lambda_function_arn
+
   prefix                                = local.prefix
   service_identifiers_publishing_to_sns = ["cloudwatch.amazonaws.com", "budgets.amazonaws.com"]
 }
@@ -243,11 +245,24 @@ module "monitoring_topic_us_east_1" {
     aws = aws.us-east-1
   }
 
-  create_email_subscription = true
+  create_email_subscription = false
 
-  email_subscription_endpoint           = module.monitoring_secrets.email_for_subscriptions
+  create_lambda_subscription = true
+  lambda_subscription_arn    = module.monitoring_slack_alerts.lambda_function_arn
+
   prefix                                = local.prefix
   service_identifiers_publishing_to_sns = ["cloudwatch.amazonaws.com"]
+}
+
+module "monitoring_slack_alerts" {
+  source = "../../modules/slack_alert_lambda"
+
+  environment = "Review"
+
+  dead_letter_monitoring_email = module.monitoring_secrets.email_for_subscriptions
+  monitoring_topics            = [module.monitoring_topic_main.sns_topic_arn, module.monitoring_topic_us_east_1.sns_topic_arn]
+  prefix                       = local.prefix
+  slack_webhook_url            = module.monitoring_secrets.slack_webhook_for_subscriptions
 }
 
 module "networking" {
