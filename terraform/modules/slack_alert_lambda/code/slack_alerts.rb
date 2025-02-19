@@ -328,11 +328,11 @@ def alarming_slack_emoji
 end
 
 def event_subject(event)
-  event[:event]['Records'][0]['Sns']['Subject']
+  event[:event]['Records'][0]['Sns']['Subject'] || "Unknown subject"
 end
 
 def event_message(event)
-  event[:event]['Records'][0]['Sns']['Message']
+  event[:event]['Records'][0]['Sns']['Message'] || "Unknown message"
 end
 
 def send_message(message)
