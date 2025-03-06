@@ -56,10 +56,9 @@ provider "aws" {
 locals {
   prefix = "core-dev"
 
-  app_host                  = "review.submit-social-housing-data.communities.gov.uk"
-  load_balancer_domain_name = "review.lb.submit-social-housing-data.communities.gov.uk"
   # all the review apps will be in this test subdomain (nothing to do with automated tests etc.)
-  test_app_host = "test.submit-social-housing-data.communities.gov.uk"
+  app_host                  = "test.submit-social-housing-data.communities.gov.uk"
+  load_balancer_domain_name = "test.lb.submit-social-housing-data.communities.gov.uk"
 
   provider_role_arn = "arn:aws:iam::837698168072:role/developer"
 
@@ -142,8 +141,8 @@ module "certificates" {
     aws.us-east-1 = aws.us-east-1
   }
 
-  cloudfront_domain_name    = local.app_host
-  load_balancer_domain_name = local.load_balancer_domain_name
+  cloudfront_domain_name    = "*.${local.app_host}"
+  load_balancer_domain_name = "*.${local.load_balancer_domain_name}"
 }
 
 module "collection_resources" {
@@ -350,7 +349,7 @@ data "aws_iam_policy_document" "dnssec_policy_document" {
 }
 
 resource "aws_route53_zone" "test_zone" {
-  name = local.test_app_host
+  name = local.app_host
 }
 
 resource "aws_route53_query_log" "test_zone_query_log" {
