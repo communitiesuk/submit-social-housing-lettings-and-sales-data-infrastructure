@@ -114,7 +114,7 @@ module "application" {
 }
 
 resource "aws_route53_record" "review_app" {
-  zone_id = aws_route53_zone.test_zone.zone_id
+  zone_id = data.terraform_remote_state.development_shared.outputs.test_zone_id
   name    = "${terraform.workspace}.test.submit-social-housing-data.communities.gov.uk"
   type    = "A"
 }
