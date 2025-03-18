@@ -117,6 +117,11 @@ resource "aws_route53_record" "review_app" {
   zone_id = data.terraform_remote_state.development_shared.outputs.test_zone_id
   name    = "${terraform.workspace}.test.submit-social-housing-data.communities.gov.uk"
   type    = "A"
+  alias {
+    name                   = data.terraform_remote_state.development_shared.outputs.cloudfront_domain_name
+    zone_id                = data.terraform_remote_state.development_shared.outputs.cloudfront_hosted_zone_id
+    evaluate_target_health = false
+  }
 }
 
 module "redis" {
