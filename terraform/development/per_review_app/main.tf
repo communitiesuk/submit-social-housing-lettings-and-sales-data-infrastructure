@@ -63,6 +63,9 @@ module "application" {
   sidekiq_task_desired_count = 1
   sidekiq_task_memory        = 1024
 
+  ad_hoc_task_cpu = 512
+  ad_hoc_task_memory = 4096
+
   out_of_hours_scale_down = {
     enabled = true
     timings = {
