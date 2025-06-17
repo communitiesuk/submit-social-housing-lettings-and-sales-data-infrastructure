@@ -15,7 +15,7 @@ variable "app_task_desired_count" {
 
 variable "app_task_memory" {
   type        = number
-  description = "The amount of memory used by the ecs app task"
+  description = "The amount of memory (in MiB) used by the ecs app task"
 }
 
 variable "application_port" {
@@ -199,7 +199,7 @@ variable "sidekiq_task_desired_count" {
 
 variable "sidekiq_task_memory" {
   type        = number
-  description = "The amount of memory used by the ecs sidekiq task"
+  description = "The amount of memory (in MiB) used by the ecs sidekiq task"
 }
 
 variable "ad_hoc_task_cpu" {
@@ -209,7 +209,7 @@ variable "ad_hoc_task_cpu" {
 
 variable "ad_hoc_task_memory" {
   type        = number
-  description = "The maximum amount of memory that can be used by the ad hoc task runner"
+  description = "The maximum amount of memory (in MiB) that can be used by the ad hoc task runner"
 }
 
 variable "sns_topic_arn" {
