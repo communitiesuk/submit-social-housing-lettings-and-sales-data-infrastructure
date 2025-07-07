@@ -1,5 +1,5 @@
 # This is a temporary measure.
-# This role is has duplicate permissions to the now-removed developer-superuser-policy, which was shared with developers on the project.
+# This role is has duplicate permissions to the now-removed developer-poweruser-policy, which was shared with developers on the project.
 # We will restrict permissions further later to only those needed to deploy our terraform infrastructure.
 # See CLDC-2820 & CLDC-4058.
 data "aws_iam_policy" "developer_power_user" {
