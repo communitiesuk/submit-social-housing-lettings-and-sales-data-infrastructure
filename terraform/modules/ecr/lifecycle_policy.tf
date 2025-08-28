@@ -32,13 +32,13 @@ resource "aws_ecr_lifecycle_policy" "core_lifecycle_policy" {
       },
       {
         "rulePriority": 3,
-        "description": "Expire review images after 14 days",
+        "description": "Expire review images after 30 days",
         "selection": {
           "tagStatus": "tagged",
           "tagPrefixList": ["review-"],
           "countType": "sinceImagePushed",
           "countUnit": "days",
-          "countNumber": 14
+          "countNumber": 30
         },
         "action": {
           "type": "expire"
