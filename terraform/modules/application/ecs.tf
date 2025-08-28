@@ -171,9 +171,9 @@ resource "aws_ecs_task_definition" "sidekiq" {
 resource "aws_ecs_task_definition" "ad_hoc_tasks" {
   #checkov:skip=CKV_AWS_336:using readonlyRootFilesystem to true breaks the app, as it needs to write to app/tmp/pids for example
   family                   = "${var.prefix}-ad-hoc"
-  cpu                      = var.app_task_cpu
+  cpu                      = var.ad_hoc_task_cpu
   execution_role_arn       = var.ecs_task_execution_role_arn
-  memory                   = var.app_task_memory #MiB
+  memory                   = var.ad_hoc_task_memory #MiB
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   task_role_arn            = var.ecs_task_role_arn
