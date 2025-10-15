@@ -38,6 +38,33 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  alias  = "eu-west-1"
+  region = "eu-west-1"
+
+  assume_role {
+    role_arn = local.provider_role_arn
+  }
+}
+
+provider "aws" {
+  alias  = "eu-west-3"
+  region = "eu-west-3"
+
+  assume_role {
+    role_arn = local.provider_role_arn
+  }
+}
+
+provider "aws" {
+  alias  = "us-east-1"
+  region = "us-east-1"
+
+  assume_role {
+    role_arn = local.provider_role_arn
+  }
+}
+
 locals {
   prefix = "core-review-${terraform.workspace}" # terraform workspaces are expected to have a number"
 

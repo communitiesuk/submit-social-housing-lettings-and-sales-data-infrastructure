@@ -14,7 +14,19 @@ terraform {
     encrypt        = true
     key            = "core-development-shared.tfstate"
     region         = "eu-west-2"
-    role_arn       = "arn:aws:iam::815624722760:role/developer"
+  }
+}
+
+data "terraform_remote_state" "development_shared" {
+  backend   = "s3"
+  workspace = "default"
+
+  config = {
+    bucket         = "core-non-prod-tf-state"
+    dynamodb_table = "core-non-prod-tf-state-lock"
+    encrypt        = true
+    key            = "core-development-shared.tfstate"
+    region         = "eu-west-2"
   }
 }
 
@@ -61,7 +73,7 @@ locals {
   # all the review apps will be in this test subdomain (nothing to do with automated tests etc.)
   test_app_host = "test.submit-social-housing-data.communities.gov.uk"
 
-  provider_role_arn = "arn:aws:iam::837698168072:role/developer"
+  provider_role_arn = data.terraform_remote_state.development_shared.outputs.deployment_role_arn
 
   enable_aws_shield = false
 
@@ -188,7 +200,6 @@ module "deployment_role" {
 
   prefix = local.prefix
   assume_from_role_arns = [
-    "arn:aws:iam::815624722760:role/developer",
     "arn:aws:iam::815624722760:role/core-application-repo"
   ]
 }
