@@ -17,18 +17,18 @@ terraform {
   }
 }
 
-data "terraform_remote_state" "production_shared" {
-  backend   = "s3"
-  workspace = "default"
+# data "terraform_remote_state" "production_shared" {
+#   backend   = "s3"
+#   workspace = "default"
 
-  config = {
-    bucket         = "core-prod-tf-state"
-    dynamodb_table = "core-prod-tf-state-lock"
-    encrypt        = true
-    key            = "core-production.tfstate"
-    region         = "eu-west-2"
-  }
-}
+#   config = {
+#     bucket         = "core-prod-tf-state"
+#     dynamodb_table = "core-prod-tf-state-lock"
+#     encrypt        = true
+#     key            = "core-production.tfstate"
+#     region         = "eu-west-2"
+#   }
+# }
 
 provider "aws" {
   region = "eu-west-2"
