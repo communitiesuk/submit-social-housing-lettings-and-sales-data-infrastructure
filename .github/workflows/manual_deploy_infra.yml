@@ -1,0 +1,102 @@
+name: "Manually deploy infra"
+
+on:
+  workflow_dispatch:
+    inputs:
+      key:
+        required: true
+        type: choice
+        options:
+          - review
+          - staging
+          - production
+          - meta
+        description: "The environment to create the infrastructure in"
+      review-app-key:
+        required: false
+        type: string
+        description: "The review app ID to deploy. To deploy shared review app infrastructure, set to 'shared'. Required if 'key' is 'review'."
+
+concurrency:
+  group: review-app-infra-${{ inputs.key }}
+  cancel-in-progress: false
+
+env:
+  aws_region: eu-west-2
+
+jobs:
+  plan:
+    name: Plan infra
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure
+          ref: main
+
+      - name: Init terraform
+        uses: ./.github/actions/init_terraform_for_manual_deploy
+        with:
+          key: ${{ inputs.key }}
+          review-app-key: ${{ inputs.review-app-key }}
+          aws_region: ${{ env.aws_region }}
+          aws_role: arn:aws:iam::815624722760:role/core-application-repo
+
+      - name: Terraform plan
+        working-directory: ${{ env.TERRAFORM_PATH }}
+        run: |
+          echo "Using path: ${{ env.TERRAFORM_PATH }} workspace: ${{ env.TERRAFORM_WORKSPACE }}"
+          terraform init
+          terraform workspace select -or-create ${{ env.TERRAFORM_WORKSPACE }}
+          terraform plan -out=tfplan
+
+      - name: Upload tfplan artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan
+          path: ${{ env.TERRAFORM_PATH }}
+  approve:
+    needs: plan
+    runs-on: ubuntu-latest
+    environment: terraform
+    steps:
+      - run: echo "Waiting for manual approval to continue..."
+  deploy:
+    needs: approve
+    name: Deploy infra
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure
+          ref: main
+
+      - name: Init terraform
+        uses: ./.github/actions/init_terraform_for_manual_deploy
+        with:
+          key: ${{ inputs.key }}
+          review-app-key: ${{ inputs.review-app-key }}
+          aws_region: ${{ env.aws_region }}
+          aws_role: arn:aws:iam::815624722760:role/core-application-repo
+
+      - name: Download tfplan artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: tfplan
+          path: ${{ env.TERRAFORM_PATH }}
+
+      - name: Terraform apply
+        working-directory: ${{ env.TERRAFORM_PATH }}
+        run: |
+          echo "Using path: ${{ env.TERRAFORM_PATH }} workspace: ${{ env.TERRAFORM_WORKSPACE }}"
+          terraform init
+          terraform workspace select -or-create ${{ env.TERRAFORM_WORKSPACE }}
+          terraform apply tfplan

@@ -1,0 +1,60 @@
+name: 'Init Terraform for Manual Deploy'
+inputs:
+  key:
+    required: true
+    type: string
+  review-app-key:
+    required: false
+    type: string
+  aws_region:
+    required: true
+    type: string
+  aws_role:
+    required: true
+    type: string
+runs:
+  using: 'composite'
+  steps:
+    - name: Configure environment variables
+      run: |
+        if [ "${{ inputs.key }}" = "review" ]; then
+          if [ -z "${{ inputs.review-app-key }}" ]; then
+            echo "Error: 'review-app-key' input is required when 'key' is 'review'."
+            exit 1
+          fi
+          if [ "${{ inputs.review-app-key }}" = "shared" ]; then
+            echo "TERRAFORM_PATH=terraform/development/shared" >> $GITHUB_ENV
+            echo "TERRAFORM_WORKSPACE=default" >> $GITHUB_ENV
+          else
+            if ! [[ "${{ inputs.review-app-key }}" =~ ^[0-9]+$ ]]; then
+              echo "Error: 'review-app-key' must be a number."
+              exit 1
+            fi
+            echo "TERRAFORM_PATH=terraform/development/per_review_app" >> $GITHUB_ENV
+            echo "TERRAFORM_WORKSPACE=${{ inputs.review-app-key }}" >> $GITHUB_ENV
+          fi
+        fi
+        if [ "${{ inputs.key }}" = "staging" ]; then
+          echo "TERRAFORM_PATH=terraform/staging" >> $GITHUB_ENV
+          echo "TERRAFORM_WORKSPACE=default" >> $GITHUB_ENV
+        fi
+        if [ "${{ inputs.key }}" = "production" ]; then
+          echo "TERRAFORM_PATH=terraform/production" >> $GITHUB_ENV
+          echo "TERRAFORM_WORKSPACE=default" >> $GITHUB_ENV
+        fi
+        if [ "${{ inputs.key }}" = "meta" ]; then
+          echo "TERRAFORM_PATH=terraform/meta" >> $GITHUB_ENV
+          echo "TERRAFORM_WORKSPACE=default" >> $GITHUB_ENV
+        fi
+      shell: bash
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.5.1
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: ${{ inputs.aws_region }}
+        role-to-assume: ${{ inputs.aws_role }}
