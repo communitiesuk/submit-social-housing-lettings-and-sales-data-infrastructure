@@ -14,9 +14,21 @@ terraform {
     encrypt        = true
     key            = "core-production.tfstate"
     region         = "eu-west-2"
-    role_arn       = "arn:aws:iam::815624722760:role/developer"
   }
 }
+
+# data "terraform_remote_state" "production_shared" {
+#   backend   = "s3"
+#   workspace = "default"
+
+#   config = {
+#     bucket         = "core-prod-tf-state"
+#     dynamodb_table = "core-prod-tf-state-lock"
+#     encrypt        = true
+#     key            = "core-production.tfstate"
+#     region         = "eu-west-2"
+#   }
+# }
 
 provider "aws" {
   region = "eu-west-2"
@@ -63,7 +75,9 @@ locals {
   app_host                  = "submit-social-housing-data.communities.gov.uk"
   load_balancer_domain_name = "lb.submit-social-housing-data.communities.gov.uk"
 
-  provider_role_arn = "arn:aws:iam::977287343304:role/developer"
+  # TODO: look into using remote state here rather than hardcoding the role arn
+  # provider_role_arn = data.terraform_remote_state.staging_shared.outputs.deployment_role_arn
+  provider_role_arn = "arn:aws:iam::977287343304:role/terraform-deploy-temp"
 
   app_task_desired_count = 4
 
@@ -75,6 +89,15 @@ locals {
 
   create_db_migration_infra = true
   create_s3_migration_infra = true
+}
+
+module "deployment_role" {
+  source = "../modules/terraform_deployment"
+
+  prefix = local.prefix
+  assume_from_role_arns = [
+    "arn:aws:iam::815624722760:role/core-application-repo"
+  ]
 }
 
 module "budget" {
