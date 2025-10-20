@@ -2,7 +2,7 @@
 # This role is has duplicate permissions to the now-removed developer-poweruser-policy, which was shared with developers on the project.
 # We will restrict permissions further later to only those needed to deploy our terraform infrastructure.
 # See CLDC-2820 & CLDC-4058.
-data "aws_iam_policy" "developer_power_user" {
+data "aws_iam_policy" "terraform_deployment" {
   name = "terraform-policy"
 }
 
@@ -22,7 +22,7 @@ resource "aws_iam_role" "terraform_deployment" {
   assume_role_policy = data.aws_iam_policy_document.terraform_deployment_assume_role.json
 }
 
-resource "aws_iam_role_policy_attachment" "terraform_deployment_developer" {
+resource "aws_iam_role_policy_attachment" "terraform_deployment_attachment" {
   role       = aws_iam_role.terraform_deployment.name
-  policy_arn = data.aws_iam_policy.developer_power_user.arn
+  policy_arn = data.aws_iam_policy.terraform_deployment.arn
 }
