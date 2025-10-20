@@ -21,13 +21,16 @@ Instead of being run in this repository, they are pulled and run by the applicat
 
 ## Other deployments
 
-Currently, all other infrastructure deployments must be done by manually applying terraform.
+To deploy any other infrastructure, you can use the `Manually deploy infra' pipeline on GitHub.
 
-This might change in future, at least for the shared development infrastructure. 
-
-To do so, use your aws cli profile for your main mhclg account (i.e. not having assumed a role in any of the application accounts), select the relevant entrypoint folder, and run `terraform apply`.
-
-While doing so, confirm that the plan you see matches the changes you expect before approving it.
+To use this:
+1. Go to https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure/actions.
+2. Select the 'Manually create infra' task.
+3. Select the environment.
+  - If deploying to the development environment (review), specify whether to deployed to the shared infrastructure or a specific review app ID.
+4. Run the task
+5. A terraform plan will run initially. Review this output.
+6. If happy, approve the deployment to run a terraform apply.
 
 At the moment, the expectation is that;
 * The production environment uses infra code from `main`
