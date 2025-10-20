@@ -9,6 +9,9 @@ app load balancer
 
 See the process below for detailed steps.
 
+NOTE: The instructions below target when we used to deploy manually. As we now deploy via pipeline these steps will need
+to be amended.
+
 ## The process
 
 ### Create a new terraform folder

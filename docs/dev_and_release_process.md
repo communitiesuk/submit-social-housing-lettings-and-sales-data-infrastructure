@@ -7,7 +7,7 @@
 * Create a branch off main for your changes
 * Make your changes
 * Merge to the dev branch and push - dev is a long running branch, but there's no need to create PR for this
-* Apply your changes to **staging** by running `terraform apply` from `terraform/staging` locally (in a console with your mhclg profile) - make sure the plan only includes changes you expect
+* Apply your changes to **staging** by running the 'Manually deploy infra' Action on the dev branch and the staging environment.
 * Try out your changes on staging
 * When happy, raise a PR from your branch to main and get a technical review
 * Get someone to do some testing/PO review on staging (exactly what form this applies in will depend on the ticket, and this might not be needed for some types of ticket)
@@ -51,10 +51,17 @@ To release an infrastructure change;
     * `terraform/development/shared` for the shared parts of the dev/review environment
     * `terraform/staging` for the staging environment
     * `terraform/production` for the production environment
-1. Run `terraform apply`. This will start by showing you a plan of what terraform will attempt to change - check that this plan matches your expectations before allowing it to continue, e.g. it's not dropping and recreating anything unusual (particularly if it's something a DNS record points at, or that stores data), you recognise all the changes etc. If you're happy, give it confirmation and it will proceed.
+1. Run `terraform apply`. This will start by showing you a plan of what terraform will attempt to change - 
 1. Keep an eye out for any problems, particularly if changes are taking a while to complete.
 
+1. Ensure code to be released is pushed to a branch
+2. Run the 'Manually deploy infra' Action set to the relevant branch & environment. 
+3. You will be prompted to approve the release. Check the plan step for the plan it generated. Check that this plan matches your expectations before allowing it to continue, e.g. it's not dropping and recreating anything unusual (particularly if it's something a DNS record points at, or that stores data), you recognise all the changes etc.
+3. If you're happy, approve the plan and the code will release.
+
 ### Releasing changes to ECS container/task definitions
+
+NOTE: These steps were written when we used to deploy manually. This should still be possible with the pipeline, though will require a little more work.
 
 These changes are ignored by default in our terraform, because the process for releasing updated application versions changes them.
 
