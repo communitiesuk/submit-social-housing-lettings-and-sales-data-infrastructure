@@ -12,7 +12,7 @@ resource "aws_lb_target_group" "this" {
     protocol            = "HTTP"
     matcher             = "204"
     timeout             = "3"
-    path                = "${var.relative_root}/health"
+    path                = "/health"
     unhealthy_threshold = "2"
   }
 }
@@ -33,11 +33,11 @@ resource "aws_lb_listener_rule" "forward" {
   }
 
   dynamic "condition" {
-    for_each = var.relative_root != "" ? [1] : []
+    for_each = var.review_app_id != "" ? [1] : []
 
     content {
-      path_pattern {
-        values = [var.relative_root, "${var.relative_root}/*"]
+      host_header {
+        values = ["${var.review_app_id}.${var.app_host}"]
       }
     }
   }

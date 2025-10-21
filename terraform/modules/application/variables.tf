@@ -171,9 +171,9 @@ variable "redis_connection_string" {
   description = "The value of the redis connection string"
 }
 
-variable "relative_root" {
+variable "review_app_id" {
   type        = string
-  description = "The path for the root of the application, relative to the app_host variable"
+  description = "The unique identifier for the review app, used as a subdomain in the application URL."
   default     = ""
 }
 
