@@ -10,7 +10,8 @@ on:
           - review
           - staging
           - production
-          - meta
+          # TODO CLDC-4127: Fix deploying to the meta environment
+          # - meta
         description: "The environment to create the infrastructure in"
       review-app-key:
         required: false
