@@ -18,6 +18,8 @@ on:
         type: string
         description: "The review app ID to deploy. To deploy shared review app infrastructure, set to 'shared'. Required if 'key' is 'review'."
 
+run-name: "Manually deploy infra to ${{ inputs.key }}"
+
 concurrency:
   group: review-app-infra-${{ inputs.key }}
   cancel-in-progress: false
@@ -63,7 +65,7 @@ jobs:
   approve:
     needs: plan
     runs-on: ubuntu-latest
-    environment: terraform
+    environment: terraform-${{ inputs.key }}
     steps:
       - run: echo "Waiting for manual approval to continue..."
   deploy:
