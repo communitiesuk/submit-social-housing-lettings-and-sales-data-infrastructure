@@ -77,7 +77,7 @@ locals {
 
   # TODO: look into using remote state here rather than hardcoding the role arn
   # provider_role_arn = data.terraform_remote_state.staging_shared.outputs.deployment_role_arn
-  provider_role_arn = "arn:aws:iam::977287343304:role/terraform-deploy-temp"
+  provider_role_arn = "arn:aws:iam::977287343304:role/core-prod-terraform-deployment"
 
   app_task_desired_count = 4
 
