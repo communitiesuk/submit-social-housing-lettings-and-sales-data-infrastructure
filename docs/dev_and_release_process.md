@@ -46,14 +46,6 @@ We expect to make this automated (or at least less manual) at some point, certai
 
 To release an infrastructure change;
 
-1. In a terminal, use e.g. `aws-vault exec mhclg` to get a shell logged in to your main AWS profile - see [development setup](./development_setup.md#set-up-aws-vault--cli)
-1. Navigate to the relevant entrypoint module;
-    * `terraform/development/shared` for the shared parts of the dev/review environment
-    * `terraform/staging` for the staging environment
-    * `terraform/production` for the production environment
-1. Run `terraform apply`. This will start by showing you a plan of what terraform will attempt to change - 
-1. Keep an eye out for any problems, particularly if changes are taking a while to complete.
-
 1. Ensure code to be released is pushed to a branch
 2. Run the 'Manually deploy infra' Action set to the relevant branch & environment. 
 3. You will be prompted to approve the release. Check the plan step for the plan it generated. Check that this plan matches your expectations before allowing it to continue, e.g. it's not dropping and recreating anything unusual (particularly if it's something a DNS record points at, or that stores data), you recognise all the changes etc.
