@@ -9,6 +9,7 @@ resource "aws_db_instance" "this" {
   apply_immediately                     = var.apply_changes_immediately
   auto_minor_version_upgrade            = true
   allocated_storage                     = var.allocated_storage #units are GiB
+  allow_major_version_upgrade           = true
   backup_retention_period               = var.backup_retention_period
   backup_window                         = var.backup_window
   ca_cert_identifier                    = "rds-ca-rsa4096-g1"
@@ -17,7 +18,7 @@ resource "aws_db_instance" "this" {
   delete_automated_backups              = false
   deletion_protection                   = var.enable_primary_deletion_protection # needs to be set to false and applied if you need to delete the DB
   engine                                = "postgres"
-  engine_version                        = "13.18"
+  engine_version                        = "18.3"
   final_snapshot_identifier             = var.prefix
   instance_class                        = var.instance_class
   maintenance_window                    = var.maintenance_window
@@ -37,7 +38,7 @@ resource "aws_db_instance" "this" {
   lifecycle {
     prevent_destroy = true
     # AWS will perform automatic minor version updates, so we want to ignore these - remove this temporarily if wanting to e.g. change the major version
-    ignore_changes = [engine_version]
+    # ignore_changes = [engine_version]
   }
 }
 
