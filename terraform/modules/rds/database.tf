@@ -37,6 +37,7 @@ resource "aws_db_instance" "this" {
   lifecycle {
     prevent_destroy = true
     # Because we want to allow AWS to automatically manage minor version upgrades, we ignore `engine_version` in the Terraform. 
+    # This means that terraform won't try to downgrade postgres again if upgraded automatically be AWS.
     # Consequently, if we want to upgrade the major version, we should do so manually via the AWS console.
     # After upgrading the major version, it's a good idea to update the `engine_version` in this Terraform anyway.
     # This is so that if, for whatever reason, we need to destroy and recreate the database, then the major version will be correct.
