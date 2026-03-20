@@ -17,7 +17,7 @@ resource "aws_db_instance" "this" {
   delete_automated_backups              = false
   deletion_protection                   = var.enable_primary_deletion_protection # needs to be set to false and applied if you need to delete the DB
   engine                                = "postgres"
-  engine_version                        = "13.18"
+  engine_version                        = "18.3"
   final_snapshot_identifier             = var.prefix
   instance_class                        = var.instance_class
   maintenance_window                    = var.maintenance_window
@@ -36,7 +36,11 @@ resource "aws_db_instance" "this" {
 
   lifecycle {
     prevent_destroy = true
-    # AWS will perform automatic minor version updates, so we want to ignore these - remove this temporarily if wanting to e.g. change the major version
+    # Because we want to allow AWS to automatically manage minor version upgrades, we ignore `engine_version` in the Terraform. 
+    # This means that Terraform won't try to downgrade Postgres again if upgraded automatically by AWS.
+    # Consequently, if we want to upgrade the major version, we should do so manually via the AWS console.
+    # After upgrading the major version, it's a good idea to update the `engine_version` in this Terraform anyway.
+    # This is so that if, for whatever reason, we need to destroy and recreate the database, then the major version will be correct.
     ignore_changes = [engine_version]
   }
 }
