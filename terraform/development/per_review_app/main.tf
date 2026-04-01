@@ -97,7 +97,7 @@ module "application" {
     enabled = true
     timings = {
       workday_start = "0 8"
-      workday_end   = "0 21"
+      workday_end   = "0 19"
     }
     scale_to = {
       app     = 0
