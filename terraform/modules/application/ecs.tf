@@ -28,7 +28,7 @@ locals {
 
 locals {
   image = var.ecr_repository_url
-  app_container_environment_base = [
+  app_container_environment = [
     { Name = "APP_HOST", Value = var.app_host },
     { Name = "BULK_UPLOAD_BUCKET", Value = local.bulk_upload_bucket_key },
     { Name = "COLLECTION_RESOURCES_BUCKET", Value = local.collection_resources_bucket_key },
@@ -39,11 +39,7 @@ locals {
     { Name = "REDIS_CONFIG", Value = "[{\"instance_name\":\"\",\"credentials\":{\"uri\":\"${var.redis_connection_string}\"}}]" },
     { Name = "S3_CONFIG", Value = jsonencode(local.s3_config) }
   ]
-  app_container_environment = (
-    var.relative_root == "" ?
-    local.app_container_environment_base :
-    concat(local.app_container_environment_base, [{ Name = "RAILS_RELATIVE_URL_ROOT", Value = var.relative_root }])
-  )
+
   app_container_secrets_base = [
     { Name = "DATABASE_URL", valueFrom = aws_ssm_parameter.complete_database_connection_string.arn },
     { Name = "GOVUK_NOTIFY_API_KEY", valueFrom = var.govuk_notify_api_key_secret_arn },
