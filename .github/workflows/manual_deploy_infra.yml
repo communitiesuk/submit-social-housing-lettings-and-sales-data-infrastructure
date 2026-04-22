@@ -38,7 +38,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure
-          ref: main
+          ref: CLDC-4127-fix-automated-deployment-to-meta
 
       - name: Init terraform
         uses: ./.github/actions/init_terraform_for_manual_deploy
@@ -79,7 +79,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure
-          ref: main
+          ref: CLDC-4127-fix-automated-deployment-to-meta
 
       - name: Init terraform
         uses: ./.github/actions/init_terraform_for_manual_deploy
