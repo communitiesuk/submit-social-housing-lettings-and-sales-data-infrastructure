@@ -14,7 +14,6 @@ terraform {
     encrypt        = true
     key            = "core-meta.tfstate"
     region         = "eu-west-2"
-    role_arn       = "arn:aws:iam::815624722760:role/developer"
   }
 }
 
