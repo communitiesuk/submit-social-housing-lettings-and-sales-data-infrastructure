@@ -162,7 +162,7 @@ module "github_actions_access" {
   meta_account_id = data.aws_caller_identity.current.account_id
   repositories = {
     application = {
-      name = "communitiesuk/submit-social-housing-lettings-and-sales-data",
+      name                          = "communitiesuk/submit-social-housing-lettings-and-sales-data",
       additional_trusted_repo_names = ["communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure"]
       policies = [
         { key = "push_ecr_images", arn = module.ecr.push_images_policy_arn },
