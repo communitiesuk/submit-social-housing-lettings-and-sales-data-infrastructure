@@ -38,7 +38,7 @@ resource "aws_ecr_lifecycle_policy" "core_lifecycle_policy" {
           "tagPrefixList": ["review-"],
           "countType": "sinceImagePushed",
           "countUnit": "days",
-          "countNumber": 31
+          "countNumber": 30
         },
         "action": {
           "type": "expire"
