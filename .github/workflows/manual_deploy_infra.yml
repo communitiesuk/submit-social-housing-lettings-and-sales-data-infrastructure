@@ -10,7 +10,7 @@ on:
           - review
           - staging
           - production
-           - meta
+          - meta
         description: "The environment to create the infrastructure in"
       review-app-key:
         required: false
