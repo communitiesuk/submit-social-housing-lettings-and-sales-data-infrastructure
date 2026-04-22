@@ -17,7 +17,7 @@ data "aws_iam_policy_document" "repo_assume_role" {
 
     condition {
       test     = "StringLike"
-      values   = concat(["repo:${each.value.name}:*"], [for repo in each.value.additional_trusted_repo_names : "repo:${repo}:*"])
+      values   = [for repo in concat([each.value.name], each.value.additional_trusted_repo_names) : "repo:${repo}:*"]
       variable = "token.actions.githubusercontent.com:sub"
     }
   }
