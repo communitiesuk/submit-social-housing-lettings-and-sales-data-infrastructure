@@ -62,8 +62,8 @@ module "budget" {
 }
 
 # We create two backends for managing the terraform state of different accounts:
-# non_prod manages meta, development and staging
-# prod manages just production
+# non_prod manages development and staging
+# prod manages production and meta
 module "non_prod_backend" {
   source = "../modules/backend"
 
@@ -165,7 +165,8 @@ module "github_actions_access" {
       name = "communitiesuk/submit-social-housing-lettings-and-sales-data",
       policies = [
         { key = "push_ecr_images", arn = module.ecr.push_images_policy_arn },
-        { key = "access_non_prod_state", arn = module.non_prod_backend.state_access_policy_arn }
+        { key = "access_non_prod_state", arn = module.non_prod_backend.state_access_policy_arn },
+        { key = "access_prod_state", arn = module.prod_backend.state_access_policy_arn }
       ]
     },
     infrastructure = {
