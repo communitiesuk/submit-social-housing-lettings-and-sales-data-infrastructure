@@ -46,7 +46,7 @@ jobs:
           key: ${{ inputs.key }}
           review-app-key: ${{ inputs.review-app-key }}
           aws_region: ${{ env.aws_region }}
-          aws_role: arn:aws:iam::815624722760:role/core-infrastructure-repo
+          aws_role: arn:aws:iam::815624722760:role/core-application-repo
 
       - name: Terraform plan
         working-directory: ${{ env.TERRAFORM_PATH }}
@@ -87,7 +87,7 @@ jobs:
           key: ${{ inputs.key }}
           review-app-key: ${{ inputs.review-app-key }}
           aws_region: ${{ env.aws_region }}
-          aws_role: arn:aws:iam::815624722760:role/core-infrastructure-repo
+          aws_role: arn:aws:iam::815624722760:role/core-application-repo
 
       - name: Download tfplan artifact
         uses: actions/download-artifact@v5

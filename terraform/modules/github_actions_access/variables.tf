@@ -7,6 +7,7 @@ variable "repositories" {
   type = map(object(
     {
       name = string,
+      additional_trusted_repo_names = optional(list(string), []),
       policies = list(object(
         {
           key = string
