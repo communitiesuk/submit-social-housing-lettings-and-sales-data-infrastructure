@@ -14,7 +14,6 @@ terraform {
     encrypt        = true
     key            = "core-meta.tfstate"
     region         = "eu-west-2"
-    role_arn       = "arn:aws:iam::815624722760:role/developer"
   }
 }
 
@@ -38,10 +37,19 @@ provider "aws" {
 locals {
   prefix = "core-meta"
 
-  provider_role_arn = "arn:aws:iam::815624722760:role/developer"
+  provider_role_arn = "arn:aws:iam::815624722760:role/core-meta-terraform-deployment"
 
   create_db_migration_infra = true
   create_s3_migration_infra = true
+}
+
+module "deployment_role" {
+  source = "../modules/terraform_deployment"
+
+  prefix = local.prefix
+  assume_from_role_arns = [
+    "arn:aws:iam::815624722760:role/core-application-repo"
+  ]
 }
 
 module "budget" {
@@ -54,8 +62,8 @@ module "budget" {
 }
 
 # We create two backends for managing the terraform state of different accounts:
-# non_prod manages meta, development and staging
-# prod manages just production
+# non_prod manages development and staging
+# prod manages production and meta
 module "non_prod_backend" {
   source = "../modules/backend"
 
@@ -154,10 +162,12 @@ module "github_actions_access" {
   meta_account_id = data.aws_caller_identity.current.account_id
   repositories = {
     application = {
-      name = "communitiesuk/submit-social-housing-lettings-and-sales-data",
+      name                          = "communitiesuk/submit-social-housing-lettings-and-sales-data",
+      additional_trusted_repo_names = ["communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure"]
       policies = [
         { key = "push_ecr_images", arn = module.ecr.push_images_policy_arn },
-        { key = "access_non_prod_state", arn = module.non_prod_backend.state_access_policy_arn }
+        { key = "access_non_prod_state", arn = module.non_prod_backend.state_access_policy_arn },
+        { key = "access_prod_state", arn = module.prod_backend.state_access_policy_arn }
       ]
     },
     infrastructure = {
