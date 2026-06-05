@@ -17,6 +17,47 @@ resource "aws_wafv2_web_acl" "this" {
     sampled_requests_enabled   = false
   }
 
+  dynamic "rule" {
+    for_each = var.restrict_by_geolocation ? [1] : []
+    content {
+      name     = "allow-gb-and-allowlist-ips"
+      priority = 1
+
+      action {
+        block {
+          custom_response {
+            response_code = 403
+          }
+        }
+      }
+
+      statement {
+        not_statement {
+          statement {
+            or_statement {
+              statement {
+                geo_match_statement {
+                  country_codes = ["GB"]
+                }
+              }
+              statement {
+                ip_set_reference_statement {
+                  arn = aws_wafv2_ip_set.allowed_ips.arn
+                }
+              }
+            }
+          }
+        }
+      }
+
+      visibility_config {
+        cloudwatch_metrics_enabled = true
+        metric_name                = "waf-geolocation-and-ip-restriction"
+        sampled_requests_enabled   = true
+      }
+    }
+  }
+
   rule {
     name     = "aws-managed-rules-amazon-ip-reputation-list"
     priority = 2

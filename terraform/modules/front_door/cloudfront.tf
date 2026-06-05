@@ -56,8 +56,8 @@ resource "aws_cloudfront_distribution" "this" {
 
   restrictions {
     geo_restriction {
-      restriction_type = var.restrict_by_geolocation ? "whitelist" : "none"
-      locations        = var.restrict_by_geolocation ? ["GB"] : []
+      restriction_type = "none"
+      locations        = []
     }
   }
 
