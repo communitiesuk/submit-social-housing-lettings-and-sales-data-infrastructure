@@ -150,7 +150,7 @@ module "redis" {
 
   apply_changes_immediately = true
   highly_available          = false
-  node_type                 = "cache.t4g.micro"
+  node_type                 = "cache.t3.micro"
 
   prefix                  = local.prefix
   redis_port              = local.redis_port

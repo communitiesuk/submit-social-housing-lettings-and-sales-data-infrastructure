@@ -1,5 +1,5 @@
 locals {
-  preferred_cache_cluster_azs = var.highly_available ? ["eu-west-2a", "eu-west-2b"] : ["eu-west-2c"]
+  preferred_cache_cluster_azs = var.highly_available ? ["eu-west-2a", "eu-west-2b"] : ["eu-west-2a"]
 }
 
 resource "aws_elasticache_replication_group" "this" {
