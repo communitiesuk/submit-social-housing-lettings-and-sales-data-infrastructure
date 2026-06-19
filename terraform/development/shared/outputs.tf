@@ -143,3 +143,18 @@ output "networking_vpc_id" {
   value       = module.networking.vpc_id
   description = "The id of the main vpc"
 }
+
+output "test_zone_id" {
+  value       = aws_route53_zone.test_zone.zone_id
+  description = "The id of route 53 test zone"
+}
+
+output "cloudfront_domain_name" {
+  value       = module.front_door.cloudfront_domain_name
+  description = "Cloudfront domain name"
+}
+
+output "cloudfront_hosted_zone_id" {
+  value       = module.front_door.cloudfront_hosted_zone_id
+  description = "Cloudfront hosted zone id"
+}

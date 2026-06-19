@@ -70,7 +70,7 @@ locals {
 
   rails_env = "review"
 
-  app_host = "review.submit-social-housing-data.communities.gov.uk"
+  app_host = "${terraform.workspace}.test.submit-social-housing-data.communities.gov.uk"
 
   provider_role_arn = data.terraform_remote_state.development_shared.outputs.deployment_role_arn
 
@@ -132,7 +132,7 @@ module "application" {
   rails_env                                         = local.rails_env
   rails_master_key_secret_arn                       = data.terraform_remote_state.development_shared.outputs.application_secrets_rails_master_key_secret_arn
   redis_connection_string                           = module.redis.redis_connection_string
-  relative_root                                     = "/${terraform.workspace}"
+  review_app_id                                     = terraform.workspace
   review_app_user_password_secret_arn               = data.terraform_remote_state.development_shared.outputs.application_secrets_review_app_user_password_secret_arn
   sentry_dsn_secret_arn                             = data.terraform_remote_state.development_shared.outputs.application_secrets_sentry_dsn_secret_arn
   sns_topic_arn                                     = data.terraform_remote_state.development_shared.outputs.monitoring_sns_topic_arn
@@ -141,6 +141,17 @@ module "application" {
   staging_performance_test_password_secret_arn      = data.terraform_remote_state.development_shared.outputs.application_secrets_staging_performance_test_password_secret_arn
   suppress_ok_notifications                         = true
   vpc_id                                            = data.terraform_remote_state.development_shared.outputs.networking_vpc_id
+}
+
+resource "aws_route53_record" "review_app" {
+  zone_id = data.terraform_remote_state.development_shared.outputs.test_zone_id
+  name    = "${terraform.workspace}.test.submit-social-housing-data.communities.gov.uk"
+  type    = "A"
+  alias {
+    name                   = data.terraform_remote_state.development_shared.outputs.cloudfront_domain_name
+    zone_id                = data.terraform_remote_state.development_shared.outputs.cloudfront_hosted_zone_id
+    evaluate_target_health = false
+  }
 }
 
 module "redis" {

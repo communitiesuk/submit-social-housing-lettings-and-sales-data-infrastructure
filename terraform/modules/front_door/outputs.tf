@@ -23,3 +23,13 @@ output "cloudfront_header_password" {
   description = "The password on the custom header used for cloudfront"
   sensitive   = true
 }
+
+output "cloudfront_domain_name" {
+  value       = aws_cloudfront_distribution.this.domain_name
+  description = "Cloudfront domain name"
+}
+
+output "cloudfront_hosted_zone_id" {
+  value       = aws_cloudfront_distribution.this.hosted_zone_id
+  description = "Cloudfront hosted zone id"
+}
