@@ -122,6 +122,8 @@ resource "aws_cloudwatch_metric_alarm" "app_tasks_exited" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "app_service_action_problem" {
+  count = var.enable_service_action_problem_alarms ? 1 : 0
+
   alarm_actions             = [var.sns_topic_arn]
   alarm_name                = "${var.prefix}-app-service-action-problem"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -137,7 +139,7 @@ resource "aws_cloudwatch_metric_alarm" "app_service_action_problem" {
   treat_missing_data        = "notBreaching"
 
   dimensions = {
-    RuleName = aws_cloudwatch_event_rule.app_service_action_problem.name
+    RuleName = aws_cloudwatch_event_rule.app_service_action_problem[0].name
   }
 }
 
@@ -246,6 +248,8 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_tasks_exited" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sidekiq_service_action_problem" {
+  count = var.enable_service_action_problem_alarms ? 1 : 0
+
   alarm_actions             = [var.sns_topic_arn]
   alarm_name                = "${var.prefix}-sidekiq-service-action-problem"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -261,7 +265,7 @@ resource "aws_cloudwatch_metric_alarm" "sidekiq_service_action_problem" {
   treat_missing_data        = "notBreaching"
 
   dimensions = {
-    RuleName = aws_cloudwatch_event_rule.sidekiq_service_action_problem.name
+    RuleName = aws_cloudwatch_event_rule.sidekiq_service_action_problem[0].name
   }
 }
 
