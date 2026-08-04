@@ -241,6 +241,12 @@ variable "suppress_ok_notifications" {
   default     = false
 }
 
+variable "enable_service_action_problem_alarms" {
+  type        = bool
+  description = "If true, create the app / sidekiq service action problem alarms (and their event rules). Set to false on review apps where spin-up causes false alarms"
+  default     = true
+}
+
 variable "vpc_id" {
   type        = string
   description = "The ID of the VPC to be associated with."
