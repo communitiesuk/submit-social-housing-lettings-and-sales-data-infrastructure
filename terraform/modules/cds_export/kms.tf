@@ -72,18 +72,6 @@ data "aws_iam_policy_document" "cds_azure_user" {
 
     resources = [aws_kms_key.this.arn]
   }
-
-  statement {
-    sid = "Root"
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
-    }
-
-    actions = ["kms:*"]
-
-    resources = [aws_kms_key.this.arn]
-  }
 }
 
 data "aws_iam_policy_document" "cds_role" {
@@ -100,18 +88,6 @@ data "aws_iam_policy_document" "cds_role" {
       "kms:GenerateDataKey",
       "kms:Decrypt"
     ]
-
-    resources = [aws_kms_key.this.arn]
-  }
-
-  statement {
-    sid = "Root"
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
-    }
-
-    actions = ["kms:*"]
 
     resources = [aws_kms_key.this.arn]
   }
