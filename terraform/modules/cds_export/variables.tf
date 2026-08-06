@@ -15,6 +15,12 @@ variable "ecs_task_role_arn" {
   description = "The arn of the app task role"
 }
 
+variable "cds_azure_user_name" {
+  type        = string
+  default     = null
+  description = "The name of the IAM user used by the CDS team's Azure pipeline to decrypt exported data directly (without assuming the CDS role)"
+}
+
 variable "prefix" {
   type        = string
   description = "The prefix to be prepended to resource names."
