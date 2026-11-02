@@ -55,6 +55,7 @@ resource "aws_db_instance" "replica" {
 
   identifier                 = "${var.prefix}-replica"
   apply_immediately          = aws_db_instance.this.apply_immediately
+  allocated_storage          = aws_db_instance.this.allocated_storage
   auto_minor_version_upgrade = aws_db_instance.this.auto_minor_version_upgrade
   ca_cert_identifier         = aws_db_instance.this.ca_cert_identifier
   copy_tags_to_snapshot      = aws_db_instance.this.copy_tags_to_snapshot
