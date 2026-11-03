@@ -251,7 +251,7 @@ module "collection_resources" {
 module "database" {
   source = "../modules/rds"
 
-  allocated_storage       = 100
+  allocated_storage       = 500
   backup_retention_period = 7
 
   apply_changes_immediately          = false
