@@ -28,9 +28,23 @@ resource "aws_cloudwatch_metric_alarm" "rds_cpu" {
   EOF
 }
 
+locals {
+  storage_alarm_instances = merge(
+    { primary = aws_db_instance.this.identifier },
+    var.create_replica ? { replica = aws_db_instance.replica[0].identifier } : {},
+  )
+}
+
+moved {
+  from = aws_cloudwatch_metric_alarm.rds_storage
+  to   = aws_cloudwatch_metric_alarm.rds_storage["primary"]
+}
+
 resource "aws_cloudwatch_metric_alarm" "rds_storage" {
+  for_each = local.storage_alarm_instances
+
   alarm_actions             = [var.sns_topic_arn]
-  alarm_name                = "${var.prefix}-rds-storage"
+  alarm_name                = each.key == "primary" ? "${var.prefix}-rds-storage" : "${var.prefix}-rds-storage-${each.key}"
   comparison_operator       = "LessThanOrEqualToThreshold"
   datapoints_to_alarm       = 1
   evaluation_periods        = 1
@@ -39,12 +53,12 @@ resource "aws_cloudwatch_metric_alarm" "rds_storage" {
   ok_actions                = [var.sns_topic_arn]
   period                    = 300
   statistic                 = "Minimum"
-  threshold                 = aws_db_instance.this.allocated_storage * 0.15
+  threshold                 = aws_db_instance.this.allocated_storage * 1024 * 1024 * 1024 * 0.15
   insufficient_data_actions = []
   treat_missing_data        = "breaching"
 
   dimensions = {
-    DBInstanceIdentifier = aws_db_instance.this.identifier
+    DBInstanceIdentifier = each.value
   }
 }
 
@@ -64,7 +78,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_cpu_anomaly" {
   1. Check top SQL queries in RDS Performance Insights: [Performance Insights Dashboard](https://console.aws.amazon.com/rds/home?region=eu-west-2#performance-insights-v20206:/resourceId/${aws_db_instance.this.identifier})
   2. Investigate recent application changes or deployments that might be impacting performance.
   3. Review the CloudWatch dashboard for additional metrics and trends: [CloudWatch Dashboard](https://console.aws.amazon.com/cloudwatch/home?region=eu-west-2#dashboards)
-  
+
   EOF
 
   metric_query {
