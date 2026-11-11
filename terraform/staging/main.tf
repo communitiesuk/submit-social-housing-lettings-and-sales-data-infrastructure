@@ -227,8 +227,7 @@ module "cds_export" {
 
   prefix = local.prefix
   cds_access_role_arns = [
-    "arn:aws:iam::062321884391:role/DSQL1",
-    "arn:aws:iam::062321884391:role/DSQSS"
+    "arn:aws:iam::062321884391:role/DSQL1"
   ]
   ecs_task_role_arn = module.application_roles.ecs_task_role_arn
 }
